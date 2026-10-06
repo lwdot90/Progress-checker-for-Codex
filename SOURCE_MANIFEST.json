@@ -31,8 +31,8 @@
     {
       "path": "DIRECTORY_READINESS.md",
       "origin": "staging_documentation",
-      "sha256": "9a703a3704e39af510807078ffc544d6001fbac87de082bb3af0981d30e5a597",
-      "bytes": 852,
+      "sha256": "b9df626e67eb6e6ffaebf1dca2fcd9bbf4c2973ca0f3d08b27bb174bcefb7f01",
+      "bytes": 963,
       "mode": "0o644"
     },
     {
@@ -236,7 +236,7 @@
       "sha256": "3b281e8f216eda2c8d49e98dd6d0f5395adceb19bffac353cf169a18db1d157c",
       "bytes": 4441,
       "mode": "0o644",
-      "origin": "unchanged_native_source"
+      "origin": "staging_documentation"
     },
     {
       "path": "dist/0.2.1-dev/SHA256SUMS",
@@ -247,10 +247,10 @@
     },
     {
       "path": "plugins/README.md",
-      "sha256": "52be6bdb1be041dd293fbd7bb6df8d3999c826e94c654212cbe53d17016d5176",
-      "bytes": 9438,
+      "sha256": "6b5c32a8c59509ad963f23490446440aa95f7363ec157c59d9f394c824857e16",
+      "bytes": 9545,
       "mode": "0o644",
-      "origin": "unchanged_native_source"
+      "origin": "staging_documentation"
     },
     {
       "path": "plugins/install.py",

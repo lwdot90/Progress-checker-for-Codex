@@ -10,6 +10,7 @@ The observed development environment is **Fedora 44, Linux x86_64, standard Code
 
 - Python **3.11 or newer** at `/usr/bin/python3` and Git at `/usr/bin/git`.
 - glibc **2.39 or newer**, `libgcc_s.so.1`, `libm.so.6`, `libc.so.6`, and the `ld-linux-x86-64.so.2` loader.
+- `/usr/bin/rpm` and the Fedora RPM database at `/usr/lib/sysimage/rpm` for environment freshness.
 - bubblewrap at `/usr/bin/bwrap`, with permitted Linux namespaces, for approved check execution. An unavailable sandbox refuses execution.
 - A trusted existing Git worktree and a private data location outside it.
 - Normal Codex authentication in the selected profile for model prompts. The installer does not copy credentials.
@@ -21,6 +22,7 @@ The frozen archive with SHA256 `404759af79cd563d3e1266f686869893727110b22465eeec
 Keep the archive, `SHA256SUMS`, and accompanying `INSTALL.md` together. Verify the download, then extract it and run the installer:
 
 ```sh
+set -eu
 sha256sum -c SHA256SUMS
 tar -xzf progress-checker-0.2.1-dev-linux-x86_64.tar.gz
 cd progress-checker-0.2.1-dev-linux-x86_64

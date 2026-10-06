@@ -8,7 +8,8 @@ execution just to satisfy a directory transport requirement.
 Before submission: resolve local MCP eligibility, establish the publisher's
 approved developer identity, and provide developer name, category, website,
 support URL, privacy policy URL, terms URL, icon, and reviewer test cases.
-Current local plugin metadata is not a complete directory submission.
+Prepare at least five positive and three negative reviewer cases, an accessible
+demo video, and release notes. Current local plugin metadata is not a complete directory submission.
 
 No submission or contact has been sent. GitHub beta installation is independent
 of directory approval.

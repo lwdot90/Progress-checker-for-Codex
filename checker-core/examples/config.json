@@ -1,0 +1,110 @@
+{
+  "schema_version": 1,
+  "project_id": "progress-panel-demo",
+  "enabled": true,
+  "panel": {
+    "show_on_start": true
+  },
+  "execution": {
+    "max_parallel": 1,
+    "default_timeout_seconds": 300
+  },
+  "fingerprint": {
+    "extra_inputs": [],
+    "exclude_outputs": [
+      "target/**"
+    ]
+  },
+  "checks": [
+    {
+      "id": "opt-in-test",
+      "argv": [
+        "cargo",
+        "test",
+        "--locked",
+        "--offline",
+        "--test",
+        "progress_panel_opt_in"
+      ],
+      "cwd": ".",
+      "kind": "test",
+      "timeout_seconds": 120
+    },
+    {
+      "id": "panel-test",
+      "argv": [
+        "cargo",
+        "test",
+        "--locked",
+        "--offline",
+        "--test",
+        "progress_panel_render"
+      ],
+      "cwd": ".",
+      "kind": "test",
+      "timeout_seconds": 120
+    },
+    {
+      "id": "restore-test",
+      "argv": [
+        "cargo",
+        "test",
+        "--locked",
+        "--offline",
+        "--test",
+        "progress_panel_restore"
+      ],
+      "cwd": ".",
+      "kind": "test",
+      "timeout_seconds": 120
+    }
+  ],
+  "milestones": [
+    {
+      "id": "project-opt-in",
+      "title": "Load opted-in project configuration",
+      "in_scope": true,
+      "depends_on": [],
+      "criteria": [
+        {
+          "id": "respects-project-opt-in",
+          "description": "The panel loads a valid opted-in configuration without crossing the Git worktree boundary",
+          "check_id": "opt-in-test",
+          "required": true
+        }
+      ]
+    },
+    {
+      "id": "embedded-panel",
+      "title": "Show milestones inside the Codex TUI",
+      "in_scope": true,
+      "depends_on": [
+        "project-opt-in"
+      ],
+      "criteria": [
+        {
+          "id": "renders-without-blocking-input",
+          "description": "The embedded panel displays claim labels and supports hide/show and narrow terminals while composer input remains usable",
+          "check_id": "panel-test",
+          "required": true
+        }
+      ]
+    },
+    {
+      "id": "restore-claims",
+      "title": "Restore saved claims as unvalidated",
+      "in_scope": true,
+      "depends_on": [
+        "project-opt-in"
+      ],
+      "criteria": [
+        {
+          "id": "restores-without-executing-checks",
+          "description": "Startup restores saved claims with unknown freshness and executes no project build or test commands",
+          "check_id": "restore-test",
+          "required": true
+        }
+      ]
+    }
+  ]
+}

@@ -1,0 +1,8 @@
+.local/
+target/
+.codex/
+.progress-checker/
+reports/
+**/__pycache__/
+*.pyc
+dist/**/*.tar.gz

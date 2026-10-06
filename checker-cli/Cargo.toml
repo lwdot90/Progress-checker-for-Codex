@@ -1,0 +1,18 @@
+[package]
+name = "checker-cli"
+version.workspace = true
+edition.workspace = true
+license.workspace = true
+
+[[bin]]
+name = "progress-checker"
+path = "src/main.rs"
+
+[dependencies]
+checker-core = { path = "../checker-core" }
+checker-service = { path = "../checker-service" }
+clap.workspace = true
+serde_json.workspace = true
+serde.workspace = true
+tokio.workspace = true
+tokio-util.workspace = true

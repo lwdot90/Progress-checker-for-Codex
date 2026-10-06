@@ -1,0 +1,32 @@
+[workspace]
+members = ["checker-core", "checker-cli", "checker-service", "checker-mcp"]
+resolver = "2"
+
+[workspace.package]
+version = "0.2.1"
+edition = "2024"
+license = "Apache-2.0"
+
+[workspace.dependencies]
+serde = { version = "=1.0.228", features = ["derive"] }
+serde_json = "=1.0.149"
+sha2 = "=0.10.9"
+tempfile = "=3.27.0"
+libc = "=0.2.186"
+tokio = { version = "=1.52.3", features = ["rt-multi-thread", "macros", "process", "io-util", "time", "sync", "signal", "net"] }
+tokio-util = { version = "=0.7.18", features = ["rt"] }
+clap = { version = "=4.5.58", features = ["derive"] }
+chrono = { version = "=0.4.43", features = ["serde"] }
+
+[profile.dev]
+debug = 0
+incremental = false
+
+# Fingerprints always hash the full current source. Keep the compression loop
+# optimized in local builds so fresh reads remain responsive on real projects.
+[profile.dev.package.sha2]
+opt-level = 3
+
+[profile.test]
+debug = 0
+incremental = false

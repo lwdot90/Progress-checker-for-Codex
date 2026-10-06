@@ -1,0 +1,1547 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "urn:progress-checker:phase-2:service",
+  "$comment": "Transport limits are byte-oriented (256 KiB frames, UTF-8 notes 4096 bytes). Schema string limits count Unicode code points. Root ownership, revision concurrency, request correlation, operation result semantics and durable idempotency are runtime checks. MCP structuredContent carries the identical response envelope.",
+  "$ref": "#/$defs/request",
+  "$defs": {
+    "request": {
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "schema_version": {
+          "const": 1
+        },
+        "request_id": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 160,
+          "pattern": "^(?!\\.\\.?$)[A-Za-z0-9_.-]+$"
+        },
+        "operation": {
+          "oneOf": [
+            {
+              "type": "object",
+              "additionalProperties": false,
+              "properties": {
+                "operation": {
+                  "const": "project"
+                }
+              },
+              "required": [
+                "operation"
+              ]
+            },
+            {
+              "type": "object",
+              "additionalProperties": false,
+              "properties": {
+                "operation": {
+                  "const": "milestones"
+                },
+                "scope": {
+                  "type": [
+                    "boolean",
+                    "null"
+                  ]
+                }
+              },
+              "required": [
+                "operation"
+              ]
+            },
+            {
+              "type": "object",
+              "additionalProperties": false,
+              "properties": {
+                "operation": {
+                  "const": "set_claim"
+                },
+                "milestone_id": {
+                  "type": "string",
+                  "minLength": 1,
+                  "maxLength": 160,
+                  "pattern": "^(?!\\.\\.?$)[A-Za-z0-9_.-]+$"
+                },
+                "claim": {
+                  "enum": [
+                    "planned",
+                    "implemented"
+                  ]
+                },
+                "note": {
+                  "type": "string",
+                  "maxLength": 4096,
+                  "pattern": "^[^\\u0000-\\u0008\\u000b\\u000c\\u000e-\\u001f\\u007f-\\u009f]*$"
+                },
+                "expected_revision": {
+                  "type": "integer",
+                  "minimum": 0,
+                  "maximum": 18446744073709551615
+                }
+              },
+              "required": [
+                "operation",
+                "milestone_id",
+                "claim",
+                "note",
+                "expected_revision"
+              ]
+            },
+            {
+              "type": "object",
+              "additionalProperties": false,
+              "properties": {
+                "operation": {
+                  "const": "run_checks"
+                },
+                "check_ids": {
+                  "type": "array",
+                  "minItems": 1,
+                  "maxItems": 64,
+                  "uniqueItems": true,
+                  "items": {
+                    "type": "string",
+                    "minLength": 1,
+                    "maxLength": 160,
+                    "pattern": "^(?!\\.\\.?$)[A-Za-z0-9_.-]+$"
+                  }
+                },
+                "idempotency_key": {
+                  "type": "string",
+                  "minLength": 1,
+                  "maxLength": 128,
+                  "pattern": "^(?!\\.\\.?$)[A-Za-z0-9_.-]+$"
+                },
+                "expected_config_hash": {
+                  "type": "string",
+                  "pattern": "^sha256:[0-9a-fA-F]{64}$"
+                },
+                "expected_revision": {
+                  "type": "integer",
+                  "minimum": 0,
+                  "maximum": 18446744073709551615
+                }
+              },
+              "required": [
+                "operation",
+                "check_ids",
+                "idempotency_key",
+                "expected_config_hash",
+                "expected_revision"
+              ]
+            },
+            {
+              "type": "object",
+              "additionalProperties": false,
+              "properties": {
+                "operation": {
+                  "const": "get_run"
+                },
+                "run_id": {
+                  "type": "string",
+                  "minLength": 1,
+                  "maxLength": 160,
+                  "pattern": "^(?!\\.\\.?$)[A-Za-z0-9_.-]+$"
+                }
+              },
+              "required": [
+                "operation",
+                "run_id"
+              ]
+            },
+            {
+              "type": "object",
+              "additionalProperties": false,
+              "properties": {
+                "operation": {
+                  "const": "progress"
+                }
+              },
+              "required": [
+                "operation"
+              ]
+            },
+            {
+              "type": "object",
+              "additionalProperties": false,
+              "properties": {
+                "operation": {
+                  "const": "get_log"
+                },
+                "run_id": {
+                  "type": "string",
+                  "minLength": 1,
+                  "maxLength": 160,
+                  "pattern": "^(?!\\.\\.?$)[A-Za-z0-9_.-]+$"
+                },
+                "check_id": {
+                  "type": "string",
+                  "minLength": 1,
+                  "maxLength": 160,
+                  "pattern": "^(?!\\.\\.?$)[A-Za-z0-9_.-]+$"
+                },
+                "offset": {
+                  "type": "integer",
+                  "minimum": 0,
+                  "maximum": 18446744073709551615
+                },
+                "limit": {
+                  "type": "integer",
+                  "minimum": 1,
+                  "maximum": 32768
+                }
+              },
+              "required": [
+                "operation",
+                "run_id",
+                "check_id",
+                "offset",
+                "limit"
+              ]
+            },
+            {
+              "type": "object",
+              "additionalProperties": false,
+              "properties": {
+                "operation": {
+                  "const": "cancel_run"
+                },
+                "run_id": {
+                  "type": "string",
+                  "minLength": 1,
+                  "maxLength": 160,
+                  "pattern": "^(?!\\.\\.?$)[A-Za-z0-9_.-]+$"
+                },
+                "expected_revision": {
+                  "type": "integer",
+                  "minimum": 0,
+                  "maximum": 18446744073709551615
+                }
+              },
+              "required": [
+                "operation",
+                "run_id",
+                "expected_revision"
+              ]
+            },
+            {
+              "type": "object",
+              "additionalProperties": false,
+              "properties": {
+                "operation": {
+                  "const": "subscribe"
+                },
+                "after_revision": {
+                  "anyOf": [
+                    {
+                      "type": "integer",
+                      "minimum": 0,
+                      "maximum": 18446744073709551615
+                    },
+                    {
+                      "type": "null"
+                    }
+                  ]
+                }
+              },
+              "required": [
+                "operation"
+              ]
+            },
+            {
+              "type": "object",
+              "additionalProperties": false,
+              "properties": {
+                "operation": {
+                  "const": "submit_plan"
+                },
+                "config": {
+                  "$ref": "#/$defs/submitted_config"
+                },
+                "reason": {
+                  "type": "string",
+                  "minLength": 1,
+                  "maxLength": 4096
+                },
+                "expected_revision": {
+                  "type": "integer",
+                  "minimum": 0
+                },
+                "expected_config_hash": {
+                  "type": "string",
+                  "pattern": "^sha256:[a-fA-F0-9]{64}$"
+                }
+              },
+              "required": [
+                "operation",
+                "config",
+                "reason",
+                "expected_revision",
+                "expected_config_hash"
+              ]
+            },
+            {
+              "type": "object",
+              "additionalProperties": false,
+              "properties": {
+                "operation": {
+                  "const": "plan_history"
+                },
+                "offset": {
+                  "type": "integer",
+                  "minimum": 0
+                },
+                "limit": {
+                  "type": "integer",
+                  "minimum": 1,
+                  "maximum": 5
+                }
+              },
+              "required": [
+                "operation",
+                "offset",
+                "limit"
+              ]
+            }
+          ]
+        }
+      },
+      "required": [
+        "schema_version",
+        "request_id",
+        "operation"
+      ]
+    },
+    "response": {
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "schema_version": {
+          "const": 1
+        },
+        "request_id": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 160,
+          "pattern": "^(?!\\.\\.?$)[A-Za-z0-9_.-]+$"
+        },
+        "service_instance_id": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 160,
+          "pattern": "^(?!\\.\\.?$)[A-Za-z0-9_.-]+$"
+        },
+        "revision": {
+          "type": "integer",
+          "minimum": 0,
+          "maximum": 18446744073709551615
+        },
+        "result": {},
+        "error": {
+          "type": "object",
+          "additionalProperties": false,
+          "properties": {
+            "code": {
+              "type": "string"
+            },
+            "message": {
+              "type": "string"
+            }
+          },
+          "required": [
+            "code",
+            "message"
+          ]
+        }
+      },
+      "required": [
+        "schema_version",
+        "request_id",
+        "service_instance_id",
+        "revision"
+      ],
+      "oneOf": [
+        {
+          "required": [
+            "result"
+          ],
+          "not": {
+            "required": [
+              "error"
+            ]
+          }
+        },
+        {
+          "required": [
+            "error"
+          ],
+          "not": {
+            "required": [
+              "result"
+            ]
+          }
+        }
+      ]
+    },
+    "config_nonempty": {
+      "type": "string",
+      "pattern": "[^\\u0009-\\u000D\\u0020\\u0085\\u00A0\\u1680\\u2000-\\u200A\\u2028\\u2029\\u202F\\u205F\\u3000]",
+      "$comment": "Matches a character outside Rust 1.95 char::is_whitespace(), so nonempty strings agree with str::trim() rather than regex-engine-specific whitespace classes."
+    },
+    "config_positiveTimeout": {
+      "type": "integer",
+      "minimum": 1,
+      "maximum": 18446744073709551615
+    },
+    "config_projectRelativePath": {
+      "type": "string",
+      "pattern": "[^\\u0009-\\u000D\\u0020\\u0085\\u00A0\\u1680\\u2000-\\u200A\\u2028\\u2029\\u202F\\u205F\\u3000]",
+      "allOf": [
+        {
+          "not": {
+            "pattern": "^[/\\\\]"
+          }
+        },
+        {
+          "not": {
+            "pattern": "^[A-Za-z]:"
+          }
+        },
+        {
+          "not": {
+            "pattern": "(^|[/\\\\])\\.\\.([/\\\\]|(?![\\s\\S]))"
+          }
+        },
+        {
+          "not": {
+            "pattern": "\u0000"
+          }
+        }
+      ]
+    },
+    "config_check": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "id",
+        "argv",
+        "cwd",
+        "kind",
+        "timeout_seconds"
+      ],
+      "properties": {
+        "id": {
+          "$ref": "#/$defs/config_nonempty"
+        },
+        "argv": {
+          "type": "array",
+          "minItems": 1,
+          "prefixItems": [
+            {
+              "allOf": [
+                {
+                  "$ref": "#/$defs/config_nonempty"
+                },
+                {
+                  "not": {
+                    "pattern": "\u0000"
+                  }
+                }
+              ]
+            }
+          ],
+          "items": {
+            "type": "string",
+            "not": {
+              "pattern": "\u0000"
+            }
+          }
+        },
+        "cwd": {
+          "$ref": "#/$defs/config_projectRelativePath"
+        },
+        "kind": {
+          "type": "string"
+        },
+        "timeout_seconds": {
+          "$ref": "#/$defs/config_positiveTimeout"
+        }
+      }
+    },
+    "config_criterion": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "id",
+        "description",
+        "check_id",
+        "required"
+      ],
+      "properties": {
+        "id": {
+          "$ref": "#/$defs/config_nonempty"
+        },
+        "description": {
+          "type": "string"
+        },
+        "check_id": {
+          "$ref": "#/$defs/config_nonempty"
+        },
+        "required": {
+          "type": "boolean"
+        }
+      }
+    },
+    "config_milestone": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "id",
+        "title",
+        "in_scope",
+        "depends_on",
+        "criteria"
+      ],
+      "properties": {
+        "id": {
+          "$ref": "#/$defs/config_nonempty"
+        },
+        "title": {
+          "$ref": "#/$defs/config_nonempty"
+        },
+        "in_scope": {
+          "type": "boolean"
+        },
+        "depends_on": {
+          "type": "array",
+          "items": {
+            "$ref": "#/$defs/config_nonempty"
+          }
+        },
+        "criteria": {
+          "type": "array",
+          "items": {
+            "$ref": "#/$defs/config_criterion"
+          },
+          "uniqueItems": true,
+          "minItems": 1,
+          "contains": {
+            "type": "object",
+            "required": [
+              "required"
+            ],
+            "properties": {
+              "required": {
+                "const": true
+              }
+            }
+          }
+        }
+      }
+    },
+    "core_source": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "git_commit",
+        "fingerprint",
+        "config_hash",
+        "checker_version",
+        "environment_signature"
+      ],
+      "properties": {
+        "git_commit": {
+          "type": "string"
+        },
+        "fingerprint": {
+          "type": "string",
+          "pattern": "^sha256:[0-9a-fA-F]{64}$"
+        },
+        "config_hash": {
+          "type": "string",
+          "pattern": "^sha256:[0-9a-fA-F]{64}$"
+        },
+        "checker_version": {
+          "type": "string"
+        },
+        "environment_signature": {
+          "type": "string",
+          "pattern": "^sha256:[0-9a-fA-F]{64}$"
+        }
+      }
+    },
+    "core_evidence": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "run_id",
+        "check_id",
+        "execution_state",
+        "outcome",
+        "freshness",
+        "source",
+        "command_hash",
+        "log_ref",
+        "log_sha256"
+      ],
+      "properties": {
+        "run_id": {
+          "type": "string"
+        },
+        "check_id": {
+          "type": "string"
+        },
+        "execution_state": {
+          "enum": [
+            "queued",
+            "running",
+            "finished"
+          ]
+        },
+        "outcome": {
+          "anyOf": [
+            {
+              "enum": [
+                "passed",
+                "failed",
+                "skipped",
+                "unknown",
+                "cancelled",
+                "timed_out"
+              ]
+            },
+            {
+              "type": "null"
+            }
+          ]
+        },
+        "freshness": {
+          "enum": [
+            "current",
+            "stale",
+            "pending"
+          ]
+        },
+        "source": {
+          "$ref": "#/$defs/core_source"
+        },
+        "command_hash": {
+          "type": "string",
+          "pattern": "^sha256:[0-9a-fA-F]{64}$"
+        },
+        "log_ref": {
+          "type": [
+            "string",
+            "null"
+          ]
+        },
+        "log_sha256": {
+          "anyOf": [
+            {
+              "type": "string",
+              "pattern": "^sha256:[0-9a-fA-F]{64}$"
+            },
+            {
+              "type": "null"
+            }
+          ]
+        }
+      }
+    },
+    "core_run_result": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "outcome",
+        "exit_code",
+        "stdout",
+        "stderr",
+        "reason"
+      ],
+      "properties": {
+        "outcome": {
+          "enum": [
+            "passed",
+            "failed",
+            "skipped",
+            "unknown",
+            "cancelled",
+            "timed_out"
+          ]
+        },
+        "exit_code": {
+          "anyOf": [
+            {
+              "type": "integer",
+              "minimum": -2147483648,
+              "maximum": 2147483647
+            },
+            {
+              "type": "null"
+            }
+          ]
+        },
+        "stdout": {
+          "type": "object",
+          "additionalProperties": false,
+          "required": [
+            "text",
+            "truncated"
+          ],
+          "properties": {
+            "text": {
+              "type": "string"
+            },
+            "truncated": {
+              "type": "boolean"
+            }
+          }
+        },
+        "stderr": {
+          "type": "object",
+          "additionalProperties": false,
+          "required": [
+            "text",
+            "truncated"
+          ],
+          "properties": {
+            "text": {
+              "type": "string"
+            },
+            "truncated": {
+              "type": "boolean"
+            }
+          }
+        },
+        "reason": {
+          "type": [
+            "string",
+            "null"
+          ]
+        }
+      }
+    },
+    "core_run_record": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "schema_version",
+        "run_id",
+        "check_id",
+        "started_at",
+        "finished_at",
+        "duration_ms",
+        "before",
+        "after",
+        "changed_during_run",
+        "evidence",
+        "result"
+      ],
+      "properties": {
+        "schema_version": {
+          "const": 1
+        },
+        "run_id": {
+          "type": "string"
+        },
+        "check_id": {
+          "type": "string"
+        },
+        "started_at": {
+          "type": "string",
+          "pattern": "^[0-9]{4}-[0-9]{2}-[0-9]{2}T[0-9]{2}:[0-9]{2}:[0-9]{2}(\\.[0-9]+)?(Z|\\+00:00)$"
+        },
+        "finished_at": {
+          "type": "string",
+          "pattern": "^[0-9]{4}-[0-9]{2}-[0-9]{2}T[0-9]{2}:[0-9]{2}:[0-9]{2}(\\.[0-9]+)?(Z|\\+00:00)$"
+        },
+        "duration_ms": {
+          "type": "integer",
+          "minimum": 0,
+          "maximum": 18446744073709551615
+        },
+        "before": {
+          "$ref": "#/$defs/core_source"
+        },
+        "after": {
+          "anyOf": [
+            {
+              "$ref": "#/$defs/core_source"
+            },
+            {
+              "type": "null"
+            }
+          ]
+        },
+        "changed_during_run": {
+          "type": "boolean"
+        },
+        "evidence": {
+          "$ref": "#/$defs/core_evidence"
+        },
+        "result": {
+          "$ref": "#/$defs/core_run_result"
+        }
+      }
+    },
+    "core_milestone_evaluation": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "milestone_id",
+        "implementation_claim",
+        "verified",
+        "blockers",
+        "evidence_refs"
+      ],
+      "properties": {
+        "milestone_id": {
+          "type": "string"
+        },
+        "implementation_claim": {
+          "enum": [
+            "planned",
+            "implemented"
+          ]
+        },
+        "verified": {
+          "type": "boolean"
+        },
+        "blockers": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        },
+        "evidence_refs": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        }
+      }
+    },
+    "core_progress": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "verified",
+        "scoped",
+        "percent",
+        "milestones"
+      ],
+      "properties": {
+        "verified": {
+          "type": "integer",
+          "minimum": 0
+        },
+        "scoped": {
+          "type": "integer",
+          "minimum": 0
+        },
+        "percent": {
+          "anyOf": [
+            {
+              "type": "integer",
+              "minimum": 0,
+              "maximum": 100
+            },
+            {
+              "type": "null"
+            }
+          ]
+        },
+        "milestones": {
+          "type": "array",
+          "items": {
+            "$ref": "#/$defs/core_milestone_evaluation"
+          }
+        }
+      }
+    },
+    "core_status": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "schema_version",
+        "revision",
+        "project_id",
+        "source",
+        "latest",
+        "progress",
+        "warnings"
+      ],
+      "properties": {
+        "schema_version": {
+          "const": 1
+        },
+        "revision": {
+          "type": "integer",
+          "minimum": 0,
+          "maximum": 18446744073709551615
+        },
+        "project_id": {
+          "type": "string"
+        },
+        "source": {
+          "$ref": "#/$defs/core_source"
+        },
+        "latest": {
+          "type": "object",
+          "additionalProperties": {
+            "$ref": "#/$defs/core_evidence"
+          }
+        },
+        "progress": {
+          "$ref": "#/$defs/core_progress"
+        },
+        "warnings": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        }
+      },
+      "$comment": "Output only: Status and Progress derive Serialize, never Deserialize. JSON of this shape must never be used as input to grant verification."
+    },
+    "snapshot": {
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "schema_version": {
+          "const": 1
+        },
+        "canonical_root": {
+          "type": "string",
+          "pattern": "^/"
+        },
+        "service_instance_id": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 160,
+          "pattern": "^(?!\\.\\.?$)[A-Za-z0-9_.-]+$"
+        },
+        "revision": {
+          "type": "integer",
+          "minimum": 0,
+          "maximum": 18446744073709551615
+        },
+        "config": {
+          "title": "Phase 0 embedded progress panel project configuration",
+          "description": "Read-only project configuration. Command definitions are validated but never executed by the Phase 0 panel.",
+          "$comment": "Rust enforces ID uniqueness, reference resolution, and milestone acyclicity; uniqueItems checks whole-object equality only. Both schema and runtime require at least one required criterion per milestone. Path checks are lexical; future execution must canonicalize paths and enforce an approved root and sandbox.",
+          "type": "object",
+          "additionalProperties": false,
+          "required": [
+            "schema_version",
+            "project_id",
+            "enabled",
+            "panel",
+            "execution",
+            "fingerprint",
+            "checks",
+            "milestones"
+          ],
+          "properties": {
+            "schema_version": {
+              "const": 1
+            },
+            "project_id": {
+              "$ref": "#/$defs/config_nonempty"
+            },
+            "enabled": {
+              "type": "boolean"
+            },
+            "panel": {
+              "type": "object",
+              "additionalProperties": false,
+              "required": [
+                "show_on_start"
+              ],
+              "properties": {
+                "show_on_start": {
+                  "type": "boolean"
+                }
+              }
+            },
+            "execution": {
+              "type": "object",
+              "additionalProperties": false,
+              "required": [
+                "max_parallel",
+                "default_timeout_seconds"
+              ],
+              "properties": {
+                "max_parallel": {
+                  "type": "integer",
+                  "minimum": 1,
+                  "maximum": 4294967295
+                },
+                "default_timeout_seconds": {
+                  "$ref": "#/$defs/config_positiveTimeout"
+                }
+              }
+            },
+            "fingerprint": {
+              "type": "object",
+              "additionalProperties": false,
+              "required": [
+                "extra_inputs",
+                "exclude_outputs"
+              ],
+              "properties": {
+                "extra_inputs": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/$defs/config_projectRelativePath"
+                  }
+                },
+                "exclude_outputs": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/$defs/config_projectRelativePath"
+                  }
+                }
+              }
+            },
+            "checks": {
+              "type": "array",
+              "items": {
+                "$ref": "#/$defs/config_check"
+              },
+              "uniqueItems": true
+            },
+            "milestones": {
+              "type": "array",
+              "items": {
+                "$ref": "#/$defs/config_milestone"
+              },
+              "uniqueItems": true
+            }
+          }
+        },
+        "claims": {
+          "type": "object",
+          "additionalProperties": {
+            "enum": [
+              "planned",
+              "implemented"
+            ]
+          }
+        },
+        "claim_notes": {
+          "type": "object",
+          "additionalProperties": {
+            "type": "string"
+          }
+        },
+        "status": {
+          "$ref": "#/$defs/core_status"
+        },
+        "health": {
+          "const": "ready"
+        },
+        "running": {
+          "type": "array",
+          "items": {
+            "$ref": "#/$defs/core_evidence"
+          }
+        },
+        "run_metadata": {
+          "type": "object",
+          "additionalProperties": {
+            "type": "object",
+            "additionalProperties": false,
+            "required": [
+              "run_id",
+              "started_at",
+              "finished_at",
+              "duration_ms"
+            ],
+            "properties": {
+              "run_id": {
+                "type": "string",
+                "minLength": 1,
+                "maxLength": 160,
+                "pattern": "^(?!\\.\\.?$)[A-Za-z0-9_.-]+$"
+              },
+              "started_at": {
+                "type": [
+                  "string",
+                  "null"
+                ]
+              },
+              "finished_at": {
+                "type": [
+                  "string",
+                  "null"
+                ]
+              },
+              "duration_ms": {
+                "anyOf": [
+                  {
+                    "type": "integer",
+                    "minimum": 0,
+                    "maximum": 18446744073709551615
+                  },
+                  {
+                    "type": "null"
+                  }
+                ]
+              }
+            }
+          }
+        }
+      },
+      "required": [
+        "schema_version",
+        "canonical_root",
+        "service_instance_id",
+        "revision",
+        "config",
+        "claims",
+        "claim_notes",
+        "status",
+        "health",
+        "running",
+        "run_metadata"
+      ]
+    },
+    "log_page": {
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "run_id": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 160,
+          "pattern": "^(?!\\.\\.?$)[A-Za-z0-9_.-]+$"
+        },
+        "check_id": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 160,
+          "pattern": "^(?!\\.\\.?$)[A-Za-z0-9_.-]+$"
+        },
+        "offset": {
+          "type": "integer",
+          "minimum": 0,
+          "maximum": 18446744073709551615
+        },
+        "next_offset": {
+          "type": "integer",
+          "minimum": 0,
+          "maximum": 18446744073709551615
+        },
+        "total_bytes": {
+          "type": "integer",
+          "minimum": 0,
+          "maximum": 18446744073709551615
+        },
+        "text": {
+          "type": "string"
+        },
+        "truncated": {
+          "type": "boolean"
+        }
+      },
+      "required": [
+        "run_id",
+        "check_id",
+        "offset",
+        "next_offset",
+        "total_bytes",
+        "text",
+        "truncated"
+      ]
+    },
+    "batch_acceptance": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "run_id",
+        "check_ids",
+        "run_ids",
+        "expected_config_hash",
+        "revision",
+        "cancel_requested"
+      ],
+      "properties": {
+        "run_id": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 160,
+          "pattern": "^(?!\\.\\.?$)[A-Za-z0-9_.-]+$"
+        },
+        "check_ids": {
+          "type": "array",
+          "items": {
+            "type": "string",
+            "minLength": 1,
+            "maxLength": 160,
+            "pattern": "^(?!\\.\\.?$)[A-Za-z0-9_.-]+$"
+          }
+        },
+        "run_ids": {
+          "type": "array",
+          "items": {
+            "type": "string",
+            "minLength": 1,
+            "maxLength": 160,
+            "pattern": "^(?!\\.\\.?$)[A-Za-z0-9_.-]+$"
+          }
+        },
+        "expected_config_hash": {
+          "type": "string",
+          "pattern": "^sha256:[0-9a-fA-F]{64}$"
+        },
+        "revision": {
+          "type": "integer",
+          "minimum": 0,
+          "maximum": 18446744073709551615
+        },
+        "cancel_requested": {
+          "type": "boolean"
+        }
+      }
+    },
+    "batch_run": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "run_id",
+        "check_ids",
+        "run_ids",
+        "expected_config_hash",
+        "revision",
+        "cancel_requested",
+        "execution_state",
+        "runs"
+      ],
+      "properties": {
+        "run_id": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 160,
+          "pattern": "^(?!\\.\\.?$)[A-Za-z0-9_.-]+$"
+        },
+        "check_ids": {
+          "type": "array",
+          "items": {
+            "type": "string",
+            "minLength": 1,
+            "maxLength": 160,
+            "pattern": "^(?!\\.\\.?$)[A-Za-z0-9_.-]+$"
+          }
+        },
+        "run_ids": {
+          "type": "array",
+          "items": {
+            "type": "string",
+            "minLength": 1,
+            "maxLength": 160,
+            "pattern": "^(?!\\.\\.?$)[A-Za-z0-9_.-]+$"
+          }
+        },
+        "expected_config_hash": {
+          "type": "string",
+          "pattern": "^sha256:[0-9a-fA-F]{64}$"
+        },
+        "revision": {
+          "type": "integer",
+          "minimum": 0,
+          "maximum": 18446744073709551615
+        },
+        "cancel_requested": {
+          "type": "boolean"
+        },
+        "execution_state": {
+          "enum": [
+            "queued",
+            "running",
+            "finished"
+          ]
+        },
+        "runs": {
+          "type": "array",
+          "items": {
+            "oneOf": [
+              {
+                "$ref": "#/$defs/run_summary"
+              },
+              {
+                "$ref": "#/$defs/core_evidence"
+              },
+              {
+                "$ref": "#/$defs/missing_child"
+              }
+            ]
+          }
+        }
+      }
+    },
+    "run_summary": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "schema_version",
+        "run_id",
+        "check_id",
+        "started_at",
+        "finished_at",
+        "duration_ms",
+        "before",
+        "after",
+        "changed_during_run",
+        "evidence",
+        "result",
+        "current_freshness"
+      ],
+      "properties": {
+        "schema_version": {
+          "const": 1
+        },
+        "run_id": {
+          "type": "string"
+        },
+        "check_id": {
+          "type": "string"
+        },
+        "started_at": {
+          "type": "string",
+          "pattern": "^[0-9]{4}-[0-9]{2}-[0-9]{2}T[0-9]{2}:[0-9]{2}:[0-9]{2}(\\.[0-9]+)?(Z|\\+00:00)$"
+        },
+        "finished_at": {
+          "type": "string",
+          "pattern": "^[0-9]{4}-[0-9]{2}-[0-9]{2}T[0-9]{2}:[0-9]{2}:[0-9]{2}(\\.[0-9]+)?(Z|\\+00:00)$"
+        },
+        "duration_ms": {
+          "type": "integer",
+          "minimum": 0,
+          "maximum": 18446744073709551615
+        },
+        "before": {
+          "$ref": "#/$defs/core_source"
+        },
+        "after": {
+          "anyOf": [
+            {
+              "$ref": "#/$defs/core_source"
+            },
+            {
+              "type": "null"
+            }
+          ]
+        },
+        "changed_during_run": {
+          "type": "boolean"
+        },
+        "evidence": {
+          "$ref": "#/$defs/core_evidence"
+        },
+        "result": {
+          "$ref": "#/$defs/result_summary"
+        },
+        "current_freshness": {
+          "enum": [
+            "current",
+            "stale",
+            "pending"
+          ]
+        }
+      }
+    },
+    "result_summary": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "outcome",
+        "exit_code",
+        "reason"
+      ],
+      "properties": {
+        "outcome": {
+          "enum": [
+            "passed",
+            "failed",
+            "skipped",
+            "unknown",
+            "cancelled",
+            "timed_out"
+          ]
+        },
+        "exit_code": {
+          "anyOf": [
+            {
+              "type": "integer",
+              "minimum": -2147483648,
+              "maximum": 2147483647
+            },
+            {
+              "type": "null"
+            }
+          ]
+        },
+        "reason": {
+          "type": [
+            "string",
+            "null"
+          ]
+        }
+      }
+    },
+    "cancel_result": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "run_id",
+        "cancellation_requested"
+      ],
+      "properties": {
+        "run_id": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 160,
+          "pattern": "^(?!\\.\\.?$)[A-Za-z0-9_.-]+$"
+        },
+        "cancellation_requested": {
+          "type": "boolean"
+        }
+      }
+    },
+    "missing_child": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "run_id",
+        "execution_state",
+        "outcome",
+        "current_freshness"
+      ],
+      "properties": {
+        "run_id": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 160,
+          "pattern": "^(?!\\.\\.?$)[A-Za-z0-9_.-]+$"
+        },
+        "execution_state": {
+          "const": "finished"
+        },
+        "outcome": {
+          "const": "unknown"
+        },
+        "current_freshness": {
+          "const": "pending"
+        }
+      }
+    },
+    "get_run_result": {
+      "oneOf": [
+        {
+          "$ref": "#/$defs/batch_run"
+        },
+        {
+          "$ref": "#/$defs/run_summary"
+        },
+        {
+          "$ref": "#/$defs/core_evidence"
+        }
+      ]
+    },
+    "submitted_config": {
+      "title": "Phase 0 embedded progress panel project configuration",
+      "description": "Read-only project configuration. Command definitions are validated but never executed by the Phase 0 panel.",
+      "$comment": "Rust enforces ID uniqueness, reference resolution, and milestone acyclicity; uniqueItems checks whole-object equality only. Both schema and runtime require at least one required criterion per milestone. Path checks are lexical; future execution must canonicalize paths and enforce an approved root and sandbox.",
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "schema_version",
+        "project_id",
+        "enabled",
+        "panel",
+        "execution",
+        "fingerprint",
+        "checks",
+        "milestones"
+      ],
+      "properties": {
+        "schema_version": {
+          "const": 1
+        },
+        "project_id": {
+          "$ref": "#/$defs/config_nonempty"
+        },
+        "enabled": {
+          "type": "boolean"
+        },
+        "panel": {
+          "type": "object",
+          "additionalProperties": false,
+          "required": [
+            "show_on_start"
+          ],
+          "properties": {
+            "show_on_start": {
+              "type": "boolean"
+            }
+          }
+        },
+        "execution": {
+          "type": "object",
+          "additionalProperties": false,
+          "required": [
+            "max_parallel",
+            "default_timeout_seconds"
+          ],
+          "properties": {
+            "max_parallel": {
+              "type": "integer",
+              "minimum": 1,
+              "maximum": 4294967295
+            },
+            "default_timeout_seconds": {
+              "$ref": "#/$defs/config_positiveTimeout"
+            }
+          }
+        },
+        "fingerprint": {
+          "type": "object",
+          "additionalProperties": false,
+          "required": [
+            "extra_inputs",
+            "exclude_outputs"
+          ],
+          "properties": {
+            "extra_inputs": {
+              "type": "array",
+              "items": {
+                "$ref": "#/$defs/config_projectRelativePath"
+              }
+            },
+            "exclude_outputs": {
+              "type": "array",
+              "items": {
+                "$ref": "#/$defs/config_projectRelativePath"
+              }
+            }
+          }
+        },
+        "checks": {
+          "type": "array",
+          "items": {
+            "$ref": "#/$defs/config_check"
+          },
+          "uniqueItems": true
+        },
+        "milestones": {
+          "type": "array",
+          "items": {
+            "$ref": "#/$defs/config_milestone"
+          },
+          "uniqueItems": true
+        }
+      }
+    }
+  }
+}

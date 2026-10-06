@@ -1,0 +1,13 @@
+Progress Checker
+
+The Progress Checker backend workspace and native plugin are licensed under the
+Apache License, Version 2.0. See LICENSE for its terms. Copyrights remain with
+the respective contributors.
+
+Third-party dependencies retain their own licenses and copyright notices.
+The plugin package includes THIRD_PARTY_NOTICES.md and the corresponding
+third-party license material and version inventory.
+
+This backend plugin package does not include the maintained Codex fork or an
+OpenAI Codex executable. OpenAI is not identified as the author or licensor of
+Progress Checker by these project notices. Codex is obtained separately.

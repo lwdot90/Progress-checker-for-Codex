@@ -1,0 +1,270 @@
+#!/usr/bin/python3
+"""Start/attach the root-bound checker and supervise its MCP session.
+
+Only private runtime leases are managed here. Check approvals are never created.
+The installer supplies the canonical root explicitly; cwd is the plugin cache.
+"""
+import argparse
+import contextlib
+import fcntl
+import hashlib
+import json
+import os
+from pathlib import Path
+import signal
+import socket
+import stat
+import subprocess
+import sys
+import threading
+import time
+
+
+def identity(pid):
+    try:
+        # starttime distinguishes reused PIDs; comm may contain spaces or ')'.
+        info = Path(f'/proc/{pid}/stat').read_text().rsplit(')', 1)[1].split()
+        if info[0] == 'Z' or Path(f'/proc/{pid}').stat().st_uid != os.getuid():
+            return None
+        return {'pid': pid, 'starttime': info[19]}
+    except (OSError, IndexError):
+        return None
+
+
+def live(record):
+    return isinstance(record, dict) and identity(record.get('pid', -1)) == record
+
+
+def private(path):
+    path.mkdir(parents=True, mode=0o700, exist_ok=True)
+    info = path.lstat()
+    if not stat.S_ISDIR(info.st_mode) or info.st_uid != os.getuid() or info.st_mode & 0o077:
+        raise RuntimeError(f'Expected a private owned directory: {path}')
+
+
+def separate(root, directory):
+    if directory == root or root in directory.parents or directory in root.parents:
+        raise RuntimeError('Private runtime directory and repository must not overlap')
+
+
+def fallback_directory(parent=Path('/tmp'), parent_owner=0):
+    # The injectable parent is only for isolated helper tests; Runtime always
+    # uses the fixed /tmp location, never an environment-controlled directory.
+    info = parent.lstat()
+    if (not stat.S_ISDIR(info.st_mode) or info.st_uid != parent_owner
+            or not info.st_mode & stat.S_ISVTX or parent.resolve(strict=True) != parent):
+        raise RuntimeError('IPC parent must be a real root-owned sticky directory')
+    directory = parent / f'progress-checker-ipc-{os.geteuid()}'
+    directory.mkdir(mode=0o700, exist_ok=True)
+    info = directory.lstat()
+    if (not stat.S_ISDIR(info.st_mode) or info.st_uid != os.geteuid()
+            or stat.S_IMODE(info.st_mode) != 0o700):
+        raise RuntimeError(f'Expected a private owned IPC directory: {directory}')
+    return directory
+
+
+def socket_path(root, state, fallback_parent=Path('/tmp'), parent_owner=0):
+    root, state = root.resolve(strict=True), state.resolve(strict=True)
+    separate(root, state)
+    key = hashlib.sha256(os.fsencode(root)).hexdigest()[:24]
+    path = state / f'ipc-{key}.sock'
+    if len(os.fsencode(path)) <= 100:
+        return path
+    directory = fallback_directory(fallback_parent, parent_owner)
+    separate(root, directory)
+    key = hashlib.sha256(os.fsencode(root) + b'\0' + os.fsencode(state)).hexdigest()[:24]
+    return directory / f'ipc-{key}.sock'
+
+
+def atomic(path, value):
+    temporary = path.with_name(path.name + f'.{os.getpid()}.tmp')
+    with temporary.open('x') as output:
+        json.dump(value, output)
+        output.flush()
+        os.fsync(output.fileno())
+    temporary.replace(path)
+
+
+class Runtime:
+    def __init__(self, root, state):
+        self.root, self.state = root.resolve(strict=True), state
+        private(state)
+        self.state = state.resolve(strict=True)
+        separate(self.root, self.state)
+        self.bin = Path(__file__).resolve().parent
+        key = hashlib.sha256(os.fsencode(self.root)).hexdigest()[:24]
+        self.socket = socket_path(self.root, self.state)
+        self.directory = self.state / f'plugin-{key}'
+        private(self.directory)
+        self.leases = self.directory / 'leases'
+        private(self.leases)
+        self.record = self.directory / 'service.json'
+        self.lease = self.leases / f'{os.getpid()}.json'
+        self.child = None
+        self.watchers = []
+
+    @contextlib.contextmanager
+    def locked(self):
+        fd = os.open(self.directory / 'lock', os.O_CREAT | os.O_RDWR | os.O_NOFOLLOW, 0o600)
+        with os.fdopen(fd, 'r+') as lock:
+            fcntl.flock(lock, fcntl.LOCK_EX)
+            yield
+
+    def service_record(self):
+        try:
+            return json.loads(self.record.read_text())
+        except FileNotFoundError:
+            return None
+
+    def connected(self):
+        try:
+            info = self.socket.lstat()
+            if not stat.S_ISSOCK(info.st_mode) or info.st_uid != os.getuid() or info.st_mode & 0o077:
+                return False
+            with socket.socket(socket.AF_UNIX) as connection:
+                connection.settimeout(1)
+                connection.connect(str(self.socket))
+            return True
+        except OSError:
+            return False
+
+    def ensure_service(self):
+        with self.locked():
+            owned = self.service_record()
+            if live(owned) or self.connected():
+                return
+            command = [str(self.bin / 'progress-checker'), '--root', str(self.root), '--state-dir', str(self.state)]
+            with (self.directory / 'service.log').open('ab') as log:
+                self.child = subprocess.Popen([*command, 'serve'], stdin=subprocess.DEVNULL,
+                    stdout=log, stderr=log, start_new_session=True)
+            record = identity(self.child.pid)
+            if record is None:
+                raise RuntimeError('Checker failed to start; inspect the private service.log')
+            atomic(self.record, record)
+            # Native Codex may kill its MCP process group after a short grace
+            # period. Keep gentle writer cleanup outside that process group.
+            self.watchers = [watcher for watcher in self.watchers if watcher.poll() is None]
+            with (self.directory / 'service.log').open('ab') as log:
+                self.watchers.append(subprocess.Popen([
+                    sys.executable, str(self.bin / 'checker-plugin'),
+                    '--root', str(self.root), '--state-dir', str(self.state),
+                    '--watch-service', str(record['pid']), record['starttime'],
+                ], stdin=subprocess.DEVNULL, stdout=log, stderr=log, start_new_session=True))
+            deadline = time.monotonic() + 45
+            while time.monotonic() < deadline:
+                if self.child.poll() is not None:
+                    raise RuntimeError('Checker exited during startup; inspect the private service.log')
+                try:
+                    result = subprocess.run([*command, 'status'], stdout=subprocess.DEVNULL,
+                        stderr=subprocess.DEVNULL, timeout=5)
+                    if result.returncode == 0:
+                        return
+                except subprocess.TimeoutExpired:
+                    pass
+                time.sleep(0.1)
+            self.stop_owned()
+            raise RuntimeError('Checker initialization timed out')
+
+    def stop_owned(self):
+        record = self.service_record()
+        if live(record):
+            os.kill(record['pid'], signal.SIGTERM)
+            deadline = time.monotonic() + 10
+            while live(record) and time.monotonic() < deadline:
+                if self.child:
+                    self.child.poll()
+                time.sleep(0.05)
+            if live(record):
+                # Never force-kill a writer while it may be persisting evidence.
+                raise RuntimeError('Checker shutdown is still pending')
+        self.record.unlink(missing_ok=True)
+
+    def attach(self):
+        with self.locked():
+            atomic(self.lease, identity(os.getpid()))
+        self.ensure_service()
+
+    def detach(self):
+        with self.locked():
+            self.lease.unlink(missing_ok=True)
+            active = False
+            for lease in self.leases.glob('*.json'):
+                if live(json.loads(lease.read_text())):
+                    active = True
+                else:
+                    lease.unlink()
+            if not active:
+                self.stop_owned()
+
+    def watch_service(self, expected):
+        # This process never attaches or creates a service/lease. An exact
+        # ownership record prevents it from stopping an independent writer or
+        # a replacement that reused the PID.
+        while live(expected):
+            with self.locked():
+                if self.service_record() != expected:
+                    return
+                active = False
+                for lease in self.leases.glob('*.json'):
+                    if live(json.loads(lease.read_text())):
+                        active = True
+                    else:
+                        lease.unlink()
+                if not active:
+                    self.stop_owned()
+                    return
+            time.sleep(0.25)
+        with self.locked():
+            if self.service_record() == expected:
+                self.record.unlink(missing_ok=True)
+
+
+def main():
+    parser = argparse.ArgumentParser(description=__doc__)
+    parser.add_argument('--root', required=True, type=Path)
+    parser.add_argument('--state-dir', required=True, type=Path)
+    parser.add_argument('--watch-service', nargs=2, metavar=('PID', 'STARTTIME'),
+                        help=argparse.SUPPRESS)
+    args = parser.parse_args()
+    runtime = Runtime(args.root, args.state_dir)
+    if args.watch_service:
+        pid, starttime = args.watch_service
+        runtime.watch_service({'pid': int(pid), 'starttime': starttime})
+        return 0
+    stopped = threading.Event()
+    adapter = None
+
+    def interrupt(*_):
+        stopped.set()
+        if adapter and adapter.poll() is None:
+            adapter.terminate()
+
+    signal.signal(signal.SIGTERM, interrupt)
+    signal.signal(signal.SIGINT, interrupt)
+    try:
+        runtime.attach()
+        def monitor():
+            while not stopped.wait(1):
+                try:
+                    runtime.ensure_service()
+                except Exception as error:
+                    print(f'Progress Checker reconnect: {error}', file=sys.stderr)
+        worker = threading.Thread(target=monitor, daemon=True)
+        worker.start()
+        adapter = subprocess.Popen([str(runtime.bin / 'progress-checker-mcp'),
+            '--root', str(runtime.root), '--state-dir', str(runtime.state)])
+        status = adapter.wait()
+        stopped.set()
+        worker.join(timeout=46)
+        return status
+    finally:
+        stopped.set()
+        runtime.detach()
+
+
+if __name__ == '__main__':
+    try:
+        sys.exit(main())
+    except Exception as error:
+        print(f'Progress Checker: {error}', file=sys.stderr)
+        sys.exit(1)

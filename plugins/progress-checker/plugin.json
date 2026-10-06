@@ -1,0 +1,15 @@
+{
+  "$schema": "https://agent-plugins.org/schemas/1.0.0/plugin.schema.json",
+  "name": "progress-checker",
+  "version": "0.2.1-dev",
+  "description": "Track explicit milestones with current local check evidence.",
+  "author": {"name": "Progress Checker contributors"},
+  "extensions": {
+    "com.openai": {
+      "interface": {
+        "displayName": "Progress Checker",
+        "shortDescription": "Evidence-backed progress for this repository"
+      }
+    }
+  }
+}

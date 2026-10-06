@@ -1,0 +1,16 @@
+[package]
+name = "checker-mcp"
+version.workspace = true
+edition.workspace = true
+license.workspace = true
+
+[[bin]]
+name = "progress-checker-mcp"
+path = "src/main.rs"
+
+[dependencies]
+checker-service = { path = "../checker-service" }
+serde.workspace = true
+serde_json.workspace = true
+clap.workspace = true
+tokio.workspace = true

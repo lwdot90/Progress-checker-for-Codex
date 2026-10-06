@@ -1,0 +1,94 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "urn:progress-checker:phase-1:trust",
+  "title": "Phase 1 exact local execution approval",
+  "$comment": "Only a separately stored human approval can authorize execution. Schema validity cannot establish canonical paths, ownership, digest equality, or sandbox availability. run_on_start, arbitrary environments, and repository-granted approvals are unsupported.",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "schema_version",
+    "binding",
+    "binding_digest"
+  ],
+  "properties": {
+    "schema_version": {
+      "const": 1
+    },
+    "binding": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "canonical_root",
+        "config_hash",
+        "command_hash",
+        "argv",
+        "cwd",
+        "environment",
+        "sandbox_profile",
+        "executable_hash",
+        "sandbox_binary_hash"
+      ],
+      "properties": {
+        "canonical_root": {
+          "type": "string",
+          "pattern": "^/[^\\u0000]*$"
+        },
+        "config_hash": {
+          "type": "string",
+          "pattern": "^sha256:[0-9a-fA-F]{64}$"
+        },
+        "command_hash": {
+          "type": "string",
+          "pattern": "^sha256:[0-9a-fA-F]{64}$"
+        },
+        "argv": {
+          "type": "array",
+          "minItems": 1,
+          "items": {
+            "type": "string",
+            "pattern": "^[^\\u0000]*$"
+          }
+        },
+        "cwd": {
+          "type": "string",
+          "pattern": "^/[^\\u0000]*$"
+        },
+        "environment": {
+          "type": "object",
+          "additionalProperties": false,
+          "required": [
+            "PATH",
+            "HOME",
+            "LANG"
+          ],
+          "properties": {
+            "PATH": {
+              "const": "/usr/bin:/bin"
+            },
+            "HOME": {
+              "const": "/tmp"
+            },
+            "LANG": {
+              "const": "C.UTF-8"
+            }
+          }
+        },
+        "sandbox_profile": {
+          "const": "linux-bwrap-no-network-no-home-v1"
+        },
+        "executable_hash": {
+          "type": "string",
+          "pattern": "^sha256:[0-9a-fA-F]{64}$"
+        },
+        "sandbox_binary_hash": {
+          "type": "string",
+          "pattern": "^sha256:[0-9a-fA-F]{64}$"
+        }
+      }
+    },
+    "binding_digest": {
+      "type": "string",
+      "pattern": "^sha256:[0-9a-fA-F]{64}$"
+    }
+  }
+}

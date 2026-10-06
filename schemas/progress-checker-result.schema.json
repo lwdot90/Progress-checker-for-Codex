@@ -1,0 +1,374 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "urn:progress-checker:phase-1:result",
+  "title": "Phase 1 immutable command run record",
+  "$comment": "Derived progress is absent from persistence. Freshness/outcome wire values are never sufficient proof; the engine checks authenticated state, log contents and hashes, current identity, and newest attempts.",
+  "$ref": "#/$defs/run_record",
+  "$defs": {
+    "source": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "git_commit",
+        "fingerprint",
+        "config_hash",
+        "checker_version",
+        "environment_signature"
+      ],
+      "properties": {
+        "git_commit": {
+          "type": "string"
+        },
+        "fingerprint": {
+          "type": "string",
+          "pattern": "^sha256:[0-9a-fA-F]{64}$"
+        },
+        "config_hash": {
+          "type": "string",
+          "pattern": "^sha256:[0-9a-fA-F]{64}$"
+        },
+        "checker_version": {
+          "type": "string"
+        },
+        "environment_signature": {
+          "type": "string",
+          "pattern": "^sha256:[0-9a-fA-F]{64}$"
+        }
+      }
+    },
+    "evidence": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "run_id",
+        "check_id",
+        "execution_state",
+        "outcome",
+        "freshness",
+        "source",
+        "command_hash",
+        "log_ref",
+        "log_sha256"
+      ],
+      "properties": {
+        "run_id": {
+          "type": "string"
+        },
+        "check_id": {
+          "type": "string"
+        },
+        "execution_state": {
+          "enum": [
+            "queued",
+            "running",
+            "finished"
+          ]
+        },
+        "outcome": {
+          "anyOf": [
+            {
+              "enum": [
+                "passed",
+                "failed",
+                "skipped",
+                "unknown",
+                "cancelled",
+                "timed_out"
+              ]
+            },
+            {
+              "type": "null"
+            }
+          ]
+        },
+        "freshness": {
+          "enum": [
+            "current",
+            "stale",
+            "pending"
+          ]
+        },
+        "source": {
+          "$ref": "#/$defs/source"
+        },
+        "command_hash": {
+          "type": "string",
+          "pattern": "^sha256:[0-9a-fA-F]{64}$"
+        },
+        "log_ref": {
+          "type": [
+            "string",
+            "null"
+          ]
+        },
+        "log_sha256": {
+          "anyOf": [
+            {
+              "type": "string",
+              "pattern": "^sha256:[0-9a-fA-F]{64}$"
+            },
+            {
+              "type": "null"
+            }
+          ]
+        }
+      }
+    },
+    "run_result": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "outcome",
+        "exit_code",
+        "stdout",
+        "stderr",
+        "reason"
+      ],
+      "properties": {
+        "outcome": {
+          "enum": [
+            "passed",
+            "failed",
+            "skipped",
+            "unknown",
+            "cancelled",
+            "timed_out"
+          ]
+        },
+        "exit_code": {
+          "anyOf": [
+            {
+              "type": "integer",
+              "minimum": -2147483648,
+              "maximum": 2147483647
+            },
+            {
+              "type": "null"
+            }
+          ]
+        },
+        "stdout": {
+          "type": "object",
+          "additionalProperties": false,
+          "required": [
+            "text",
+            "truncated"
+          ],
+          "properties": {
+            "text": {
+              "type": "string"
+            },
+            "truncated": {
+              "type": "boolean"
+            }
+          }
+        },
+        "stderr": {
+          "type": "object",
+          "additionalProperties": false,
+          "required": [
+            "text",
+            "truncated"
+          ],
+          "properties": {
+            "text": {
+              "type": "string"
+            },
+            "truncated": {
+              "type": "boolean"
+            }
+          }
+        },
+        "reason": {
+          "type": [
+            "string",
+            "null"
+          ]
+        }
+      }
+    },
+    "run_record": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "schema_version",
+        "run_id",
+        "check_id",
+        "started_at",
+        "finished_at",
+        "duration_ms",
+        "before",
+        "after",
+        "changed_during_run",
+        "evidence",
+        "result"
+      ],
+      "properties": {
+        "schema_version": {
+          "const": 1
+        },
+        "run_id": {
+          "type": "string"
+        },
+        "check_id": {
+          "type": "string"
+        },
+        "started_at": {
+          "type": "string",
+          "pattern": "^[0-9]{4}-[0-9]{2}-[0-9]{2}T[0-9]{2}:[0-9]{2}:[0-9]{2}(\\.[0-9]+)?(Z|\\+00:00)$"
+        },
+        "finished_at": {
+          "type": "string",
+          "pattern": "^[0-9]{4}-[0-9]{2}-[0-9]{2}T[0-9]{2}:[0-9]{2}:[0-9]{2}(\\.[0-9]+)?(Z|\\+00:00)$"
+        },
+        "duration_ms": {
+          "type": "integer",
+          "minimum": 0,
+          "maximum": 18446744073709551615
+        },
+        "before": {
+          "$ref": "#/$defs/source"
+        },
+        "after": {
+          "anyOf": [
+            {
+              "$ref": "#/$defs/source"
+            },
+            {
+              "type": "null"
+            }
+          ]
+        },
+        "changed_during_run": {
+          "type": "boolean"
+        },
+        "evidence": {
+          "$ref": "#/$defs/evidence"
+        },
+        "result": {
+          "$ref": "#/$defs/run_result"
+        }
+      }
+    },
+    "milestone_evaluation": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "milestone_id",
+        "implementation_claim",
+        "verified",
+        "blockers",
+        "evidence_refs"
+      ],
+      "properties": {
+        "milestone_id": {
+          "type": "string"
+        },
+        "implementation_claim": {
+          "enum": [
+            "planned",
+            "implemented"
+          ]
+        },
+        "verified": {
+          "type": "boolean"
+        },
+        "blockers": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        },
+        "evidence_refs": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        }
+      }
+    },
+    "progress": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "verified",
+        "scoped",
+        "percent",
+        "milestones"
+      ],
+      "properties": {
+        "verified": {
+          "type": "integer",
+          "minimum": 0
+        },
+        "scoped": {
+          "type": "integer",
+          "minimum": 0
+        },
+        "percent": {
+          "anyOf": [
+            {
+              "type": "integer",
+              "minimum": 0,
+              "maximum": 100
+            },
+            {
+              "type": "null"
+            }
+          ]
+        },
+        "milestones": {
+          "type": "array",
+          "items": {
+            "$ref": "#/$defs/milestone_evaluation"
+          }
+        }
+      }
+    },
+    "status": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "schema_version",
+        "revision",
+        "project_id",
+        "source",
+        "latest",
+        "progress",
+        "warnings"
+      ],
+      "properties": {
+        "schema_version": {
+          "const": 1
+        },
+        "revision": {
+          "type": "integer",
+          "minimum": 0,
+          "maximum": 18446744073709551615
+        },
+        "project_id": {
+          "type": "string"
+        },
+        "source": {
+          "$ref": "#/$defs/source"
+        },
+        "latest": {
+          "type": "object",
+          "additionalProperties": {
+            "$ref": "#/$defs/evidence"
+          }
+        },
+        "progress": {
+          "$ref": "#/$defs/progress"
+        },
+        "warnings": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        }
+      },
+      "$comment": "Output only: Status and Progress derive Serialize, never Deserialize. JSON of this shape must never be used as input to grant verification."
+    }
+  }
+}

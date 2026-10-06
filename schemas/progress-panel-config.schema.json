@@ -1,0 +1,254 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "urn:progress-checker:phase-0:config",
+  "title": "Phase 0 embedded progress panel project configuration",
+  "description": "Read-only project configuration. Command definitions are validated but never executed by the Phase 0 panel.",
+  "$comment": "Rust enforces ID uniqueness, reference resolution, and milestone acyclicity; uniqueItems checks whole-object equality only. Both schema and runtime require at least one required criterion per milestone. Path checks are lexical; future execution must canonicalize paths and enforce an approved root and sandbox.",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "schema_version",
+    "project_id",
+    "enabled",
+    "panel",
+    "execution",
+    "fingerprint",
+    "checks",
+    "milestones"
+  ],
+  "properties": {
+    "schema_version": {
+      "const": 1
+    },
+    "project_id": {
+      "$ref": "#/$defs/nonempty"
+    },
+    "enabled": {
+      "type": "boolean"
+    },
+    "panel": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "show_on_start"
+      ],
+      "properties": {
+        "show_on_start": {
+          "type": "boolean"
+        }
+      }
+    },
+    "execution": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "max_parallel",
+        "default_timeout_seconds"
+      ],
+      "properties": {
+        "max_parallel": {
+          "type": "integer",
+          "minimum": 1,
+          "maximum": 4294967295
+        },
+        "default_timeout_seconds": {
+          "$ref": "#/$defs/positiveTimeout"
+        }
+      }
+    },
+    "fingerprint": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "extra_inputs",
+        "exclude_outputs"
+      ],
+      "properties": {
+        "extra_inputs": {
+          "type": "array",
+          "items": {
+            "$ref": "#/$defs/projectRelativePath"
+          }
+        },
+        "exclude_outputs": {
+          "type": "array",
+          "items": {
+            "$ref": "#/$defs/projectRelativePath"
+          }
+        }
+      }
+    },
+    "checks": {
+      "type": "array",
+      "items": {
+        "$ref": "#/$defs/check"
+      },
+      "uniqueItems": true
+    },
+    "milestones": {
+      "type": "array",
+      "items": {
+        "$ref": "#/$defs/milestone"
+      },
+      "uniqueItems": true
+    }
+  },
+  "$defs": {
+    "nonempty": {
+      "type": "string",
+      "pattern": "[^\\u0009-\\u000D\\u0020\\u0085\\u00A0\\u1680\\u2000-\\u200A\\u2028\\u2029\\u202F\\u205F\\u3000]",
+      "$comment": "Matches a character outside Rust 1.95 char::is_whitespace(), so nonempty strings agree with str::trim() rather than regex-engine-specific whitespace classes."
+    },
+    "positiveTimeout": {
+      "type": "integer",
+      "minimum": 1,
+      "maximum": 18446744073709551615
+    },
+    "projectRelativePath": {
+      "type": "string",
+      "pattern": "[^\\u0009-\\u000D\\u0020\\u0085\\u00A0\\u1680\\u2000-\\u200A\\u2028\\u2029\\u202F\\u205F\\u3000]",
+      "allOf": [
+        {
+          "not": {
+            "pattern": "^[/\\\\]"
+          }
+        },
+        {
+          "not": {
+            "pattern": "^[A-Za-z]:"
+          }
+        },
+        {
+          "not": {
+            "pattern": "(^|[/\\\\])\\.\\.([/\\\\]|(?![\\s\\S]))"
+          }
+        },
+        {
+          "not": {
+            "pattern": "\u0000"
+          }
+        }
+      ]
+    },
+    "check": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "id",
+        "argv",
+        "cwd",
+        "kind",
+        "timeout_seconds"
+      ],
+      "properties": {
+        "id": {
+          "$ref": "#/$defs/nonempty"
+        },
+        "argv": {
+          "type": "array",
+          "minItems": 1,
+          "prefixItems": [
+            {
+              "allOf": [
+                {
+                  "$ref": "#/$defs/nonempty"
+                },
+                {
+                  "not": {
+                    "pattern": "\u0000"
+                  }
+                }
+              ]
+            }
+          ],
+          "items": {
+            "type": "string",
+            "not": {
+              "pattern": "\u0000"
+            }
+          }
+        },
+        "cwd": {
+          "$ref": "#/$defs/projectRelativePath"
+        },
+        "kind": {
+          "type": "string"
+        },
+        "timeout_seconds": {
+          "$ref": "#/$defs/positiveTimeout"
+        }
+      }
+    },
+    "criterion": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "id",
+        "description",
+        "check_id",
+        "required"
+      ],
+      "properties": {
+        "id": {
+          "$ref": "#/$defs/nonempty"
+        },
+        "description": {
+          "type": "string"
+        },
+        "check_id": {
+          "$ref": "#/$defs/nonempty"
+        },
+        "required": {
+          "type": "boolean"
+        }
+      }
+    },
+    "milestone": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "id",
+        "title",
+        "in_scope",
+        "depends_on",
+        "criteria"
+      ],
+      "properties": {
+        "id": {
+          "$ref": "#/$defs/nonempty"
+        },
+        "title": {
+          "$ref": "#/$defs/nonempty"
+        },
+        "in_scope": {
+          "type": "boolean"
+        },
+        "depends_on": {
+          "type": "array",
+          "items": {
+            "$ref": "#/$defs/nonempty"
+          }
+        },
+        "criteria": {
+          "type": "array",
+          "items": {
+            "$ref": "#/$defs/criterion"
+          },
+          "uniqueItems": true,
+          "minItems": 1,
+          "contains": {
+            "type": "object",
+            "required": [
+              "required"
+            ],
+            "properties": {
+              "required": {
+                "const": true
+              }
+            }
+          }
+        }
+      }
+    }
+  }
+}

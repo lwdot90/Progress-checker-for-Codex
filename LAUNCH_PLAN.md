@@ -30,3 +30,16 @@ approval rules are unchanged. This is not a default-container compatibility clai
 These launch outcomes are tracked separately from the original development
 checker configuration. No original check definitions or human grants are changed
 for publishing. Missing launch evidence must remain explicit.
+
+## Global-install follow-up — 2026-10-06
+
+Added requirements: one user-level installation/update, explicit per-project
+activation through conversation, and isolated plans/claims/evidence for multiple
+projects. Original delivery requirements and legacy support remain.
+
+Implemented in 0.3.0-dev. Validation: ten MCP unit tests, 75 source-free native
+global integration assertions (including shared writer and missing-grant refusal),
+and a current passing previously approved synthetic check through the new gateway.
+Root checker records three added implementation claims separately from configured
+verification. Root check approval remains pending after the explicit plan revision.
+Directory submission remains external and pending.

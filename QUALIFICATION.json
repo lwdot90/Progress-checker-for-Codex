@@ -1,6 +1,7 @@
 {
   "schema_version": 1,
-  "archive_sha256": "404759af79cd563d3e1266f686869893727110b22465eeecbbb0cf2c7ba9c029",
+  "version": "0.3.0-dev",
+  "archive_sha256": "0169944a42895eb37a1b279316052fbf566e6a7d436ce53eef95d55060176d9b",
   "platform": "Fedora 44 x86_64",
   "codex_version": "0.160.0",
   "container": {
@@ -14,55 +15,334 @@
       "unmask=ALL"
     ]
   },
-  "package_assertions_passed": 75,
-  "execution_assertions": [
-    {
-      "name": "passing CLI accepted",
-      "passed": true
-    },
-    {
-      "name": "approved check passes and verifies",
-      "passed": true
-    },
-    {
-      "name": "restart retains current passing run",
-      "passed": true
-    },
-    {
-      "name": "source edit invalidates verification",
-      "passed": true
-    },
-    {
-      "name": "failing CLI accepted",
-      "passed": true
-    },
-    {
-      "name": "failed assertion stays unverified",
-      "passed": true
-    },
-    {
-      "name": "restored CLI accepted",
-      "passed": true
-    },
-    {
-      "name": "unchanged command grant supports corrected rerun",
-      "passed": true
-    }
-  ],
-  "retention_assertions": [
-    {
-      "name": "update preserves current passing evidence",
-      "passed": true
-    },
-    {
-      "name": "removal preserves run and correctly marks evidence stale after managed instructions change",
-      "passed": true
-    }
-  ],
+  "mcp_unit_tests_passed": 10,
+  "global_integration": {
+    "status": "passed",
+    "assertions": [
+      {
+        "name": "package contains the global launcher and installer",
+        "passed": true
+      },
+      {
+        "name": "self-contained package checksums cover every payload file",
+        "passed": true
+      },
+      {
+        "name": "self-contained package payload bytes match their checksums",
+        "passed": true
+      },
+      {
+        "name": "0-git-init succeeds",
+        "passed": true
+      },
+      {
+        "name": "0-git-add succeeds",
+        "passed": true
+      },
+      {
+        "name": "0-git-commit succeeds",
+        "passed": true
+      },
+      {
+        "name": "1-git-init succeeds",
+        "passed": true
+      },
+      {
+        "name": "1-git-add succeeds",
+        "passed": true
+      },
+      {
+        "name": "1-git-commit succeeds",
+        "passed": true
+      },
+      {
+        "name": "global-install succeeds",
+        "passed": true
+      },
+      {
+        "name": "global install without --project changes no repository files",
+        "passed": true
+      },
+      {
+        "name": "native profile has exactly one installed global plugin",
+        "passed": true
+      },
+      {
+        "name": "native installed cache has the exact packaged version",
+        "passed": true
+      },
+      {
+        "name": "global native MCP definition binds only retained state, never a project",
+        "passed": true
+      },
+      {
+        "name": "global plugin is enabled and unrelated global settings survive",
+        "passed": true
+      },
+      {
+        "name": "global gateway discovers ten backend tools plus explicit tracking",
+        "passed": true
+      },
+      {
+        "name": "read-only discovery excludes tracking and every mutation",
+        "passed": true
+      },
+      {
+        "name": "unbound gateway refuses backend tools",
+        "passed": true
+      },
+      {
+        "name": "unknown tool refuses before project selection",
+        "passed": true
+      },
+      {
+        "name": "read-only tracking is refused before any setup",
+        "passed": true
+      },
+      {
+        "name": "malformed false metadata is refused before tracking",
+        "passed": true
+      },
+      {
+        "name": "malformed zero metadata is refused before tracking",
+        "passed": true
+      },
+      {
+        "name": "malformed empty-list metadata is refused before tracking",
+        "passed": true
+      },
+      {
+        "name": "malformed empty-string metadata is refused before tracking",
+        "passed": true
+      },
+      {
+        "name": "unbound discovery and refusals start no writer or project setup",
+        "passed": true
+      },
+      {
+        "name": "relative project selection is refused",
+        "passed": true
+      },
+      {
+        "name": "subdirectory project selection is refused",
+        "passed": true
+      },
+      {
+        "name": "not-git project selection is refused",
+        "passed": true
+      },
+      {
+        "name": "cache project selection is refused",
+        "passed": true
+      },
+      {
+        "name": "invalid roots leave no accidental checker configuration or instructions",
+        "passed": true
+      },
+      {
+        "name": "edited-agents-git-init succeeds",
+        "passed": true
+      },
+      {
+        "name": "edited instructions refuse tracking",
+        "passed": true
+      },
+      {
+        "name": "edited refusal preserves instructions and creates no project files",
+        "passed": true
+      },
+      {
+        "name": "duplicate-agents-git-init succeeds",
+        "passed": true
+      },
+      {
+        "name": "duplicate instructions refuse tracking",
+        "passed": true
+      },
+      {
+        "name": "duplicate refusal preserves instructions and creates no project files",
+        "passed": true
+      },
+      {
+        "name": "near-limit-agents-git-init succeeds",
+        "passed": true
+      },
+      {
+        "name": "near-limit instructions refuse tracking",
+        "passed": true
+      },
+      {
+        "name": "near-limit refusal preserves instructions and creates no project files",
+        "passed": true
+      },
+      {
+        "name": "instruction refusals keep the gateway unbound without a writer",
+        "passed": true
+      },
+      {
+        "name": "tracking confirms the exact selected canonical worktree",
+        "passed": true
+      },
+      {
+        "name": "tracking preserves the exact existing project configuration",
+        "passed": true
+      },
+      {
+        "name": "one connection cannot switch projects",
+        "passed": true
+      },
+      {
+        "name": "refused switch leaves the other project untouched",
+        "passed": true
+      },
+      {
+        "name": "tracking confirms the exact selected canonical worktree",
+        "passed": true
+      },
+      {
+        "name": "simultaneous same-root connections share the existing service instance",
+        "passed": true
+      },
+      {
+        "name": "tracking confirms the exact selected canonical worktree",
+        "passed": true
+      },
+      {
+        "name": "first tracking creates an empty plan without invented checks or milestones",
+        "passed": true
+      },
+      {
+        "name": "tracking preserves user instructions and adds one managed block 0",
+        "passed": true
+      },
+      {
+        "name": "tracking preserves user instructions and adds one managed block 1",
+        "passed": true
+      },
+      {
+        "name": "tracking confirms the exact selected canonical worktree",
+        "passed": true
+      },
+      {
+        "name": "same-root tracking is idempotent",
+        "passed": true
+      },
+      {
+        "name": "global workflow keeps implemented claims separate from verification",
+        "passed": true
+      },
+      {
+        "name": "read-only metadata reaches the backend mutation guard",
+        "passed": true
+      },
+      {
+        "name": "global gateway preserves exact missing-grant refusal",
+        "passed": true
+      },
+      {
+        "name": "simultaneous global connections isolate plans claims and evidence by root",
+        "passed": true
+      },
+      {
+        "name": "no unapproved configured command executes or creates evidence",
+        "passed": true
+      },
+      {
+        "name": "global-list succeeds",
+        "passed": true
+      },
+      {
+        "name": "global-update-refused is refused",
+        "passed": true
+      },
+      {
+        "name": "global-update succeeds",
+        "passed": true
+      },
+      {
+        "name": "native profile has exactly one installed global plugin",
+        "passed": true
+      },
+      {
+        "name": "native installed cache has the exact packaged version",
+        "passed": true
+      },
+      {
+        "name": "global native MCP definition binds only retained state, never a project",
+        "passed": true
+      },
+      {
+        "name": "global plugin is enabled and unrelated global settings survive",
+        "passed": true
+      },
+      {
+        "name": "global update preserves public project config and instruction bytes",
+        "passed": true
+      },
+      {
+        "name": "tracking confirms the exact selected canonical worktree",
+        "passed": true
+      },
+      {
+        "name": "global update retains public plan claims evidence and history 0",
+        "passed": true
+      },
+      {
+        "name": "tracking confirms the exact selected canonical worktree",
+        "passed": true
+      },
+      {
+        "name": "global update retains public plan claims evidence and history 1",
+        "passed": true
+      },
+      {
+        "name": "global-remove succeeds",
+        "passed": true
+      },
+      {
+        "name": "global removal preserves project files without repairing them",
+        "passed": true
+      },
+      {
+        "name": "global removal removes native cache and preserves unrelated profile settings",
+        "passed": true
+      },
+      {
+        "name": "global removal retains public plan claims evidence and history 0",
+        "passed": true
+      },
+      {
+        "name": "global removal retains public plan claims evidence and history 1",
+        "passed": true
+      },
+      {
+        "name": "installation update and removal never execute the unapproved sentinel",
+        "passed": true
+      }
+    ],
+    "approvals_created": false,
+    "configured_commands_executed": false,
+    "private_records_read": false,
+    "archive_sha256": "0169944a42895eb37a1b279316052fbf566e6a7d436ce53eef95d55060176d9b",
+    "package_version": "0.3.0-dev",
+    "coverage": "Actual global native installation and simultaneous explicit-root MCP routing; plan/claim persistence, empty evidence preservation, and missing-grant refusal. No approved configured command or authenticated model prompt was executed."
+  },
+  "approved_recipient": {
+    "status": "passed",
+    "global_plugin_version": "0.3.0-dev",
+    "approved_run_id": "batch-1791305127533970870-853-30-0",
+    "outcome": "passed",
+    "freshness": "current",
+    "verified": 1,
+    "approval_created": false,
+    "approval_note": "Reused the unchanged exact command grant from the prior native human-approved synthetic fixture; no approvals read or edited by this harness."
+  },
   "limits": [
-    "Synthetic approved content check; recipient trial used no authenticated model request.",
-    "Relaxed outer container namespace policy; ordinary machines and default container policies are not qualified.",
-    "Development-host authenticated Codex workflow qualified separately.",
-    "Public OpenAI directory approval pending."
+    "Project root is explicitly supplied by the caller from the Codex session; bundled MCP cannot independently infer or attest it.",
+    "Global integration tests create no approvals and run no configured command; the separate approved fixture reuses a prior unchanged native human grant.",
+    "No authenticated model prompt was sent in the recipient sandbox.",
+    "Default container policies, other operating systems and ordinary recipient computers are not qualified.",
+    "Root development checker config added three milestones preserving original eight; config revision invalidates old grants. Root configured global-onboarding remains unverified pending human approval.",
+    "Official public-directory listing remains pending."
   ]
 }

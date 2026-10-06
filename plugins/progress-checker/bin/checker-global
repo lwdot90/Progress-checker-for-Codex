@@ -1,0 +1,229 @@
+#!/usr/bin/python3
+"""Global plugin gateway: explicitly track one Git worktree per MCP connection.
+
+The plugin cache working directory is never interpreted as the active project.
+No service, project setup, or check starts before checker_track_project.
+"""
+import argparse
+import hashlib
+import json
+import os
+from pathlib import Path
+import runpy
+import select
+import signal
+import subprocess
+import sys
+import time
+
+MAX_FRAME = 256 * 1024
+BIN = Path(__file__).resolve().parent
+TRACK = {'name': 'checker_track_project', 'description': 'Enable tracking for the current project after the user requests it. Supply the absolute Git worktree root from the current Codex session. This connection stays bound to that project; never choose another project or the plugin cache. Preserves existing plans. Never approves or executes checks.',
+         'inputSchema': {'type': 'object', 'properties': {'project_root': {'type': 'string', 'minLength': 1, 'maxLength': 4096}}, 'required': ['project_root'], 'additionalProperties': False},
+         'annotations': {'readOnlyHint': False, 'destructiveHint': False, 'idempotentHint': True, 'openWorldHint': False}}
+
+
+def result(value, error=False):
+    return {'content': [{'type': 'text', 'text': json.dumps(value)}], 'structuredContent': value, 'isError': error}
+
+
+def failure(code, message):
+    return result({'error': {'code': code, 'message': message}}, True)
+
+
+class Gateway:
+    def __init__(self, state):
+        self.state = state.resolve()
+        self.root = None
+        self.child = None
+        self.buffer = b''
+        self.sequence = 0
+        self.initialized = self.ready = False
+        self.tools = json.loads(subprocess.check_output([str(BIN / 'progress-checker-mcp'), '--describe-tools'], timeout=10))['tools']
+        self.names = {tool['name'] for tool in self.tools}
+
+    def exchange(self, method, params):
+        self.sequence += 1
+        self.child.stdin.write((json.dumps({'jsonrpc': '2.0', 'id': self.sequence, 'method': method, 'params': params}) + '\n').encode())
+        self.child.stdin.flush()
+        deadline = time.monotonic() + 50
+        while b'\n' not in self.buffer:
+            if time.monotonic() >= deadline:
+                raise RuntimeError('Bound checker response timed out')
+            if select.select([self.child.stdout], [], [], .2)[0]:
+                chunk = os.read(self.child.stdout.fileno(), 65536)
+                if not chunk:
+                    raise RuntimeError('Bound checker connection closed')
+                self.buffer += chunk
+                if len(self.buffer) > MAX_FRAME:
+                    raise RuntimeError('Bound checker exceeded frame limit')
+        line, self.buffer = self.buffer.split(b'\n', 1)
+        answer = json.loads(line)
+        if answer.get('id') != self.sequence:
+            raise RuntimeError('Bound checker response identity mismatch')
+        return answer
+
+    def track(self, arguments):
+        if not isinstance(arguments, dict) or set(arguments) != {'project_root'}:
+            return failure('INVALID_ARGUMENT', 'Supply only project_root.')
+        supplied = arguments['project_root']
+        if not isinstance(supplied, str) or len(supplied) > 4096 or not Path(supplied).is_absolute():
+            return failure('INVALID_ARGUMENT', 'project_root must be an absolute Git worktree root.')
+        root = Path(supplied).resolve(strict=True)
+        if self.root is not None and root != self.root:
+            return failure('PROJECT_ALREADY_BOUND', 'Start a separate Codex session for another project. This connection cannot switch repositories.')
+        git = subprocess.check_output(['/usr/bin/git', '-C', str(root), 'rev-parse', '--show-toplevel'], stderr=subprocess.PIPE, timeout=10).decode().strip()
+        if root != Path(git).resolve(strict=True):
+            return failure('INVALID_ARGUMENT', 'Select the exact Git worktree root, not a subdirectory.')
+        # Refuse cache selection and evidence/project overlap before any project mutation.
+        if root == BIN.parent or root in BIN.parents or BIN in root.parents:
+            return failure('INVALID_ARGUMENT', 'The plugin cache is not a project.')
+        if root == self.state or root in self.state.parents or self.state in root.parents:
+            return failure('INVALID_ARGUMENT', 'Evidence storage and the project must not overlap.')
+        if self.child is not None and self.child.poll() is not None:
+            self.close()
+        if self.child is not None:
+            return result({'canonical_root': str(self.root), 'state_directory': str(self.state), 'already_tracking': True})
+        helper = runpy.run_path(str(BIN / 'checker-project'))
+        config_dir = root / '.progress-checker'
+        if config_dir.is_symlink() or (config_dir.exists() and not config_dir.is_dir()):
+            return failure('INVALID_ARGUMENT', 'Project configuration directory must be a real directory.')
+        config = config_dir / 'config.json'
+        if config.is_symlink() or (config.exists() and not config.is_file()):
+            return failure('INVALID_ARGUMENT', 'Project configuration must be a regular file.')
+        # Check instructions before creating anything. The helper preserves user text.
+        before_agents = helper['read_agents'](root / 'AGENTS.md')
+        counts = before_agents.count(helper['BEGIN']), before_agents.count(helper['END'])
+        if counts not in ((0, 0), (1, 1)):
+            return failure('INVALID_ARGUMENT', 'Ambiguous managed instructions; review AGENTS.md.')
+        if counts == (0, 0) and len(before_agents) + len(helper['BLOCK']) > 1024 * 1024:
+            return failure('INVALID_ARGUMENT', 'Managed instructions would exceed the setup size limit.')
+        if counts == (1, 1):
+            begin = before_agents.index(helper['BEGIN'])
+            end = before_agents.index(helper['END']) + len(helper['END'])
+            if before_agents[end:end + 1] == b'\n': end += 1
+            if begin < 2 or end < begin or before_agents[begin - 2:end] != helper['BLOCK']:
+                return failure('INVALID_ARGUMENT', 'Edited managed instructions; review AGENTS.md.')
+        runtime_module = runpy.run_path(str(BIN / 'checker-plugin'))
+        runtime_module['private'](self.state)
+        config_dir.mkdir(exist_ok=True)
+        if not config.exists():
+            initial = {'schema_version': 1, 'project_id': 'project-' + hashlib.sha256(os.fsencode(root)).hexdigest()[:12], 'enabled': True, 'panel': {'show_on_start': True}, 'execution': {'max_parallel': 1, 'default_timeout_seconds': 300}, 'fingerprint': {'extra_inputs': [], 'exclude_outputs': []}, 'checks': [], 'milestones': []}
+            # Atomic create-only link: do not replace a concurrent submitted plan.
+            temporary = config_dir / ('.initial-' + str(os.getpid()))
+            try:
+                with temporary.open('x') as output:
+                    json.dump(initial, output, indent=2); output.write('\n'); output.flush(); os.fsync(output.fileno())
+                try:
+                    os.link(temporary, config)
+                except FileExistsError:
+                    pass
+            finally:
+                temporary.unlink(missing_ok=True)
+        helper['update'](root, 'install')
+        # Latch before starting any backend. Failure cannot redirect this session.
+        self.root = root
+        self.child = subprocess.Popen([str(BIN / 'checker-plugin'), '--root', str(root), '--state-dir', str(self.state)], stdin=subprocess.PIPE, stdout=subprocess.PIPE, stderr=sys.stderr)
+        try:
+            answer = self.exchange('initialize', {'protocolVersion': '2025-06-18', 'capabilities': {}, 'clientInfo': {'name': 'progress-global', 'version': '1'}})
+            if 'error' in answer:
+                raise RuntimeError('Bound checker initialization failed')
+            self.child.stdin.write(b'{"jsonrpc":"2.0","method":"notifications/initialized"}\n'); self.child.stdin.flush()
+            project = self.exchange('tools/call', {'name': 'checker_get_project', 'arguments': {}})
+            value = project.get('result', {})
+            if value.get('isError'):
+                self.close()
+                return value
+            return result({'canonical_root': str(root), 'state_directory': str(self.state), 'already_tracking': False, 'project': value.get('structuredContent'), 'next': 'Review and submit accepted milestones with checker_submit_plan. Command approval remains separate.'})
+        except Exception:
+            self.close()
+            raise
+
+    def close(self):
+        if self.child is None:
+            return
+        child, self.child = self.child, None
+        if child.poll() is None:
+            child.stdin.close()
+            try:
+                child.wait(timeout=15)
+            except subprocess.TimeoutExpired:
+                child.terminate(); child.wait(timeout=50)
+        child.stdout.close()
+        self.buffer = b''
+
+    def dispatch(self, request):
+        id_value = request.get('id')
+        if request.get('jsonrpc') != '2.0' or not isinstance(request.get('method'), str) or set(request) - {'jsonrpc', 'id', 'method', 'params'} or ('id' in request and (isinstance(id_value, bool) or not isinstance(id_value, (str, int)) or isinstance(id_value, str) and len(id_value.encode()) > 160)):
+            return {'jsonrpc': '2.0', 'id': None, 'error': {'code': -32600, 'message': 'Invalid request'}}
+        method = request['method']; params = request.get('params', {})
+        if 'id' not in request:
+            if method == 'notifications/initialized' and self.initialized:
+                self.ready = True
+            return None
+        def reply(value):return {'jsonrpc': '2.0', 'id': id_value, 'result': value}
+        if method == 'ping':return reply({})
+        if method == 'initialize' and not self.initialized:
+            if not isinstance(params, dict) or not isinstance(params.get('protocolVersion'), str) or not isinstance(params.get('capabilities'), dict) or not isinstance(params.get('clientInfo'), dict):
+                return {'jsonrpc':'2.0','id':id_value,'error':{'code':-32602,'message':'Invalid initialization'}}
+            self.initialized = True
+            return reply({'protocolVersion':'2025-06-18','capabilities':{'tools':{'listChanged':False}},'serverInfo':{'name':'progress-checker-global','version':'0.3.0-dev'},'instructions':'Install once globally. When the user requests tracking, call checker_track_project with the current session Git worktree root. Never use cache cwd. The connection cannot switch projects. Claims are not verification; commands require exact human approval.'})
+        if not self.ready:return reply(failure('NOT_INITIALIZED','Initialize first.'))
+        if not isinstance(params, dict):return reply(failure('INVALID_ARGUMENT','Expected an object.'))
+        meta=params.get('_meta')
+        if meta is None: meta = {}
+        if not isinstance(meta,dict) or ('openai/readOnly' in meta and not isinstance(meta['openai/readOnly'],bool)):
+            return reply(failure('INVALID_ARGUMENT','Invalid read-only metadata.'))
+        read_only=meta.get('openai/readOnly',False)
+        if method == 'tools/list':
+            if set(params)-{'_meta','cursor'} or params.get('cursor') not in (None,''):
+                return reply(failure('INVALID_ARGUMENT','Pagination is unsupported.'))
+            return reply({'tools':[t for t in self.tools+[TRACK] if not read_only or t.get('annotations',{}).get('readOnlyHint')]})
+        if method != 'tools/call':return reply(failure('UNKNOWN_METHOD','Unsupported method.'))
+        if set(params)-{'name','arguments','_meta'}:return reply(failure('INVALID_ARGUMENT','Unsupported tool parameters.'))
+        name=params.get('name')
+        if name == TRACK['name']:
+            if read_only:return reply(failure('READ_ONLY_REQUEST','Tracking changes project files.'))
+            return reply(self.track(params.get('arguments',{})))
+        if name not in self.names:return reply(failure('INVALID_ARGUMENT','Unknown tool.'))
+        if self.child is None:return reply(failure('PROJECT_NOT_TRACKED','Ask to track this project first; supply the current session Git worktree root.'))
+        try:
+            answer=self.exchange(method,params)
+        except Exception:
+            self.close()
+            raise
+        answer['id']=id_value;return answer
+
+
+def main():
+    parser=argparse.ArgumentParser(description=__doc__);parser.add_argument('--state-dir',type=Path,required=True);args=parser.parse_args()
+    gateway=Gateway(args.state_dir)
+    def interrupted(*_):raise KeyboardInterrupt()
+    signal.signal(signal.SIGTERM,interrupted);signal.signal(signal.SIGINT,interrupted)
+    try:
+        while True:
+            frame=sys.stdin.buffer.readline(MAX_FRAME+1)
+            if not frame:break
+            if len(frame)>MAX_FRAME or not frame.endswith(b'\n'):
+                raise ValueError('MCP frame exceeds limit or is truncated')
+            request = None
+            try:
+                request=json.loads(frame)
+                if not isinstance(request,dict):raise ValueError('Expected request object')
+                answer=gateway.dispatch(request)
+            except json.JSONDecodeError:
+                answer={'jsonrpc':'2.0','id':None,'error':{'code':-32700,'message':'Parse error'}}
+            except Exception as error:
+                id_value=request.get('id') if isinstance(locals().get('request'),dict) else None
+                answer={'jsonrpc':'2.0','id':id_value,'result':failure('GATEWAY_ERROR',str(error))}
+            if answer is not None:
+                encoded=json.dumps(answer).encode()
+                if len(encoded)>=MAX_FRAME:
+                    encoded=json.dumps({'jsonrpc':'2.0','id':answer.get('id'),'result':failure('RESPONSE_TOO_LARGE','Request a smaller scope.')}).encode()
+                sys.stdout.buffer.write(encoded+b'\n');sys.stdout.buffer.flush()
+    except KeyboardInterrupt:
+        pass
+    finally:gateway.close()
+
+
+if __name__ == '__main__':main()

@@ -1,5 +1,5 @@
 #!/usr/bin/python3
-"""Install a packaged Progress Checker plugin for an existing Git repository."""
+"""Install Progress Checker globally, or bind it to one Git project with --project."""
 import argparse
 import hashlib
 import json
@@ -117,27 +117,164 @@ def plugin_setting(path, selector, enabled):
     atomic_text(path, changed)
 
 
+
+def global_install(args, package):
+    """One user-wide marketplace; project selection belongs to the global launcher."""
+    marketplace = 'progress-global'
+    selector = 'progress-checker@' + marketplace
+    data = args.data_home.resolve()
+    profile = args.codex_home.resolve()
+    destination = data / 'progress-checker-plugins' / 'global'
+    installed = destination / 'plugins/progress-checker'
+    settings = profile / 'config.toml'
+    binding = installed / 'mcp.json'
+    state = (args.state_dir or (data / 'progress-checker')).resolve()
+    for directory in (destination, installed.parent, installed):
+        if directory.is_symlink() or (directory.exists() and not directory.is_dir()):
+            raise SystemExit(f'Global installation directory must be a real directory: {directory}')
+    if os.path.lexists(binding):
+        if binding.is_symlink() or not binding.is_file() or binding.stat().st_size > 64 * 1024:
+            raise SystemExit('Installed global MCP binding must be a bounded regular file')
+        definition = json.loads(binding.read_text())['mcpServers']['progress_checker']
+        bound_args = definition.get('args')
+        if (definition.get('type') != 'stdio' or definition.get('command') != './bin/checker-global'
+                or type(bound_args) is not list or len(bound_args) != 2
+                or bound_args[0] != '--state-dir' or type(bound_args[1]) is not str
+                or not Path(bound_args[1]).is_absolute()
+                or str(Path(bound_args[1]).resolve()) != bound_args[1]):
+            raise SystemExit('Installed MCP binding is not the exact global launcher; review before updating')
+        retained_state = Path(bound_args[1])
+        if args.state_dir and state != retained_state:
+            raise SystemExit('Existing global installation uses a different state directory; retain its binding')
+        state = retained_state
+    if state == destination or destination in state.parents or state in destination.parents:
+        raise SystemExit('--state-dir must not overlap the global installation directory')
+    if state.exists():
+        info = state.lstat()
+        if not state.is_dir() or info.st_uid != os.geteuid() or info.st_mode & 0o077:
+            raise SystemExit('--state-dir must be a private owned directory')
+    environment = os.environ.copy()
+    environment['CODEX_HOME'] = str(profile)
+    profile.mkdir(parents=True, mode=0o700, exist_ok=True)
+    if args.action == 'list':
+        subprocess.run([args.codex, 'plugin', 'list', '--marketplace', marketplace, '--json'],
+                       env=environment, check=True)
+        return
+    if args.action == 'remove':
+        file_snapshot(settings)
+        if settings.exists():
+            tomllib.loads(settings.read_text())
+        subprocess.run([args.codex, 'plugin', 'remove', selector, '--json'], env=environment, check=True)
+        plugin_setting(settings, selector, None)
+        subprocess.run([args.codex, 'plugin', 'marketplace', 'remove', marketplace, '--json'],
+                       env=environment, check=True)
+        print(json.dumps({'removed': selector, 'mode': 'global',
+            'preserved_project_files': True, 'preserved_state_directory': str(state)}, indent=2))
+        return
+    if args.action == 'update' and not installed.is_dir():
+        raise SystemExit('No existing global installation; use install first')
+    installed.parent.mkdir(parents=True, exist_ok=True)
+    staging = Path(tempfile.mkdtemp(prefix='.progress-checker-stage-', dir=installed.parent))
+    backup = installed.parent / (staging.name + '-previous')
+    marketplace_file = destination / '.agents/plugins/marketplace.json'
+    setup_paths = (settings, marketplace_file)
+    original = {path: file_snapshot(path) for path in setup_paths}
+    expected = dict(original)
+    activated = False
+    had_previous = installed.exists()
+    native_changed = False
+    def observe(paths=setup_paths):
+        expected.update({path: file_snapshot(path) for path in paths})
+    def native(command):
+        try:
+            subprocess.run(command, env=environment, check=True)
+        finally:
+            observe((settings,))
+    try:
+        replacement = staging / 'plugin'
+        shutil.copytree(package / 'plugin', replacement)
+        launcher = replacement / 'bin/checker-global'
+        if launcher.is_symlink() or not launcher.is_file() or not os.access(launcher, os.X_OK):
+            raise ValueError('Package must include the executable global launcher')
+        atomic_text(replacement / 'mcp.json', json.dumps({
+            '$schema': 'https://agent-plugins.org/schemas/1.0.0/mcp.schema.json',
+            'mcpServers': {'progress_checker': {'type': 'stdio', 'command': './bin/checker-global',
+                'args': ['--state-dir', str(state)]}},
+        }, indent=2) + '\n')
+        if settings.exists():
+            tomllib.loads(settings.read_text())
+        if had_previous:
+            installed.rename(backup)
+        replacement.rename(installed)
+        activated = True
+        atomic_text(marketplace_file, json.dumps({'name': marketplace, 'plugins': [{
+            'name': 'progress-checker', 'source': {'source': 'local', 'path': './plugins/progress-checker'},
+            'policy': {'installation': 'AVAILABLE', 'authentication': 'ON_INSTALL'}, 'category': 'Productivity',
+        }]}, indent=2) + '\n')
+        observe((marketplace_file,))
+        native([args.codex, 'plugin', 'marketplace', 'add', str(destination), '--json'])
+        if had_previous:
+            native_changed = True
+            native([args.codex, 'plugin', 'remove', selector, '--json'])
+        native([args.codex, 'plugin', 'add', selector, '--json'])
+        plugin_setting(settings, selector, True)
+        observe((settings,))
+    except Exception:
+        if activated:
+            shutil.rmtree(installed)
+        if backup.exists():
+            backup.rename(installed)
+        profile_unchanged = file_snapshot(settings) == expected[settings]
+        if had_previous and native_changed and profile_unchanged:
+            restored = subprocess.run([args.codex, 'plugin', 'add', selector, '--json'],
+                                      env=environment, check=False)
+            if restored.returncode:
+                print('Previous global source restored, but native cache restoration failed; run install again.', file=sys.stderr)
+            observe((settings,))
+        elif had_previous and native_changed:
+            print('Previous global source restored; concurrent profile change preserved. Review native cache restoration.', file=sys.stderr)
+        elif not had_previous and activated and profile_unchanged:
+            subprocess.run([args.codex, 'plugin', 'remove', selector, '--json'],
+                           env=environment, check=False)
+            observe((settings,))
+        for path in setup_paths:
+            restore_file(path, original[path], expected[path])
+        raise
+    finally:
+        shutil.rmtree(staging, ignore_errors=True)
+    if backup.exists():
+        shutil.rmtree(backup)
+    print(json.dumps({'installed': selector, 'action': args.action, 'mode': 'global',
+        'marketplace': str(destination), 'state_directory': str(state), 'project_files_changed': False,
+        'next': 'Restart Codex. Select the session project through the global launcher; no project was bound by installation.'}, indent=2))
+
+
 def main():
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument('action', nargs='?', choices=['install', 'update', 'remove', 'list'], default='install')
-    parser.add_argument('--project', type=Path, required=True)
+    parser.add_argument('--project', type=Path, help='Legacy installation bound to this exact Git worktree')
     parser.add_argument('--codex', default='codex')
     parser.add_argument('--skip-agent-instructions', action='store_true', help='Keep AGENTS.md unchanged during setup')
     parser.add_argument('--codex-home', type=Path, default=Path(os.environ.get('CODEX_HOME', str(Path.home() / '.codex'))))
     parser.add_argument('--data-home', type=Path, default=Path(os.environ.get('XDG_DATA_HOME', str(Path.home() / '.local/share'))))
     parser.add_argument('--state-dir', type=Path,
-                        help='Retained private checker state outside the project; updates preserve the existing binding')
+                        help='Retained private checker state base; updates preserve the existing binding')
     args = parser.parse_args()
-    root = args.project.resolve(strict=True)
-    git_root = Path(subprocess.check_output(['/usr/bin/git', '-C', str(root), 'rev-parse', '--show-toplevel'], text=True).strip()).resolve()
-    if git_root != root:
-        raise SystemExit('--project must be the exact existing Git worktree root')
-    validate_project_paths(root)
+    root = None
+    if args.project is not None:
+        root = args.project.resolve(strict=True)
+        git_root = Path(subprocess.check_output(['/usr/bin/git', '-C', str(root), 'rev-parse', '--show-toplevel'], text=True).strip()).resolve()
+        if git_root != root:
+            raise SystemExit('--project must be the exact existing Git worktree root')
+        validate_project_paths(root)
     package = Path(__file__).resolve().parent
     for relative, digest in (json.loads((package / 'checksums.json').read_text()).items() if args.action in ('install', 'update') else []):
         target = package / relative
         if hashlib.sha256(target.read_bytes()).hexdigest() != digest:
             raise SystemExit(f'Package checksum mismatch: {relative}')
+    if args.project is None:
+        global_install(args, package)
+        return
     key = hashlib.sha256(os.fsencode(root)).hexdigest()[:12]
     marketplace = 'progress-local-' + key
     selector = 'progress-checker@' + marketplace

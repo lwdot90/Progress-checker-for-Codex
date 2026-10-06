@@ -15,10 +15,13 @@ const PROTOCOL: &str = "2025-06-18";
 #[derive(Parser)]
 #[command(name = "progress-checker-mcp", version)]
 struct Cli {
+    #[arg(long, required_unless_present = "describe_tools")]
+    root: Option<PathBuf>,
+    #[arg(long, required_unless_present = "describe_tools")]
+    state_dir: Option<PathBuf>,
+    /// Describe the tool schema without binding a project or starting a service.
     #[arg(long)]
-    root: PathBuf,
-    #[arg(long)]
-    state_dir: PathBuf,
+    describe_tools: bool,
 }
 
 fn rpc_error(id: Value, code: i64, message: &str) -> Value {
@@ -453,6 +456,10 @@ async fn dispatch(
 #[tokio::main]
 async fn main() {
     let cli = Cli::parse();
+    if cli.describe_tools {
+        println!("{}", json!({"tools": definitions()}));
+        return;
+    }
     let result = run(cli).await;
     if let Err(error) = result {
         eprintln!("MCP adapter: {error}");
@@ -460,7 +467,10 @@ async fn main() {
     }
 }
 async fn run(cli: Cli) -> Result<(), String> {
-    let client = Client::new(Endpoint::for_root(&cli.root, &cli.state_dir)?);
+    let client = Client::new(Endpoint::for_root(
+        &cli.root.ok_or("Missing project root")?,
+        &cli.state_dir.ok_or("Missing state directory")?,
+    )?);
     let mut reader = io::BufReader::new(io::stdin());
     let mut writer = io::BufWriter::new(io::stdout());
     run_session(&client, &mut reader, &mut writer).await

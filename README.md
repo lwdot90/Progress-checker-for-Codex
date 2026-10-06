@@ -1,121 +1,84 @@
 # Progress Checker for Codex
 
-Progress Checker is a local Codex plugin for planning milestones and reporting
-progress from current check evidence. It starts its checker automatically when
-Codex needs it. Implementation claims and verified progress remain separate:
-only a passing, approved check against the current project files supplies
-verification.
-
-This repository contains the native plugin and Rust backend for the Linux
-**0.2.1-dev beta**. Standard Codex presents progress in conversation through ten
-MCP tools and a planning skill. This source distribution contains no Codex fork
-or executable and does not provide a persistent terminal panel.
+Install once globally, then say **“Track this project”** in your Codex projects.
+Progress Checker proposes explicit milestones and reports progress using current
+local check evidence. Implementation claims and verification stay separate.
+Standard Codex shows progress in conversation through eleven MCP tools and a skill.
+This source distribution contains no Codex fork or persistent terminal panel.
 
 ## Install the beta
 
-Download the Linux archive, `SHA256SUMS`, and `INSTALL.md` from the
-[latest release](https://github.com/lwdot90/Progress-checker-for-Codex/releases/latest).
-GitHub may list a beta only on the [releases page](https://github.com/lwdot90/Progress-checker-for-Codex/releases),
-because prereleases are excluded from its latest-release redirect. Use the
-accompanying [installation guide](dist/0.2.1-dev/INSTALL.md).
-
-The supported beta target is Fedora 44 x86_64. Qualification used Fedora 44
-and standard Codex 0.160.0 with native plugin support. Recipients need Python
-3.11+ at `/usr/bin/python3`, Git at `/usr/bin/git`, glibc 2.39+, and
-`/usr/bin/bwrap` with working Linux namespaces for check execution. Model prompts
-use the recipient's existing Codex authentication. Environment freshness also requires
-`/usr/bin/rpm` and the RPM database at `/usr/lib/sysimage/rpm`. Rust and this checkout are
-unnecessary for the release archive.
-
-From the folder containing the three downloaded release files:
+Download the **0.3.0-dev** Linux archive and SHA256SUMS from the
+[releases page](https://github.com/lwdot90/Progress-checker-for-Codex/releases).
+From the download folder:
 
 ```sh
 set -eu
 sha256sum -c SHA256SUMS
-tar -xzf progress-checker-0.2.1-dev-linux-x86_64.tar.gz
-cd progress-checker-0.2.1-dev-linux-x86_64
-python3 install.py install --project /absolute/path/to/your/project
+tar -xzf progress-checker-0.3.0-dev-linux-x86_64.tar.gz
+cd progress-checker-0.3.0-dev-linux-x86_64
+python3 install.py
 ```
 
-`--project` must identify the existing Git worktree root; find it with
-`git rev-parse --show-toplevel`. Keep the installer's output, including its
-`state_directory`. Restart Codex in that project. Installation preserves
-unrelated settings and adds a managed section to `AGENTS.md`; the detailed guide
-explains profile choices and `--skip-agent-instructions`.
+Restart Codex, open a Git project, and say **“Track this project.”** Review the
+proposed milestones and acceptance checks. For another project, open another
+Codex session and say the same thing. No reinstall or state-directory argument
+is needed. Each project keeps separate plans, claims, evidence and command grants.
 
-Ask Codex to propose milestones and observable acceptance checks from your
-requirements, show the plan for your review, and submit the accepted complete
-plan. Ask it to record implemented work and read Progress Checker when reporting
-progress. Source edits make previous evidence stale. Plan/config revisions
-invalidate command grants, including revisions that retain the same command.
+Supported beta: **Fedora 44 x86_64**, tested with Codex 0.160.0. Runtime requires
+Python 3.11+ at /usr/bin/python3, Git at /usr/bin/git, glibc 2.39+, /usr/bin/rpm
+and /usr/lib/sysimage/rpm. Approved checks require /usr/bin/bwrap with working
+Linux namespaces. Recipients need no Rust or source checkout.
 
-For each new or changed check, print its exact approval command from the
-extracted archive:
+Close sessions using the plugin before update/removal. From the extracted archive:
 
 ```sh
-./plugin/bin/checker-project approval-command --root /absolute/path/to/your/project \
-  --state-dir STATE_DIRECTORY --check CHECK_ID
+python3 install.py update
+python3 install.py remove
 ```
 
-Close project Codex sessions and any independently started checker service,
-then run the printed command yourself in a terminal. Review the exact command
-and confirm it only if you accept its sandbox access. Reopen Codex and request
-the approved check. An agent must never answer that confirmation prompt.
-An unchanged grant can cover later runs; ordinary progress reads and prompts
-need no command approval. There is no batch-approval feature.
-
-Close project sessions before updating or removing the plugin. Use the
-installer from a newly extracted archive and retain the original project,
-Codex profile, data directory, and any customized executable path:
-
-```sh
-python3 install.py update --project /absolute/path/to/your/project
-python3 install.py list --project /absolute/path/to/your/project
-python3 install.py remove --project /absolute/path/to/your/project
-```
-
-Updates retain the installed state binding and evidence. Removal preserves
-project configuration and private evidence. Details are in
-[the installation guide](dist/0.2.1-dev/INSTALL.md) and
-[the package documentation](plugins/README.md).
+These actions apply globally; removal preserves project files and evidence.
+[INSTALL.md](dist/0.3.0-dev/INSTALL.md) covers legacy migration and profile options.
+Planning and progress reads need no execution approval. For each new or changed
+check, the agent supplies an exact human CLI command: review and confirm it in
+your terminal before execution. Stop project checker sessions before approval.
+An unchanged grant supports later runs; plan revisions revoke grants.
 
 ## Qualification and limits
 
-The frozen 0.2.1-dev release archive is identified by SHA-256
-`404759af79cd563d3e1266f686869893727110b22465eeecbbb0cf2c7ba9c029`.
-It completed the local development delivery checks and authenticated standard
-Codex workflow on 2026-10-06. Source-free recipient qualification covered native
-discovery, installation, upgrade, configuration/state retention, and removal.
-An isolated Fedora 44 recipient sandbox also passed a human-approved content
-check, restart retention, edit staleness, failure handling, and evidence retention
-through update and removal. See [QUALIFICATION.json](QUALIFICATION.json) for
-coverage and the relaxed outer-container namespace policy. This recipient trial
-used no authenticated model request. An unavailable sandbox refuses checks.
+The frozen 0.3.0-dev archive SHA-256 is
+`0169944a42895eb37a1b279316052fbf566e6a7d436ce53eef95d55060176d9b`.
+Ten MCP unit tests and 75 native global integration assertions passed. A source-free
+Fedora recipient sandbox also passed a previously human-approved synthetic check
+through the new global gateway, with current passing evidence.
+[QUALIFICATION.json](QUALIFICATION.json) records coverage and limits.
 
-Those results apply to the frozen archive and tested environment. A build from
-this source produces a separate artifact that requires its own checks and
-checksum. Other operating systems, Codex versions, and ordinary recipient
-execution environments are unqualified. Public directory availability is not
-established; use the release installer. The installer creates an explicit
-worktree/state binding and a local marketplace, so copying the plugin directory
-alone is insufficient.
+Codex launches bundled servers from the plugin cache, so the skill supplies the
+current session's Git root explicitly. The plugin cannot independently infer or
+attest that root; it returns the canonical root for confirmation. Each connection
+stays bound to one project. It never approves or executes checks on installation,
+tracking or startup. The outer test container allowed nested namespaces using
+seccomp=unconfined, label=disable and unmask=ALL, while using UID1000, no network,
+zero capabilities and no host mounts. Default container policy compatibility,
+other platforms and ordinary recipient machines remain unqualified. No recipient
+model prompt was sent; the earlier authenticated host workflow qualified 0.2.1.
 
-The service stores evidence outside the repository in a private state
-directory. Verification remains limited to each check's declared coverage.
-Same-user processes that can directly alter private approval files are outside
-the human-authentication guarantee. If the checker is unavailable, continue
-normal Codex work and report progress as unverified.
+The service stores private evidence outside each repository, keyed by canonical
+root. Checks verify only their declared coverage. Same-user direct tampering with
+private approval records is outside the human-authentication guarantee. If the
+checker is unavailable, continue normal work and report progress as unverified.
+Public directory availability is pending; use the GitHub installer.
 
-For beta issues, include the operating system, Codex version, package checksum,
-and a redacted error at the
-[issue tracker](https://github.com/lwdot90/Progress-checker-for-Codex/issues).
-Do not attach credentials, private state, approval records, or unredacted logs.
+Report beta issues at the [issue tracker](https://github.com/lwdot90/Progress-checker-for-Codex/issues)
+with OS, Codex version, checksum and a redacted error. Do not attach credentials,
+private state, approval records or unredacted logs.
 
 ## Build the native plugin from source
 
 The workspace contains `checker-core`, the human CLI, the Unix service, and the
 MCP adapter. Python launchers, installer, and the skill live under `plugins/`.
-The installer adds the worktree-specific `mcp.json` during installation. The
+The installer adds a state-only global `mcp.json`; explicit legacy `--project`
+installation still writes a project-bound definition. The
 versioned [schemas](schemas/README.md) document relevant JSON contracts; Rust
 validation is authoritative.
 

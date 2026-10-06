@@ -2,8 +2,8 @@
   "schema_version": 1,
   "scope": "native_plugin_source_only",
   "release": {
-    "version": "0.2.1-dev",
-    "archive_sha256": "404759af79cd563d3e1266f686869893727110b22465eeecbbb0cf2c7ba9c029",
+    "version": "0.3.0-dev",
+    "archive_sha256": "0169944a42895eb37a1b279316052fbf566e6a7d436ce53eef95d55060176d9b",
     "archive_included": false
   },
   "files": [
@@ -30,17 +30,17 @@
     },
     {
       "path": "DIRECTORY_READINESS.md",
-      "origin": "staging_documentation",
       "sha256": "b9df626e67eb6e6ffaebf1dca2fcd9bbf4c2973ca0f3d08b27bb174bcefb7f01",
       "bytes": 963,
-      "mode": "0o644"
+      "mode": "0o644",
+      "origin": "staging_documentation"
     },
     {
       "path": "LAUNCH_PLAN.md",
-      "origin": "staging_documentation",
-      "sha256": "6dcc3b5d09d230401a07698eab21d70cfe337f3b9483f6af16c75513955d5b8a",
-      "bytes": 2120,
-      "mode": "0o644"
+      "sha256": "a0990bcba50d6d4d0346cd555e8a02deaf11b62e4c447dd228ff06c9c27e5283",
+      "bytes": 2855,
+      "mode": "0o644",
+      "origin": "staging_documentation"
     },
     {
       "path": "LICENSE",
@@ -58,15 +58,15 @@
     },
     {
       "path": "QUALIFICATION.json",
-      "origin": "staging_documentation",
-      "sha256": "28de24e1a092e882a26e08bc0e427e88655f6fa1c66f9537deffe45e78902f75",
-      "bytes": 1749,
-      "mode": "0o644"
+      "sha256": "ad7f4a189d5bfea1e96324e3ec791fdd930438c7f8405f92daf4ba6401fa233e",
+      "bytes": 10486,
+      "mode": "0o644",
+      "origin": "staging_documentation"
     },
     {
       "path": "README.md",
-      "sha256": "96881011ffc31c6a7d9a6d179dbfcec7730cc0422c4833c0bc81f5b83490f23e",
-      "bytes": 9733,
+      "sha256": "d96105506dbecafdcb4a07bb4e744b7539e6e12d07dd668c71ea46400d28c156",
+      "bytes": 7753,
       "mode": "0o644",
       "origin": "staging_documentation"
     },
@@ -191,8 +191,8 @@
     },
     {
       "path": "checker-mcp/src/main.rs",
-      "sha256": "52f19a3a7697ee0ece1f9695e51ea0766eb458673691afda5ed4f50ab248ddcf",
-      "bytes": 36731,
+      "sha256": "3d2563083c6101bddc9c438b3668b027fd3c2ee20bd53a817b6c2455193c77c5",
+      "bytes": 37155,
       "mode": "0o644",
       "origin": "unchanged_native_source"
     },
@@ -253,16 +253,30 @@
       "origin": "unchanged_native_source"
     },
     {
-      "path": "plugins/README.md",
-      "sha256": "6b5c32a8c59509ad963f23490446440aa95f7363ec157c59d9f394c824857e16",
-      "bytes": 9545,
+      "path": "dist/0.3.0-dev/INSTALL.md",
+      "sha256": "0ee33f6efae873737f13198b10df59d6178c5230d37f39b5edd5df9b4b1ae338",
+      "bytes": 2560,
       "mode": "0o644",
-      "origin": "staging_documentation"
+      "origin": "unchanged_native_source"
+    },
+    {
+      "path": "dist/0.3.0-dev/SHA256SUMS",
+      "sha256": "7a6caadf924d53fe0de869f59588b89faa57460026a1699eb99aa3ae7fb04039",
+      "bytes": 113,
+      "mode": "0o644",
+      "origin": "unchanged_native_source"
+    },
+    {
+      "path": "plugins/README.md",
+      "sha256": "46d701cb85f4aaa4c422da169c567d8d45a5006b880cd162053cb137d3f00e3d",
+      "bytes": 3437,
+      "mode": "0o644",
+      "origin": "unchanged_native_source"
     },
     {
       "path": "plugins/install.py",
-      "sha256": "838910e107ddbda9ba6a93773d2d588532bd713d38c0ef9dbd474a9b187b5bca",
-      "bytes": 15003,
+      "sha256": "829181896b0d4a9d1c2f1ad2957a25d55405ede5985ef01e47a05ca4c48c0822",
+      "bytes": 22591,
       "mode": "0o644",
       "origin": "unchanged_native_source"
     },
@@ -271,6 +285,13 @@
       "sha256": "154fb61f4050f3913ce569f19cbe5cf170ba7d3e8e6b05f16b630d9c17934d2d",
       "bytes": 13948,
       "mode": "0o644",
+      "origin": "unchanged_native_source"
+    },
+    {
+      "path": "plugins/progress-checker/bin/checker-global",
+      "sha256": "f015540c0997555fc8d6b6eff2578d9a0a734bbb3aac53af46045140551b3c7b",
+      "bytes": 14012,
+      "mode": "0o755",
       "origin": "unchanged_native_source"
     },
     {
@@ -289,15 +310,15 @@
     },
     {
       "path": "plugins/progress-checker/plugin.json",
-      "sha256": "933bad61f9ee992c8d40d5209ac7dd2138c1bb036a7a06974e356b8bc2e8bd91",
-      "bytes": 466,
+      "sha256": "a831ad73eb6172510bb5bb100298969bf00b32920ba44deeb11581e2d5c1f0b6",
+      "bytes": 486,
       "mode": "0o644",
       "origin": "unchanged_native_source"
     },
     {
       "path": "plugins/progress-checker/skills/progress-checker/SKILL.md",
-      "sha256": "f9d76ba8c25d2600fe9e9e4f9004fed73392add7cd9d2a2d595a87bf29164a49",
-      "bytes": 2125,
+      "sha256": "2baada18b931cd656d8f189935f8f3d1951b556c657a91dfd73edc733a6917a4",
+      "bytes": 3233,
       "mode": "0o644",
       "origin": "unchanged_native_source"
     },
@@ -2050,12 +2071,19 @@
       "bytes": 228,
       "mode": "0o755",
       "origin": "unchanged_native_source"
+    },
+    {
+      "path": "scripts/test-global-plugin.py",
+      "sha256": "c48158cfbac2a0c0c8733ad48d121b744b4b287cf3020d9c737ab648f0f28fb2",
+      "bytes": 27996,
+      "mode": "0o644",
+      "origin": "unchanged_native_source"
     }
   ],
   "manifest_self_excluded": true,
   "source_audit": {
     "status": "passed",
-    "unchanged_copied_files": 284,
+    "unchanged_copied_files": 289,
     "staging_documentation_files": [
       ".gitignore",
       "DIRECTORY_READINESS.md",
@@ -2063,7 +2091,6 @@
       "QUALIFICATION.json",
       "README.md",
       "dist/0.2.1-dev/INSTALL.md",
-      "plugins/README.md",
       "schemas/README.md"
     ],
     "external_dependencies": 110,

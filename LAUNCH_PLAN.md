@@ -10,12 +10,13 @@ launch requirements; it does not turn implementation claims into verification.
    Rust, host credentials, or host mounts. Qualify discovery, upgrade, and
    removal; then human-approve one exact fixture command, run it through the
    checker, and inspect current verification, source-change staleness, and
-   restart retention. Package assertions passed; approved execution remains
-   pending. This qualifies the stated container environment only.
+   restart retention. All 75 package assertions passed. Approved execution, restart,
+   staleness, failure, and update/removal evidence retention passed. This qualifies the stated container environment only.
 2. **Public beta delivery.** Depends on recipient trial. Publish reviewed native
    source and a prerelease with the frozen Linux archive, SHA256SUMS, and INSTALL.md.
    Confirm asset bytes match the published checksum and links are usable.
-   A draft release is preparation, not a completed public release.
+   Publish the qualified beta after this record is committed. Public asset
+   bytes must match the frozen checksum.
 3. **Directory readiness.** Depends on public beta delivery. Resolve official
    local-MCP submission support, provide required publisher metadata and policy
    URLs, and complete the official review process. Directory approval is external

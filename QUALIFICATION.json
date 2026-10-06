@@ -1,0 +1,68 @@
+{
+  "schema_version": 1,
+  "archive_sha256": "404759af79cd563d3e1266f686869893727110b22465eeecbbb0cf2c7ba9c029",
+  "platform": "Fedora 44 x86_64",
+  "codex_version": "0.160.0",
+  "container": {
+    "uid": 1000,
+    "capabilities": "zero",
+    "network": "none",
+    "host_mounts": [],
+    "outer_security_options": [
+      "seccomp=unconfined",
+      "label=disable",
+      "unmask=ALL"
+    ]
+  },
+  "package_assertions_passed": 75,
+  "execution_assertions": [
+    {
+      "name": "passing CLI accepted",
+      "passed": true
+    },
+    {
+      "name": "approved check passes and verifies",
+      "passed": true
+    },
+    {
+      "name": "restart retains current passing run",
+      "passed": true
+    },
+    {
+      "name": "source edit invalidates verification",
+      "passed": true
+    },
+    {
+      "name": "failing CLI accepted",
+      "passed": true
+    },
+    {
+      "name": "failed assertion stays unverified",
+      "passed": true
+    },
+    {
+      "name": "restored CLI accepted",
+      "passed": true
+    },
+    {
+      "name": "unchanged command grant supports corrected rerun",
+      "passed": true
+    }
+  ],
+  "retention_assertions": [
+    {
+      "name": "update preserves current passing evidence",
+      "passed": true
+    },
+    {
+      "name": "removal preserves run and correctly marks evidence stale after managed instructions change",
+      "passed": true
+    }
+  ],
+  "limits": [
+    "Synthetic approved content check; recipient trial used no authenticated model request.",
+    "Relaxed outer container namespace policy; ordinary machines and default container policies are not qualified.",
+    "Development-host authenticated Codex workflow qualified separately.",
+    "Public OpenAI directory approval pending."
+  ]
+}

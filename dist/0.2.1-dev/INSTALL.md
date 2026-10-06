@@ -98,3 +98,13 @@ The archived `README.md` predates qualification; use this accompanying guide for
 the current qualification statement. The extracted README also provides detailed
 prerequisites, approval instructions, licenses and limitations. Share this archive,
 `SHA256SUMS` and this guide together; identify it as a development package.
+
+## Additional sandbox qualification
+
+A source-free Fedora 44 recipient sandbox passed 75 packaging assertions plus
+human-approved check execution, restart retention, edit staleness, failure
+handling, and update/removal evidence retention. Removal changes managed
+instructions, so retained evidence becomes stale. The outer container used
+zero capabilities, UID 1000, no network or host mounts, and relaxed namespace
+policy (seccomp=unconfined, label=disable, unmask=ALL). This trial did not send
+an authenticated model request or qualify default container policies.

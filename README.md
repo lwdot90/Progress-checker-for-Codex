@@ -86,9 +86,11 @@ The frozen 0.2.1-dev release archive is identified by SHA-256
 It completed the local development delivery checks and authenticated standard
 Codex workflow on 2026-10-06. Source-free recipient qualification covered native
 discovery, installation, upgrade, configuration/state retention, and removal.
-Approved check execution was exercised on the development host; the clean
-recipient fixture's nested sandbox did not establish recipient execution
-support. An unavailable sandbox refuses checks.
+An isolated Fedora 44 recipient sandbox also passed a human-approved content
+check, restart retention, edit staleness, failure handling, and evidence retention
+through update and removal. See [QUALIFICATION.json](QUALIFICATION.json) for
+coverage and the relaxed outer-container namespace policy. This recipient trial
+used no authenticated model request. An unavailable sandbox refuses checks.
 
 Those results apply to the frozen archive and tested environment. A build from
 this source produces a separate artifact that requires its own checks and

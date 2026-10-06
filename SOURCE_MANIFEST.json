@@ -38,8 +38,8 @@
     {
       "path": "LAUNCH_PLAN.md",
       "origin": "staging_documentation",
-      "sha256": "5b807e7147824a9c53650c1f8a2840da2b798c6064804f03d1e904075cdb2ccc",
-      "bytes": 1969,
+      "sha256": "4e928ad2eecd569aeb96c6e6617be0e1b6d064c2e004e1623a2b3e86013722db",
+      "bytes": 2084,
       "mode": "0o644"
     },
     {
@@ -57,9 +57,16 @@
       "origin": "unchanged_native_source"
     },
     {
+      "path": "QUALIFICATION.json",
+      "origin": "staging_documentation",
+      "sha256": "28de24e1a092e882a26e08bc0e427e88655f6fa1c66f9537deffe45e78902f75",
+      "bytes": 1749,
+      "mode": "0o644"
+    },
+    {
       "path": "README.md",
-      "sha256": "f428266187d2f4cd901cb5eb0ef6a839befcdacf8a46791dcf177ff960df6d02",
-      "bytes": 9535,
+      "sha256": "96881011ffc31c6a7d9a6d179dbfcec7730cc0422c4833c0bc81f5b83490f23e",
+      "bytes": 9733,
       "mode": "0o644",
       "origin": "staging_documentation"
     },
@@ -233,8 +240,8 @@
     },
     {
       "path": "dist/0.2.1-dev/INSTALL.md",
-      "sha256": "3b281e8f216eda2c8d49e98dd6d0f5395adceb19bffac353cf169a18db1d157c",
-      "bytes": 4441,
+      "sha256": "5f5c27c0f05b792ca3a9a2c8475519e9d2108ed5f31a9e030ec331eec0d4e041",
+      "bytes": 5008,
       "mode": "0o644",
       "origin": "staging_documentation"
     },
@@ -2048,10 +2055,15 @@
   "manifest_self_excluded": true,
   "source_audit": {
     "status": "passed",
-    "unchanged_copied_files": 286,
+    "unchanged_copied_files": 284,
     "staging_documentation_files": [
       ".gitignore",
+      "DIRECTORY_READINESS.md",
+      "LAUNCH_PLAN.md",
+      "QUALIFICATION.json",
       "README.md",
+      "dist/0.2.1-dev/INSTALL.md",
+      "plugins/README.md",
       "schemas/README.md"
     ],
     "external_dependencies": 110,

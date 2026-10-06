@@ -15,8 +15,8 @@ launch requirements; it does not turn implementation claims into verification.
 2. **Public beta delivery.** Depends on recipient trial. Publish reviewed native
    source and a prerelease with the frozen Linux archive, SHA256SUMS, and INSTALL.md.
    Confirm asset bytes match the published checksum and links are usable.
-   Publish the qualified beta after this record is committed. Public asset
-   bytes must match the frozen checksum.
+   Published as v0.2.1-dev on 2026-10-06. The archive upload digest
+   matches the frozen checksum; installation and qualification guides are attached.
 3. **Directory readiness.** Depends on public beta delivery. Resolve official
    local-MCP submission support, provide required publisher metadata and policy
    URLs, and complete the official review process. Directory approval is external

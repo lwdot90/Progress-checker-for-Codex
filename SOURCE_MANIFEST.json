@@ -66,8 +66,8 @@
     },
     {
       "path": "QUALIFICATION-0.4.json",
-      "sha256": "7038798f73fac3fffd20a045e763ef40310011afeff3a3ba15d8a439907a6763",
-      "bytes": 2298,
+      "sha256": "3d4a9eef86efec420933d5111bbd0cc4722f2c6ebf01cdd82a16c25c1dccabd2",
+      "bytes": 8399,
       "mode": "0o644",
       "origin": "native_plugin_source_or_public_documentation"
     },

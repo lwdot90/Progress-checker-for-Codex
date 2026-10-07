@@ -37,6 +37,154 @@
       "changed_version_upgrade": false,
       "command_approval": false,
       "configured_checks": false
+    },
+    "native_browser_ui": {
+      "schema_version": 1,
+      "status": "passed",
+      "qualification": "Actual native Codex terminal plugin-browser installation and fresh-chat MCP discovery",
+      "codex_version": "codex-cli 0.161.0",
+      "codex_sha256": "9a820c17865fa825d04db416818679a9d63bd72e50835c396f496e5684626c9c",
+      "plugin_version": "0.4.0-dev",
+      "catalog_source": "https://github.com/lwdot90/Progress-checker-for-Codex.git",
+      "catalog_commit": "7d18ee0196e916b33b93393ea761a8dad9b966ff",
+      "payload_commit": "6cec3dbc00c417bd05b5b4b1b3a61ad01ef44371",
+      "assertions_passed": 17,
+      "assertions_total": 17,
+      "elapsed_session_seconds": 106.597,
+      "native_ui_flow": [
+        "Open /plugins in a fresh isolated Codex profile.",
+        "Select Add Marketplace and enter the public Git repository URL.",
+        "Open the pinned Progress Checker plugin details and select Install plugin.",
+        "Confirm the native browser shows Progress Checker installed and enabled at 0.4.0-dev, with its planning skill.",
+        "Start a new chat in the current disposable checkout.",
+        "Open /mcp and confirm progress_checker: connected (11 tools)."
+      ],
+      "mcp_connection_owner": "Native Codex process; no manual MCP client used for this UI proof",
+      "assertions": [
+        {
+          "name": "standard Codex 0.161.0 enters TUI without login",
+          "passed": true
+        },
+        {
+          "name": "plugins browser exposes Add Marketplace tab",
+          "passed": true
+        },
+        {
+          "name": "native marketplace prompt accepts the public repository URL",
+          "passed": true
+        },
+        {
+          "name": "native marketplace add returns progress-global",
+          "passed": true
+        },
+        {
+          "name": "native plugin details disclose the full pinned payload commit",
+          "passed": true
+        },
+        {
+          "name": "native browser reports successful install without app authentication",
+          "passed": true
+        },
+        {
+          "name": "native browser shows plugin installed and enabled",
+          "passed": true
+        },
+        {
+          "name": "installed plugin details show 0.4.0-dev and planning skill",
+          "passed": true
+        },
+        {
+          "name": "native new-chat UI offers current checkout",
+          "passed": true
+        },
+        {
+          "name": "new chat opens in disposable project",
+          "passed": true
+        },
+        {
+          "name": "Codex itself connects the installed MCP and lists eleven tools",
+          "passed": true
+        },
+        {
+          "name": "native installation persists plugin enabled flag in isolated profile",
+          "passed": true
+        },
+        {
+          "name": "native installed MCP command has portable empty arguments",
+          "passed": true
+        },
+        {
+          "name": "no model provider HTTP request occurred",
+          "passed": true
+        },
+        {
+          "name": "no auth.json file was created",
+          "passed": true
+        },
+        {
+          "name": "fixture remains an untracked Git repository without checker config or private state",
+          "passed": true
+        },
+        {
+          "name": "Codex exits normally through local quit command",
+          "passed": true
+        }
+      ],
+      "isolation": {
+        "fresh_disposable_home_and_codex_home": true,
+        "real_user_profile_modified": false,
+        "credentials_copied_or_fabricated": false,
+        "auth_files_created": false,
+        "model_provider": "Local no-auth mock provider; inference requests are rejected.",
+        "observed_model_provider_http_requests": 0,
+        "model_prompts_sent": false,
+        "configured_checks_executed": false,
+        "check_approvals_created": false,
+        "project_tracking_or_checker_state_created": false,
+        "private_records_read": false
+      },
+      "evidence": {
+        "report": {
+          "filename": "report.json",
+          "sha256": "358b3e627a5fdfcd2936a4df5f4d533d204633c467f5074020a9cfc2c3ad6018"
+        },
+        "terminal_transcript": {
+          "filename": "terminal.ansi",
+          "sha256": "3e409c9de073b2b44317e81887708c72c1a0680b5c5c571808f8efc56316770e"
+        },
+        "capture_description": "Original PTY bytes and decoded live terminal states. PNG captures render those terminal text states; they are not desktop screenshots."
+      },
+      "coverage_limits": [
+        "This proof covers native browser installation, enabled skill discovery, a fresh chat, and Codex-owned MCP connection with an eleven-tool count.",
+        "Individual tool names are covered by separate native backend evidence.",
+        "No model conversation, Track this project request, human check approval, or configured-check execution was performed.",
+        "No universal public directory listing or independent-machine compatibility claim is made."
+      ]
+    },
+    "source_free_native_browser": {
+      "platform": "Fedora 44 x86_64",
+      "codex_version": "0.160.0",
+      "codex_sha256": "12eb3e81114588aca3b7998f4f19e8997b056aca08e57a7ca7c8a3ec8c652aad",
+      "payload_commit": "6cec3dbc00c417bd05b5b4b1b3a61ad01ef44371",
+      "native_cache_files_matched": 246,
+      "reports": [
+        {
+          "probe": "native-cli",
+          "assertions_passed": 57,
+          "report_sha256": "210a1ef76039ece284d66cb3b2b5f81a349c019122786df0d98188d63b1a1363"
+        },
+        {
+          "probe": "browser-api",
+          "assertions_passed": 12,
+          "report_sha256": "ca3e955b6702f405a3c61713213b80c5083c194adceb762dcfa44685103cedc2"
+        }
+      ],
+      "coverage": "Source-free native marketplace CLI and browser backend plugin/install, discovery and plugin/uninstall; exact frozen file bytes and modes, with portable installed MCP tool discovery.",
+      "visual_keyboard_automation": false,
+      "model_requests_executed": false,
+      "commands_approved": false,
+      "configured_commands_executed": false,
+      "private_records_read": false
     }
   },
   "human_live_approval": "pending",

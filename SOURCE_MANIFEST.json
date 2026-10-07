@@ -66,8 +66,8 @@
     },
     {
       "path": "QUALIFICATION-0.4.json",
-      "sha256": "d7b22cd375d4ef9a5b01fc4dba0259e60a4282457df5f30673487318b8a8cebf",
-      "bytes": 1671,
+      "sha256": "7038798f73fac3fffd20a045e763ef40310011afeff3a3ba15d8a439907a6763",
+      "bytes": 2298,
       "mode": "0o644",
       "origin": "native_plugin_source_or_public_documentation"
     },
@@ -297,8 +297,8 @@
     },
     {
       "path": "plugins/README.md",
-      "sha256": "5b07017833a5d465b8ad71cf0ac9ab8f287cb7be15681d5b08c1177e47a67e11",
-      "bytes": 4688,
+      "sha256": "deb5539606419fa766ab8b7ef9bc5ba2511ab0e3904d80ceb20e2995ba9bb497",
+      "bytes": 4722,
       "mode": "0o644",
       "origin": "native_plugin_source_or_public_documentation"
     },

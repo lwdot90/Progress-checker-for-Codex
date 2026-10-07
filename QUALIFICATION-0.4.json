@@ -25,6 +25,18 @@
       "commands_approved": false,
       "configured_commands_executed": false,
       "private_records_read": false
+    },
+    "published_https_marketplace": {
+      "codex_version": "0.161.0",
+      "assertions_passed": 55,
+      "catalog_commit": "25b76247f26bce5fc77d32c1a5673e16e59561f2",
+      "payload_commit": "6cec3dbc00c417bd05b5b4b1b3a61ad01ef44371",
+      "native_cache_files_matched": 246,
+      "coverage": "actual public Git marketplace add, pinned plugin installation, skill/tools/tracking, Git marketplace upgrade, same-pin plugin refresh, removal and fixture state retention",
+      "authenticated_model_prompt": false,
+      "changed_version_upgrade": false,
+      "command_approval": false,
+      "configured_checks": false
     }
   },
   "human_live_approval": "pending",

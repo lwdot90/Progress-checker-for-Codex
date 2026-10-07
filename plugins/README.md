@@ -1,9 +1,9 @@
 # Progress Checker plugin
 
 Install once for your Codex profile, then use it in your projects. The
-**0.4.0-dev candidate is in preparation**: publication of the native marketplace
-and qualification of this onboarding flow are pending. Earlier archive results
-do not qualify this candidate.
+**0.4.0-dev is available through the native custom marketplace.**
+Native installation passed local and published HTTPS trials. The final human
+live-approval trial remains pending; earlier archives do not verify this release.
 
 Supported beta target: Fedora 44 x86_64 and standard Codex 0.160.0.
 Runtime prerequisites: Python 3.11+ at /usr/bin/python3, Git at /usr/bin/git,

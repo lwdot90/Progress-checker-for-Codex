@@ -114,10 +114,9 @@ async fn execute(cli: Cli) -> Result<(), String> {
     };
     match cli.command {
         Command::Serve => serve(&cli.root, &state_base).await,
-        Command::Validate | Command::Checks | Command::Approve { .. } => {
-            // Engine's exclusive writer lock rejects these operations while the
-            // service is active. Approval stays an explicit human-only action.
-            let mut engine = Engine::open(&cli.root, &state_base)?;
+        Command::Approve { check } => approve(&cli.root, &state_base, &check).await,
+        Command::Validate | Command::Checks => {
+            let engine = Engine::open(&cli.root, &state_base)?;
             match cli.command {
                 Command::Validate => {
                     engine.config().validate()?;
@@ -126,12 +125,6 @@ async fn execute(cli: Cli) -> Result<(), String> {
                     )
                 }
                 Command::Checks => print_json(&engine.config().checks),
-                Command::Approve { check } => {
-                    let binding = engine.approval_binding(&check)?;
-                    confirm_approval(&check, &binding)?;
-                    engine.approve(&check, binding)?;
-                    print_json(&serde_json::json!({"approved": check}))
-                }
                 _ => unreachable!(),
             }
         }
@@ -163,6 +156,78 @@ async fn execute(cli: Cli) -> Result<(), String> {
             }
         }
     }
+}
+
+async fn approve(
+    root: &std::path::Path,
+    state: &std::path::Path,
+    check: &str,
+) -> Result<(), String> {
+    use checker_core::{engine::Engine, security::ApprovalBinding};
+    use checker_service::{
+        client::{Client, Endpoint},
+        protocol::Operation,
+    };
+    // Refuse pipes before requesting a challenge or opening private state.
+    if !io::stdin().is_terminal() || !io::stdout().is_terminal() {
+        return Err("PERMISSION_REQUIRED: approval requires an interactive human terminal".into());
+    }
+    if let Ok(endpoint) = Endpoint::for_root(root, state)
+        && endpoint.socket_path.exists()
+    {
+        let client = Client::new(endpoint);
+        // Never fall back to a second writer after a service error.
+        let preview = approval_rpc(
+            &client,
+            Operation::ApprovalChallenge {
+                check_id: check.into(),
+            },
+        )
+        .await?;
+        let challenge_id = preview["challenge_id"]
+            .as_str()
+            .ok_or("missing approval challenge")?
+            .to_owned();
+        let binding: ApprovalBinding =
+            serde_json::from_value(preview["binding"].clone()).map_err(|e| e.to_string())?;
+        if preview["check_id"].as_str() != Some(check) {
+            return Err("approval preview check identity mismatch".into());
+        }
+        confirm_approval(check, &binding)?;
+        return print_json(
+            &approval_rpc(
+                &client,
+                Operation::ApprovalCommit {
+                    challenge_id,
+                    binding,
+                },
+            )
+            .await?,
+        );
+    }
+    let mut engine = Engine::open(root, state)?;
+    let binding = engine.approval_binding(check)?;
+    confirm_approval(check, &binding)?;
+    engine.approve(check, binding)?;
+    print_json(&serde_json::json!({"approved": check}))
+}
+
+async fn approval_rpc(
+    client: &checker_service::client::Client,
+    operation: checker_service::protocol::Operation,
+) -> Result<serde_json::Value, String> {
+    let response = client.async_call(operation).await.map_err(|error| {
+        format!("Approval service unavailable: {error}. If upgrading from an older plugin, close its old sessions once and reopen with the matching plugin version. Then run approval again and review the fresh definition. No check was executed.")
+    })?;
+    if let Some(error) = response.error {
+        return Err(format!(
+            "{}: {}. Run approval again and review the fresh definition. If this service predates 0.4, reopen older plugin sessions with the matching version. An error after confirmation may leave the exact grant saved; approval itself executes no check.",
+            error.code, error.message
+        ));
+    }
+    response.result.ok_or_else(|| {
+        "Approval returned no result; review a fresh approval before continuing.".into()
+    })
 }
 
 async fn serve(root: &std::path::Path, state_base: &std::path::Path) -> Result<(), String> {

@@ -2,2103 +2,2146 @@
   "schema_version": 1,
   "scope": "native_plugin_source_only",
   "release": {
-    "version": "0.3.0-dev",
-    "archive_sha256": "0169944a42895eb37a1b279316052fbf566e6a7d436ce53eef95d55060176d9b",
-    "archive_included": false
+    "version": "0.4.0-dev",
+    "archive_sha256": "4bd153b6c43b843114f76228382c9c76ebb7c3553e1d776cb31c77a8a07c7228",
+    "archive_included": false,
+    "native_payload_commit": "6cec3dbc00c417bd05b5b4b1b3a61ad01ef44371"
   },
   "files": [
+    {
+      "path": ".agents/plugins/marketplace.json",
+      "sha256": "e7e5539b5e0ceb7310e4753668e90a4afc2e9c0f51e165899cde396772b008f0",
+      "bytes": 629,
+      "mode": "0o644",
+      "origin": "native_plugin_source_or_public_documentation"
+    },
     {
       "path": ".gitignore",
       "sha256": "0a1f325f09c666a4dccab87290ee892bda39c0bb737a6e30971d01ae40e29a1d",
       "bytes": 91,
       "mode": "0o644",
-      "origin": "staging_documentation"
+      "origin": "native_plugin_source_or_public_documentation"
     },
     {
       "path": "Cargo.lock",
       "sha256": "50e1b6499024b70915f9d34e39698b0852feda5d72c3cfe1d8011ae99b11c4d1",
       "bytes": 26588,
       "mode": "0o644",
-      "origin": "unchanged_native_source"
+      "origin": "native_plugin_source_or_public_documentation"
     },
     {
       "path": "Cargo.toml",
       "sha256": "c1f0c98ce05a61e5cdc3431626f4aa4d825756eb4a1127db263dd8ad75c1737d",
       "bytes": 928,
       "mode": "0o644",
-      "origin": "unchanged_native_source"
+      "origin": "native_plugin_source_or_public_documentation"
     },
     {
       "path": "DIRECTORY_READINESS.md",
       "sha256": "b9df626e67eb6e6ffaebf1dca2fcd9bbf4c2973ca0f3d08b27bb174bcefb7f01",
       "bytes": 963,
       "mode": "0o644",
-      "origin": "staging_documentation"
+      "origin": "native_plugin_source_or_public_documentation"
     },
     {
       "path": "LAUNCH_PLAN.md",
       "sha256": "a0990bcba50d6d4d0346cd555e8a02deaf11b62e4c447dd228ff06c9c27e5283",
       "bytes": 2855,
       "mode": "0o644",
-      "origin": "staging_documentation"
+      "origin": "native_plugin_source_or_public_documentation"
     },
     {
       "path": "LICENSE",
       "sha256": "074e6e32c86a4c0ef8b3ed25b721ca23aca83df277cd88106ef7177c354615ff",
       "bytes": 10280,
       "mode": "0o644",
-      "origin": "unchanged_native_source"
+      "origin": "native_plugin_source_or_public_documentation"
     },
     {
       "path": "NOTICE",
       "sha256": "c97b49d3eda38e62a69e8bd54c08580b00545ab4e9d2f57dc2294c6c5ade3edb",
       "bytes": 636,
       "mode": "0o644",
-      "origin": "unchanged_native_source"
+      "origin": "native_plugin_source_or_public_documentation"
+    },
+    {
+      "path": "QUALIFICATION-0.4.json",
+      "sha256": "d7b22cd375d4ef9a5b01fc4dba0259e60a4282457df5f30673487318b8a8cebf",
+      "bytes": 1671,
+      "mode": "0o644",
+      "origin": "native_plugin_source_or_public_documentation"
     },
     {
       "path": "QUALIFICATION.json",
       "sha256": "ad7f4a189d5bfea1e96324e3ec791fdd930438c7f8405f92daf4ba6401fa233e",
       "bytes": 10486,
       "mode": "0o644",
-      "origin": "staging_documentation"
+      "origin": "native_plugin_source_or_public_documentation"
     },
     {
       "path": "README.md",
-      "sha256": "d96105506dbecafdcb4a07bb4e744b7539e6e12d07dd668c71ea46400d28c156",
-      "bytes": 7753,
+      "sha256": "0689ad248c0e47d1f3aeb12177555f4daecf2037ecf50ea32a51efa645adc74d",
+      "bytes": 4689,
       "mode": "0o644",
-      "origin": "staging_documentation"
+      "origin": "native_plugin_source_or_public_documentation"
     },
     {
       "path": "checker-cli/Cargo.toml",
       "sha256": "33222ccde5c0e50dada8ce715d9e228287ee6d00f3bebb94bdc16ef3d2ff6cc7",
       "bytes": 396,
       "mode": "0o644",
-      "origin": "unchanged_native_source"
+      "origin": "native_plugin_source_or_public_documentation"
     },
     {
       "path": "checker-cli/src/main.rs",
-      "sha256": "02ca10e829fa13a8b3000582cebd2a89ec1a9bfe1dc3d9c87a7d8a65b9846dd7",
-      "bytes": 13363,
+      "sha256": "7f2faa840b818b9cd56f740c1b4270c18595d906ea6b5153aef31f29e7bdb9ba",
+      "bytes": 15838,
       "mode": "0o644",
-      "origin": "unchanged_native_source"
+      "origin": "native_plugin_source_or_public_documentation"
     },
     {
       "path": "checker-core/Cargo.toml",
       "sha256": "cf2027eaf0a11e8998dd6b013f0082af71277dfc9d297903faa76c22e3db40ee",
       "bytes": 379,
       "mode": "0o644",
-      "origin": "unchanged_native_source"
+      "origin": "native_plugin_source_or_public_documentation"
     },
     {
       "path": "checker-core/examples/config.json",
       "sha256": "464dda95f83e481804c57f48eb5f5f341130ea9ababd1d9609089d1681545c5a",
       "bytes": 2497,
       "mode": "0o644",
-      "origin": "unchanged_native_source"
+      "origin": "native_plugin_source_or_public_documentation"
     },
     {
       "path": "checker-core/src/config.rs",
       "sha256": "dfeeda36d15303a433ab4d43a85ab9ff07ecb83b7a35763ab660cc252307ed3a",
       "bytes": 9161,
       "mode": "0o644",
-      "origin": "unchanged_native_source"
+      "origin": "native_plugin_source_or_public_documentation"
     },
     {
       "path": "checker-core/src/engine.rs",
       "sha256": "90377bdf997ced2694e80adb9243e3d5a1d1ca7e508df289336e7a404a143720",
       "bytes": 33398,
       "mode": "0o644",
-      "origin": "unchanged_native_source"
+      "origin": "native_plugin_source_or_public_documentation"
     },
     {
       "path": "checker-core/src/engine_tests.rs",
       "sha256": "0e220e431d1b2fee8d62d80be3ed792bafa718a066ded670864fe05ff091b643",
       "bytes": 14347,
       "mode": "0o644",
-      "origin": "unchanged_native_source"
+      "origin": "native_plugin_source_or_public_documentation"
     },
     {
       "path": "checker-core/src/environment.rs",
       "sha256": "c0d625e241bb44b85f2b30ccefcb60ecf93e995e0429f73b132dd946d0bfa36e",
       "bytes": 9288,
       "mode": "0o644",
-      "origin": "unchanged_native_source"
+      "origin": "native_plugin_source_or_public_documentation"
     },
     {
       "path": "checker-core/src/fingerprint.rs",
       "sha256": "28b7d5aca9eebbfd8dca6f5c62b840451b505b4ac83166d6a74b5cc41bec30a2",
       "bytes": 34172,
       "mode": "0o644",
-      "origin": "unchanged_native_source"
+      "origin": "native_plugin_source_or_public_documentation"
     },
     {
       "path": "checker-core/src/lib.rs",
       "sha256": "1c002e81865f92ccd7c68a1e3588cd542ec78e6251b1e4fd0237f4ccf04f65fe",
       "bytes": 138,
       "mode": "0o644",
-      "origin": "unchanged_native_source"
+      "origin": "native_plugin_source_or_public_documentation"
     },
     {
       "path": "checker-core/src/model.rs",
       "sha256": "5558f8916d4134605ef4cc78228ee66f1ff4ccab23101e4a2f195a963f561ab7",
       "bytes": 11722,
       "mode": "0o644",
-      "origin": "unchanged_native_source"
+      "origin": "native_plugin_source_or_public_documentation"
     },
     {
       "path": "checker-core/src/plan.rs",
       "sha256": "05a196a7ccfa0409230c45657aa0be3a3222853e3edf64e8c7555ddeb5210d98",
       "bytes": 18836,
       "mode": "0o644",
-      "origin": "unchanged_native_source"
+      "origin": "native_plugin_source_or_public_documentation"
     },
     {
       "path": "checker-core/src/runner.rs",
       "sha256": "9238d0dfc1c48b03661a8e20394a4b40d14d7d10e628a462dffd71c4d8dc91a8",
       "bytes": 20324,
       "mode": "0o644",
-      "origin": "unchanged_native_source"
+      "origin": "native_plugin_source_or_public_documentation"
     },
     {
       "path": "checker-core/src/security.rs",
       "sha256": "d40ae480458375df3efe77eea7db6b9711ca8a38e5eb6e3e6d3a57b496e11c30",
       "bytes": 13435,
       "mode": "0o644",
-      "origin": "unchanged_native_source"
+      "origin": "native_plugin_source_or_public_documentation"
     },
     {
       "path": "checker-core/src/service_engine_tests.rs",
       "sha256": "99c6711337077826874fde789b5556d7d59f90ee81fa437510e150d8fae28a09",
       "bytes": 9907,
       "mode": "0o644",
-      "origin": "unchanged_native_source"
+      "origin": "native_plugin_source_or_public_documentation"
     },
     {
       "path": "checker-core/src/store.rs",
       "sha256": "1e15c778b1b1801be6988d5c85cb83379259b7e6e6f96e8415f791fc61b4aa82",
       "bytes": 26973,
       "mode": "0o644",
-      "origin": "unchanged_native_source"
+      "origin": "native_plugin_source_or_public_documentation"
     },
     {
       "path": "checker-mcp/Cargo.toml",
       "sha256": "c46654f4110ee9c47c40347b324857fbc054f7cbf0f5823708d82773db7253c5",
       "bytes": 328,
       "mode": "0o644",
-      "origin": "unchanged_native_source"
+      "origin": "native_plugin_source_or_public_documentation"
     },
     {
       "path": "checker-mcp/src/main.rs",
       "sha256": "3d2563083c6101bddc9c438b3668b027fd3c2ee20bd53a817b6c2455193c77c5",
       "bytes": 37155,
       "mode": "0o644",
-      "origin": "unchanged_native_source"
+      "origin": "native_plugin_source_or_public_documentation"
     },
     {
       "path": "checker-service/Cargo.toml",
       "sha256": "e886d80d98eb010fa814515da75114a3dd274551db7e571d13dfa1c1749201a1",
       "bytes": 472,
       "mode": "0o644",
-      "origin": "unchanged_native_source"
+      "origin": "native_plugin_source_or_public_documentation"
     },
     {
       "path": "checker-service/src/client.rs",
       "sha256": "3868e6762d8e77959bc1ba8a7e819a286622e46bd57d8778865181b221129173",
       "bytes": 11413,
       "mode": "0o644",
-      "origin": "unchanged_native_source"
+      "origin": "native_plugin_source_or_public_documentation"
     },
     {
       "path": "checker-service/src/lib.rs",
       "sha256": "9221788ffbbd1456c410ded02c807af8468bdd977d08d253e72b7ea7e5662e58",
       "bytes": 74,
       "mode": "0o644",
-      "origin": "unchanged_native_source"
+      "origin": "native_plugin_source_or_public_documentation"
     },
     {
       "path": "checker-service/src/main.rs",
       "sha256": "67731b66e78625b1fd06ded38613b937c85035acf624f3737fc54ba05a73dcfa",
       "bytes": 1364,
       "mode": "0o644",
-      "origin": "unchanged_native_source"
+      "origin": "native_plugin_source_or_public_documentation"
     },
     {
       "path": "checker-service/src/protocol.rs",
-      "sha256": "f059c8203d6d39f72f647a21f9540c465e9c4436dc620ca1ea30ff2b6015ec7d",
-      "bytes": 12022,
+      "sha256": "fe5434d895ac9533686133b7f4c994f76a56a7a964992021f60e5b55316dd499",
+      "bytes": 16357,
       "mode": "0o644",
-      "origin": "unchanged_native_source"
+      "origin": "native_plugin_source_or_public_documentation"
     },
     {
       "path": "checker-service/src/server.rs",
-      "sha256": "134f5ca86c9cebf04dbd148ec02e6364b8f7a6b77c818771912fbf964fc4d16b",
-      "bytes": 39011,
+      "sha256": "7ffde0489cbbf652bdf5af6df0f297626991c973e66cc964bb6edc99c8307082",
+      "bytes": 53089,
       "mode": "0o644",
-      "origin": "unchanged_native_source"
+      "origin": "native_plugin_source_or_public_documentation"
     },
     {
       "path": "dist/0.2.1-dev/INSTALL.md",
       "sha256": "5f5c27c0f05b792ca3a9a2c8475519e9d2108ed5f31a9e030ec331eec0d4e041",
       "bytes": 5008,
       "mode": "0o644",
-      "origin": "staging_documentation"
+      "origin": "native_plugin_source_or_public_documentation"
     },
     {
       "path": "dist/0.2.1-dev/SHA256SUMS",
       "sha256": "61e9a31add0b138c8c1458aeea2282fc9b744291c1b0217216476e84348e8fd0",
       "bytes": 113,
       "mode": "0o644",
-      "origin": "unchanged_native_source"
+      "origin": "native_plugin_source_or_public_documentation"
     },
     {
       "path": "dist/0.3.0-dev/INSTALL.md",
       "sha256": "0ee33f6efae873737f13198b10df59d6178c5230d37f39b5edd5df9b4b1ae338",
       "bytes": 2560,
       "mode": "0o644",
-      "origin": "unchanged_native_source"
+      "origin": "native_plugin_source_or_public_documentation"
     },
     {
       "path": "dist/0.3.0-dev/SHA256SUMS",
       "sha256": "7a6caadf924d53fe0de869f59588b89faa57460026a1699eb99aa3ae7fb04039",
       "bytes": 113,
       "mode": "0o644",
-      "origin": "unchanged_native_source"
+      "origin": "native_plugin_source_or_public_documentation"
+    },
+    {
+      "path": "dist/0.4.0-dev/INSTALL.md",
+      "sha256": "f3cc9dc6f675fc3dc9451f66de48734b3cd9d0795bd0b17ce607b6053e093644",
+      "bytes": 3409,
+      "mode": "0o644",
+      "origin": "native_plugin_source_or_public_documentation"
+    },
+    {
+      "path": "dist/0.4.0-dev/SHA256SUMS",
+      "sha256": "abdc533ff781a6b5c3c5be1a2093705e289bbfea93995cfacbddd44cbe52ccf2",
+      "bytes": 113,
+      "mode": "0o644",
+      "origin": "native_plugin_source_or_public_documentation"
     },
     {
       "path": "plugins/README.md",
-      "sha256": "46d701cb85f4aaa4c422da169c567d8d45a5006b880cd162053cb137d3f00e3d",
-      "bytes": 3437,
+      "sha256": "5b07017833a5d465b8ad71cf0ac9ab8f287cb7be15681d5b08c1177e47a67e11",
+      "bytes": 4688,
       "mode": "0o644",
-      "origin": "unchanged_native_source"
+      "origin": "native_plugin_source_or_public_documentation"
     },
     {
       "path": "plugins/install.py",
       "sha256": "829181896b0d4a9d1c2f1ad2957a25d55405ede5985ef01e47a05ca4c48c0822",
       "bytes": 22591,
       "mode": "0o644",
-      "origin": "unchanged_native_source"
+      "origin": "native_plugin_source_or_public_documentation"
     },
     {
       "path": "plugins/progress-checker/THIRD_PARTY_NOTICES.md",
       "sha256": "154fb61f4050f3913ce569f19cbe5cf170ba7d3e8e6b05f16b630d9c17934d2d",
       "bytes": 13948,
       "mode": "0o644",
-      "origin": "unchanged_native_source"
+      "origin": "native_plugin_source_or_public_documentation"
     },
     {
       "path": "plugins/progress-checker/bin/checker-global",
-      "sha256": "f015540c0997555fc8d6b6eff2578d9a0a734bbb3aac53af46045140551b3c7b",
-      "bytes": 14012,
+      "sha256": "8fd371cdb217e40126a091c12f35bc3394394df84060640754afc99057d26666",
+      "bytes": 14271,
       "mode": "0o755",
-      "origin": "unchanged_native_source"
+      "origin": "native_plugin_source_or_public_documentation"
     },
     {
       "path": "plugins/progress-checker/bin/checker-plugin",
       "sha256": "82fb1e7cef3172e465f33fec54d4d7be4f799c66193b5dd8f9b989689009fcaa",
       "bytes": 10507,
       "mode": "0o755",
-      "origin": "unchanged_native_source"
+      "origin": "native_plugin_source_or_public_documentation"
     },
     {
       "path": "plugins/progress-checker/bin/checker-project",
-      "sha256": "847ef581ea507646b066b0d2c06c8426997169f7a2051ef2e49336343c554a2a",
-      "bytes": 5839,
+      "sha256": "23abfce7f0b53645a6f5bf0ddc82f8a127be980e798d36f3a2b24484ba42fadb",
+      "bytes": 5800,
       "mode": "0o755",
-      "origin": "unchanged_native_source"
+      "origin": "native_plugin_source_or_public_documentation"
     },
     {
       "path": "plugins/progress-checker/plugin.json",
-      "sha256": "a831ad73eb6172510bb5bb100298969bf00b32920ba44deeb11581e2d5c1f0b6",
+      "sha256": "188c91ddbc7c5ec1f5187a718667cd003db99a8b2890909fb3ddba434c0b03df",
       "bytes": 486,
       "mode": "0o644",
-      "origin": "unchanged_native_source"
+      "origin": "native_plugin_source_or_public_documentation"
     },
     {
       "path": "plugins/progress-checker/skills/progress-checker/SKILL.md",
-      "sha256": "2baada18b931cd656d8f189935f8f3d1951b556c657a91dfd73edc733a6917a4",
-      "bytes": 3233,
+      "sha256": "ee2d69708e34c403d6ec6894dfec8c2ffd760f03a6459ff49481ce16f0b7e1da",
+      "bytes": 4839,
       "mode": "0o644",
-      "origin": "unchanged_native_source"
+      "origin": "native_plugin_source_or_public_documentation"
     },
     {
       "path": "plugins/progress-checker/third-party/crates/android_system_properties-0.1.5/LICENSE-APACHE",
       "sha256": "216486f29671a4262efe32af6d84a75bef398127f8c5f369b5c8305983887a06",
       "bytes": 554,
       "mode": "0o644",
-      "origin": "unchanged_native_source"
+      "origin": "native_plugin_source_or_public_documentation"
     },
     {
       "path": "plugins/progress-checker/third-party/crates/android_system_properties-0.1.5/LICENSE-MIT",
       "sha256": "80f275e90d799911ed3830a7f242a2ef5a4ade2092fe0aa07bfb2d2cf2f2b95e",
       "bytes": 1080,
       "mode": "0o644",
-      "origin": "unchanged_native_source"
+      "origin": "native_plugin_source_or_public_documentation"
     },
     {
       "path": "plugins/progress-checker/third-party/crates/anstream-0.6.21/LICENSE-APACHE",
       "sha256": "c6596eb7be8581c18be736c846fb9173b69eccf6ef94c5135893ec56bd92ba08",
       "bytes": 11358,
       "mode": "0o644",
-      "origin": "unchanged_native_source"
+      "origin": "native_plugin_source_or_public_documentation"
     },
     {
       "path": "plugins/progress-checker/third-party/crates/anstream-0.6.21/LICENSE-MIT",
       "sha256": "6efb0476a1cc085077ed49357026d8c173bf33017278ef440f222fb9cbcb66e6",
       "bytes": 1062,
       "mode": "0o644",
-      "origin": "unchanged_native_source"
+      "origin": "native_plugin_source_or_public_documentation"
     },
     {
       "path": "plugins/progress-checker/third-party/crates/anstyle-1.0.13/LICENSE-APACHE",
       "sha256": "c6596eb7be8581c18be736c846fb9173b69eccf6ef94c5135893ec56bd92ba08",
       "bytes": 11358,
       "mode": "0o644",
-      "origin": "unchanged_native_source"
+      "origin": "native_plugin_source_or_public_documentation"
     },
     {
       "path": "plugins/progress-checker/third-party/crates/anstyle-1.0.13/LICENSE-MIT",
       "sha256": "6efb0476a1cc085077ed49357026d8c173bf33017278ef440f222fb9cbcb66e6",
       "bytes": 1062,
       "mode": "0o644",
-      "origin": "unchanged_native_source"
+      "origin": "native_plugin_source_or_public_documentation"
     },
     {
       "path": "plugins/progress-checker/third-party/crates/anstyle-parse-0.2.7/LICENSE-APACHE",
       "sha256": "c6596eb7be8581c18be736c846fb9173b69eccf6ef94c5135893ec56bd92ba08",
       "bytes": 11358,
       "mode": "0o644",
-      "origin": "unchanged_native_source"
+      "origin": "native_plugin_source_or_public_documentation"
     },
     {
       "path": "plugins/progress-checker/third-party/crates/anstyle-parse-0.2.7/LICENSE-MIT",
       "sha256": "6efb0476a1cc085077ed49357026d8c173bf33017278ef440f222fb9cbcb66e6",
       "bytes": 1062,
       "mode": "0o644",
-      "origin": "unchanged_native_source"
+      "origin": "native_plugin_source_or_public_documentation"
     },
     {
       "path": "plugins/progress-checker/third-party/crates/anstyle-query-1.1.5/LICENSE-APACHE",
       "sha256": "c6596eb7be8581c18be736c846fb9173b69eccf6ef94c5135893ec56bd92ba08",
       "bytes": 11358,
       "mode": "0o644",
-      "origin": "unchanged_native_source"
+      "origin": "native_plugin_source_or_public_documentation"
     },
     {
       "path": "plugins/progress-checker/third-party/crates/anstyle-query-1.1.5/LICENSE-MIT",
       "sha256": "6efb0476a1cc085077ed49357026d8c173bf33017278ef440f222fb9cbcb66e6",
       "bytes": 1062,
       "mode": "0o644",
-      "origin": "unchanged_native_source"
+      "origin": "native_plugin_source_or_public_documentation"
     },
     {
       "path": "plugins/progress-checker/third-party/crates/anstyle-wincon-3.0.11/LICENSE-APACHE",
       "sha256": "c6596eb7be8581c18be736c846fb9173b69eccf6ef94c5135893ec56bd92ba08",
       "bytes": 11358,
       "mode": "0o644",
-      "origin": "unchanged_native_source"
+      "origin": "native_plugin_source_or_public_documentation"
     },
     {
       "path": "plugins/progress-checker/third-party/crates/anstyle-wincon-3.0.11/LICENSE-MIT",
       "sha256": "6efb0476a1cc085077ed49357026d8c173bf33017278ef440f222fb9cbcb66e6",
       "bytes": 1062,
       "mode": "0o644",
-      "origin": "unchanged_native_source"
+      "origin": "native_plugin_source_or_public_documentation"
     },
     {
       "path": "plugins/progress-checker/third-party/crates/anyhow-1.0.103/LICENSE-APACHE",
       "sha256": "62c7a1e35f56406896d7aa7ca52d0cc0d272ac022b5d2796e7d6905db8a3636a",
       "bytes": 9723,
       "mode": "0o644",
-      "origin": "unchanged_native_source"
+      "origin": "native_plugin_source_or_public_documentation"
     },
     {
       "path": "plugins/progress-checker/third-party/crates/anyhow-1.0.103/LICENSE-MIT",
       "sha256": "23f18e03dc49df91622fe2a76176497404e46ced8a715d9d2b67a7446571cca3",
       "bytes": 1023,
       "mode": "0o644",
-      "origin": "unchanged_native_source"
+      "origin": "native_plugin_source_or_public_documentation"
     },
     {
       "path": "plugins/progress-checker/third-party/crates/autocfg-1.5.0/LICENSE-APACHE",
       "sha256": "a60eea817514531668d7e00765731449fe14d059d3249e0bc93b36de45f759f2",
       "bytes": 10847,
       "mode": "0o644",
-      "origin": "unchanged_native_source"
+      "origin": "native_plugin_source_or_public_documentation"
     },
     {
       "path": "plugins/progress-checker/third-party/crates/autocfg-1.5.0/LICENSE-MIT",
       "sha256": "27995d58ad5c1145c1a8cd86244ce844886958a35eb2b78c6b772748669999ac",
       "bytes": 1054,
       "mode": "0o644",
-      "origin": "unchanged_native_source"
+      "origin": "native_plugin_source_or_public_documentation"
     },
     {
       "path": "plugins/progress-checker/third-party/crates/bitflags-2.13.1/LICENSE-APACHE",
       "sha256": "a60eea817514531668d7e00765731449fe14d059d3249e0bc93b36de45f759f2",
       "bytes": 10847,
       "mode": "0o644",
-      "origin": "unchanged_native_source"
+      "origin": "native_plugin_source_or_public_documentation"
     },
     {
       "path": "plugins/progress-checker/third-party/crates/bitflags-2.13.1/LICENSE-MIT",
       "sha256": "6485b8ed310d3f0340bf1ad1f47645069ce4069dcc6bb46c7d5c6faf41de1fdb",
       "bytes": 1071,
       "mode": "0o644",
-      "origin": "unchanged_native_source"
+      "origin": "native_plugin_source_or_public_documentation"
     },
     {
       "path": "plugins/progress-checker/third-party/crates/block-buffer-0.10.4/LICENSE-APACHE",
       "sha256": "a9040321c3712d8fd0b09cf52b17445de04a23a10165049ae187cd39e5c86be5",
       "bytes": 10849,
       "mode": "0o644",
-      "origin": "unchanged_native_source"
+      "origin": "native_plugin_source_or_public_documentation"
     },
     {
       "path": "plugins/progress-checker/third-party/crates/block-buffer-0.10.4/LICENSE-MIT",
       "sha256": "d5c22aa3118d240e877ad41c5d9fa232f9c77d757d4aac0c2f943afc0a95e0ef",
       "bytes": 1082,
       "mode": "0o644",
-      "origin": "unchanged_native_source"
+      "origin": "native_plugin_source_or_public_documentation"
     },
     {
       "path": "plugins/progress-checker/third-party/crates/bumpalo-3.19.1/LICENSE-APACHE",
       "sha256": "a60eea817514531668d7e00765731449fe14d059d3249e0bc93b36de45f759f2",
       "bytes": 10847,
       "mode": "0o644",
-      "origin": "unchanged_native_source"
+      "origin": "native_plugin_source_or_public_documentation"
     },
     {
       "path": "plugins/progress-checker/third-party/crates/bumpalo-3.19.1/LICENSE-MIT",
       "sha256": "65f94e99ddaf4f5d1782a6dae23f35d4293a9a01444a13135a6887017d353cee",
       "bytes": 1059,
       "mode": "0o644",
-      "origin": "unchanged_native_source"
+      "origin": "native_plugin_source_or_public_documentation"
     },
     {
       "path": "plugins/progress-checker/third-party/crates/bytes-1.12.1/LICENSE",
       "sha256": "45f522cacecb1023856e46df79ca625dfc550c94910078bd8aec6e02880b3d42",
       "bytes": 1055,
       "mode": "0o644",
-      "origin": "unchanged_native_source"
+      "origin": "native_plugin_source_or_public_documentation"
     },
     {
       "path": "plugins/progress-checker/third-party/crates/cc-1.2.55/LICENSE-APACHE",
       "sha256": "a60eea817514531668d7e00765731449fe14d059d3249e0bc93b36de45f759f2",
       "bytes": 10847,
       "mode": "0o644",
-      "origin": "unchanged_native_source"
+      "origin": "native_plugin_source_or_public_documentation"
     },
     {
       "path": "plugins/progress-checker/third-party/crates/cc-1.2.55/LICENSE-MIT",
       "sha256": "378f5840b258e2779c39418f3f2d7b2ba96f1c7917dd6be0713f88305dbda397",
       "bytes": 1057,
       "mode": "0o644",
-      "origin": "unchanged_native_source"
+      "origin": "native_plugin_source_or_public_documentation"
     },
     {
       "path": "plugins/progress-checker/third-party/crates/cfg-if-1.0.4/LICENSE-APACHE",
       "sha256": "a60eea817514531668d7e00765731449fe14d059d3249e0bc93b36de45f759f2",
       "bytes": 10847,
       "mode": "0o644",
-      "origin": "unchanged_native_source"
+      "origin": "native_plugin_source_or_public_documentation"
     },
     {
       "path": "plugins/progress-checker/third-party/crates/cfg-if-1.0.4/LICENSE-MIT",
       "sha256": "378f5840b258e2779c39418f3f2d7b2ba96f1c7917dd6be0713f88305dbda397",
       "bytes": 1057,
       "mode": "0o644",
-      "origin": "unchanged_native_source"
+      "origin": "native_plugin_source_or_public_documentation"
     },
     {
       "path": "plugins/progress-checker/third-party/crates/chrono-0.4.43/LICENSE.txt",
       "sha256": "946c9835d8034d24404f8cfec5f4654cee5dad17e944afc3d06d742cf2882831",
       "bytes": 12307,
       "mode": "0o644",
-      "origin": "unchanged_native_source"
+      "origin": "native_plugin_source_or_public_documentation"
     },
     {
       "path": "plugins/progress-checker/third-party/crates/clap-4.5.58/LICENSE-APACHE",
       "sha256": "c6596eb7be8581c18be736c846fb9173b69eccf6ef94c5135893ec56bd92ba08",
       "bytes": 11358,
       "mode": "0o644",
-      "origin": "unchanged_native_source"
+      "origin": "native_plugin_source_or_public_documentation"
     },
     {
       "path": "plugins/progress-checker/third-party/crates/clap-4.5.58/LICENSE-MIT",
       "sha256": "6efb0476a1cc085077ed49357026d8c173bf33017278ef440f222fb9cbcb66e6",
       "bytes": 1062,
       "mode": "0o644",
-      "origin": "unchanged_native_source"
+      "origin": "native_plugin_source_or_public_documentation"
     },
     {
       "path": "plugins/progress-checker/third-party/crates/clap_builder-4.5.58/LICENSE-APACHE",
       "sha256": "c6596eb7be8581c18be736c846fb9173b69eccf6ef94c5135893ec56bd92ba08",
       "bytes": 11358,
       "mode": "0o644",
-      "origin": "unchanged_native_source"
+      "origin": "native_plugin_source_or_public_documentation"
     },
     {
       "path": "plugins/progress-checker/third-party/crates/clap_builder-4.5.58/LICENSE-MIT",
       "sha256": "6efb0476a1cc085077ed49357026d8c173bf33017278ef440f222fb9cbcb66e6",
       "bytes": 1062,
       "mode": "0o644",
-      "origin": "unchanged_native_source"
+      "origin": "native_plugin_source_or_public_documentation"
     },
     {
       "path": "plugins/progress-checker/third-party/crates/clap_derive-4.5.55/LICENSE-APACHE",
       "sha256": "c6596eb7be8581c18be736c846fb9173b69eccf6ef94c5135893ec56bd92ba08",
       "bytes": 11358,
       "mode": "0o644",
-      "origin": "unchanged_native_source"
+      "origin": "native_plugin_source_or_public_documentation"
     },
     {
       "path": "plugins/progress-checker/third-party/crates/clap_derive-4.5.55/LICENSE-MIT",
       "sha256": "6efb0476a1cc085077ed49357026d8c173bf33017278ef440f222fb9cbcb66e6",
       "bytes": 1062,
       "mode": "0o644",
-      "origin": "unchanged_native_source"
+      "origin": "native_plugin_source_or_public_documentation"
     },
     {
       "path": "plugins/progress-checker/third-party/crates/clap_lex-1.0.0/LICENSE-APACHE",
       "sha256": "c6596eb7be8581c18be736c846fb9173b69eccf6ef94c5135893ec56bd92ba08",
       "bytes": 11358,
       "mode": "0o644",
-      "origin": "unchanged_native_source"
+      "origin": "native_plugin_source_or_public_documentation"
     },
     {
       "path": "plugins/progress-checker/third-party/crates/clap_lex-1.0.0/LICENSE-MIT",
       "sha256": "6efb0476a1cc085077ed49357026d8c173bf33017278ef440f222fb9cbcb66e6",
       "bytes": 1062,
       "mode": "0o644",
-      "origin": "unchanged_native_source"
+      "origin": "native_plugin_source_or_public_documentation"
     },
     {
       "path": "plugins/progress-checker/third-party/crates/colorchoice-1.0.4/LICENSE-APACHE",
       "sha256": "c6596eb7be8581c18be736c846fb9173b69eccf6ef94c5135893ec56bd92ba08",
       "bytes": 11358,
       "mode": "0o644",
-      "origin": "unchanged_native_source"
+      "origin": "native_plugin_source_or_public_documentation"
     },
     {
       "path": "plugins/progress-checker/third-party/crates/colorchoice-1.0.4/LICENSE-MIT",
       "sha256": "6efb0476a1cc085077ed49357026d8c173bf33017278ef440f222fb9cbcb66e6",
       "bytes": 1062,
       "mode": "0o644",
-      "origin": "unchanged_native_source"
+      "origin": "native_plugin_source_or_public_documentation"
     },
     {
       "path": "plugins/progress-checker/third-party/crates/core-foundation-sys-0.8.7/LICENSE-APACHE",
       "sha256": "a60eea817514531668d7e00765731449fe14d059d3249e0bc93b36de45f759f2",
       "bytes": 10847,
       "mode": "0o644",
-      "origin": "unchanged_native_source"
+      "origin": "native_plugin_source_or_public_documentation"
     },
     {
       "path": "plugins/progress-checker/third-party/crates/core-foundation-sys-0.8.7/LICENSE-MIT",
       "sha256": "62065228e42caebca7e7d7db1204cbb867033de5982ca4009928915e4095f3a3",
       "bytes": 1067,
       "mode": "0o644",
-      "origin": "unchanged_native_source"
+      "origin": "native_plugin_source_or_public_documentation"
     },
     {
       "path": "plugins/progress-checker/third-party/crates/cpufeatures-0.2.17/LICENSE-APACHE",
       "sha256": "a9040321c3712d8fd0b09cf52b17445de04a23a10165049ae187cd39e5c86be5",
       "bytes": 10849,
       "mode": "0o644",
-      "origin": "unchanged_native_source"
+      "origin": "native_plugin_source_or_public_documentation"
     },
     {
       "path": "plugins/progress-checker/third-party/crates/cpufeatures-0.2.17/LICENSE-MIT",
       "sha256": "ae9baa7beea910273c2f384c2a6b721fb7bd02bda3436074a1072e4ee689f985",
       "bytes": 1082,
       "mode": "0o644",
-      "origin": "unchanged_native_source"
+      "origin": "native_plugin_source_or_public_documentation"
     },
     {
       "path": "plugins/progress-checker/third-party/crates/crypto-common-0.1.7/LICENSE-APACHE",
       "sha256": "a9040321c3712d8fd0b09cf52b17445de04a23a10165049ae187cd39e5c86be5",
       "bytes": 10849,
       "mode": "0o644",
-      "origin": "unchanged_native_source"
+      "origin": "native_plugin_source_or_public_documentation"
     },
     {
       "path": "plugins/progress-checker/third-party/crates/crypto-common-0.1.7/LICENSE-MIT",
       "sha256": "3521672491a3479422d5fe1aca6645dd2984090f85da6e5205abfb18fb7a6897",
       "bytes": 1065,
       "mode": "0o644",
-      "origin": "unchanged_native_source"
+      "origin": "native_plugin_source_or_public_documentation"
     },
     {
       "path": "plugins/progress-checker/third-party/crates/digest-0.10.7/LICENSE-APACHE",
       "sha256": "a9040321c3712d8fd0b09cf52b17445de04a23a10165049ae187cd39e5c86be5",
       "bytes": 10849,
       "mode": "0o644",
-      "origin": "unchanged_native_source"
+      "origin": "native_plugin_source_or_public_documentation"
     },
     {
       "path": "plugins/progress-checker/third-party/crates/digest-0.10.7/LICENSE-MIT",
       "sha256": "9e0dfd2dd4173a530e238cb6adb37aa78c34c6bc7444e0e10c1ab5d8881f63ba",
       "bytes": 1057,
       "mode": "0o644",
-      "origin": "unchanged_native_source"
+      "origin": "native_plugin_source_or_public_documentation"
     },
     {
       "path": "plugins/progress-checker/third-party/crates/equivalent-1.0.2/LICENSE-APACHE",
       "sha256": "a60eea817514531668d7e00765731449fe14d059d3249e0bc93b36de45f759f2",
       "bytes": 10847,
       "mode": "0o644",
-      "origin": "unchanged_native_source"
+      "origin": "native_plugin_source_or_public_documentation"
     },
     {
       "path": "plugins/progress-checker/third-party/crates/equivalent-1.0.2/LICENSE-MIT",
       "sha256": "7365cc8878a1d7ce155a58c4ca09c3d7a6be413efa5334a80ea842912b669349",
       "bytes": 1049,
       "mode": "0o644",
-      "origin": "unchanged_native_source"
+      "origin": "native_plugin_source_or_public_documentation"
     },
     {
       "path": "plugins/progress-checker/third-party/crates/errno-0.3.14/LICENSE-APACHE",
       "sha256": "a60eea817514531668d7e00765731449fe14d059d3249e0bc93b36de45f759f2",
       "bytes": 10847,
       "mode": "0o644",
-      "origin": "unchanged_native_source"
+      "origin": "native_plugin_source_or_public_documentation"
     },
     {
       "path": "plugins/progress-checker/third-party/crates/errno-0.3.14/LICENSE-MIT",
       "sha256": "8764a597675778ddfd4e25f81b08a05dbcf089ac05662df7613fe67f150e3aa2",
       "bytes": 1054,
       "mode": "0o644",
-      "origin": "unchanged_native_source"
+      "origin": "native_plugin_source_or_public_documentation"
     },
     {
       "path": "plugins/progress-checker/third-party/crates/fastrand-2.3.0/LICENSE-APACHE",
       "sha256": "a60eea817514531668d7e00765731449fe14d059d3249e0bc93b36de45f759f2",
       "bytes": 10847,
       "mode": "0o644",
-      "origin": "unchanged_native_source"
+      "origin": "native_plugin_source_or_public_documentation"
     },
     {
       "path": "plugins/progress-checker/third-party/crates/fastrand-2.3.0/LICENSE-MIT",
       "sha256": "23f18e03dc49df91622fe2a76176497404e46ced8a715d9d2b67a7446571cca3",
       "bytes": 1023,
       "mode": "0o644",
-      "origin": "unchanged_native_source"
+      "origin": "native_plugin_source_or_public_documentation"
     },
     {
       "path": "plugins/progress-checker/third-party/crates/find-msvc-tools-0.1.9/LICENSE-APACHE",
       "sha256": "a60eea817514531668d7e00765731449fe14d059d3249e0bc93b36de45f759f2",
       "bytes": 10847,
       "mode": "0o644",
-      "origin": "unchanged_native_source"
+      "origin": "native_plugin_source_or_public_documentation"
     },
     {
       "path": "plugins/progress-checker/third-party/crates/find-msvc-tools-0.1.9/LICENSE-MIT",
       "sha256": "378f5840b258e2779c39418f3f2d7b2ba96f1c7917dd6be0713f88305dbda397",
       "bytes": 1057,
       "mode": "0o644",
-      "origin": "unchanged_native_source"
+      "origin": "native_plugin_source_or_public_documentation"
     },
     {
       "path": "plugins/progress-checker/third-party/crates/foldhash-0.1.5/LICENSE",
       "sha256": "b1181a40b2a7b25cf66fd01481713bc1005df082c53ef73e851e55071b102744",
       "bytes": 856,
       "mode": "0o644",
-      "origin": "unchanged_native_source"
+      "origin": "native_plugin_source_or_public_documentation"
     },
     {
       "path": "plugins/progress-checker/third-party/crates/futures-core-0.3.34/LICENSE-APACHE",
       "sha256": "275c491d6d1160553c32fd6127061d7f9606c3ea25abfad6ca3f6ed088785427",
       "bytes": 10874,
       "mode": "0o644",
-      "origin": "unchanged_native_source"
+      "origin": "native_plugin_source_or_public_documentation"
     },
     {
       "path": "plugins/progress-checker/third-party/crates/futures-core-0.3.34/LICENSE-MIT",
       "sha256": "6652c868f35dfe5e8ef636810a4e576b9d663f3a17fb0f5613ad73583e1b88fd",
       "bytes": 1094,
       "mode": "0o644",
-      "origin": "unchanged_native_source"
+      "origin": "native_plugin_source_or_public_documentation"
     },
     {
       "path": "plugins/progress-checker/third-party/crates/futures-macro-0.3.34/LICENSE-APACHE",
       "sha256": "275c491d6d1160553c32fd6127061d7f9606c3ea25abfad6ca3f6ed088785427",
       "bytes": 10874,
       "mode": "0o644",
-      "origin": "unchanged_native_source"
+      "origin": "native_plugin_source_or_public_documentation"
     },
     {
       "path": "plugins/progress-checker/third-party/crates/futures-macro-0.3.34/LICENSE-MIT",
       "sha256": "6652c868f35dfe5e8ef636810a4e576b9d663f3a17fb0f5613ad73583e1b88fd",
       "bytes": 1094,
       "mode": "0o644",
-      "origin": "unchanged_native_source"
+      "origin": "native_plugin_source_or_public_documentation"
     },
     {
       "path": "plugins/progress-checker/third-party/crates/futures-sink-0.3.34/LICENSE-APACHE",
       "sha256": "275c491d6d1160553c32fd6127061d7f9606c3ea25abfad6ca3f6ed088785427",
       "bytes": 10874,
       "mode": "0o644",
-      "origin": "unchanged_native_source"
+      "origin": "native_plugin_source_or_public_documentation"
     },
     {
       "path": "plugins/progress-checker/third-party/crates/futures-sink-0.3.34/LICENSE-MIT",
       "sha256": "6652c868f35dfe5e8ef636810a4e576b9d663f3a17fb0f5613ad73583e1b88fd",
       "bytes": 1094,
       "mode": "0o644",
-      "origin": "unchanged_native_source"
+      "origin": "native_plugin_source_or_public_documentation"
     },
     {
       "path": "plugins/progress-checker/third-party/crates/futures-task-0.3.34/LICENSE-APACHE",
       "sha256": "275c491d6d1160553c32fd6127061d7f9606c3ea25abfad6ca3f6ed088785427",
       "bytes": 10874,
       "mode": "0o644",
-      "origin": "unchanged_native_source"
+      "origin": "native_plugin_source_or_public_documentation"
     },
     {
       "path": "plugins/progress-checker/third-party/crates/futures-task-0.3.34/LICENSE-MIT",
       "sha256": "6652c868f35dfe5e8ef636810a4e576b9d663f3a17fb0f5613ad73583e1b88fd",
       "bytes": 1094,
       "mode": "0o644",
-      "origin": "unchanged_native_source"
+      "origin": "native_plugin_source_or_public_documentation"
     },
     {
       "path": "plugins/progress-checker/third-party/crates/futures-util-0.3.34/LICENSE-APACHE",
       "sha256": "275c491d6d1160553c32fd6127061d7f9606c3ea25abfad6ca3f6ed088785427",
       "bytes": 10874,
       "mode": "0o644",
-      "origin": "unchanged_native_source"
+      "origin": "native_plugin_source_or_public_documentation"
     },
     {
       "path": "plugins/progress-checker/third-party/crates/futures-util-0.3.34/LICENSE-MIT",
       "sha256": "6652c868f35dfe5e8ef636810a4e576b9d663f3a17fb0f5613ad73583e1b88fd",
       "bytes": 1094,
       "mode": "0o644",
-      "origin": "unchanged_native_source"
+      "origin": "native_plugin_source_or_public_documentation"
     },
     {
       "path": "plugins/progress-checker/third-party/crates/generic-array-0.14.7/LICENSE",
       "sha256": "c09aae9d3c77b531f56351a9947bc7446511d6b025b3255312d3e3442a9a7583",
       "bytes": 1107,
       "mode": "0o644",
-      "origin": "unchanged_native_source"
+      "origin": "native_plugin_source_or_public_documentation"
     },
     {
       "path": "plugins/progress-checker/third-party/crates/getrandom-0.4.2/LICENSE-APACHE",
       "sha256": "aaff376532ea30a0cd5330b9502ad4a4c8bf769c539c87ffe78819d188a18ebf",
       "bytes": 10849,
       "mode": "0o644",
-      "origin": "unchanged_native_source"
+      "origin": "native_plugin_source_or_public_documentation"
     },
     {
       "path": "plugins/progress-checker/third-party/crates/getrandom-0.4.2/LICENSE-MIT",
       "sha256": "523a42c25d245dde9c015f882cec7f4555aad883382a6cf19b4b7d9b2cd5419b",
       "bytes": 1130,
       "mode": "0o644",
-      "origin": "unchanged_native_source"
+      "origin": "native_plugin_source_or_public_documentation"
     },
     {
       "path": "plugins/progress-checker/third-party/crates/hashbrown-0.15.5/LICENSE-APACHE",
       "sha256": "a60eea817514531668d7e00765731449fe14d059d3249e0bc93b36de45f759f2",
       "bytes": 10847,
       "mode": "0o644",
-      "origin": "unchanged_native_source"
+      "origin": "native_plugin_source_or_public_documentation"
     },
     {
       "path": "plugins/progress-checker/third-party/crates/hashbrown-0.15.5/LICENSE-MIT",
       "sha256": "ff8f68cb076caf8cefe7a6430d4ac086ce6af2ca8ce2c4e5a2004d4552ef52a2",
       "bytes": 1060,
       "mode": "0o644",
-      "origin": "unchanged_native_source"
+      "origin": "native_plugin_source_or_public_documentation"
     },
     {
       "path": "plugins/progress-checker/third-party/crates/hashbrown-0.17.1/LICENSE-APACHE",
       "sha256": "a60eea817514531668d7e00765731449fe14d059d3249e0bc93b36de45f759f2",
       "bytes": 10847,
       "mode": "0o644",
-      "origin": "unchanged_native_source"
+      "origin": "native_plugin_source_or_public_documentation"
     },
     {
       "path": "plugins/progress-checker/third-party/crates/hashbrown-0.17.1/LICENSE-MIT",
       "sha256": "ff8f68cb076caf8cefe7a6430d4ac086ce6af2ca8ce2c4e5a2004d4552ef52a2",
       "bytes": 1060,
       "mode": "0o644",
-      "origin": "unchanged_native_source"
+      "origin": "native_plugin_source_or_public_documentation"
     },
     {
       "path": "plugins/progress-checker/third-party/crates/heck-0.5.0/LICENSE-APACHE",
       "sha256": "a60eea817514531668d7e00765731449fe14d059d3249e0bc93b36de45f759f2",
       "bytes": 10847,
       "mode": "0o644",
-      "origin": "unchanged_native_source"
+      "origin": "native_plugin_source_or_public_documentation"
     },
     {
       "path": "plugins/progress-checker/third-party/crates/heck-0.5.0/LICENSE-MIT",
       "sha256": "7b63ecd5f1902af1b63729947373683c32745c16a10e8e6292e2e2dcd7e90ae0",
       "bytes": 1071,
       "mode": "0o644",
-      "origin": "unchanged_native_source"
+      "origin": "native_plugin_source_or_public_documentation"
     },
     {
       "path": "plugins/progress-checker/third-party/crates/hmac-0.12.1/LICENSE-APACHE",
       "sha256": "a9040321c3712d8fd0b09cf52b17445de04a23a10165049ae187cd39e5c86be5",
       "bytes": 10849,
       "mode": "0o644",
-      "origin": "unchanged_native_source"
+      "origin": "native_plugin_source_or_public_documentation"
     },
     {
       "path": "plugins/progress-checker/third-party/crates/hmac-0.12.1/LICENSE-MIT",
       "sha256": "9e0dfd2dd4173a530e238cb6adb37aa78c34c6bc7444e0e10c1ab5d8881f63ba",
       "bytes": 1057,
       "mode": "0o644",
-      "origin": "unchanged_native_source"
+      "origin": "native_plugin_source_or_public_documentation"
     },
     {
       "path": "plugins/progress-checker/third-party/crates/iana-time-zone-0.1.65/LICENSE-APACHE",
       "sha256": "696759d65dfe558ff7d9f031c76db19ec5c0767470fb67c4e8d990820d1e99c9",
       "bytes": 10832,
       "mode": "0o644",
-      "origin": "unchanged_native_source"
+      "origin": "native_plugin_source_or_public_documentation"
     },
     {
       "path": "plugins/progress-checker/third-party/crates/iana-time-zone-0.1.65/LICENSE-MIT",
       "sha256": "da28ccc6b158fc2d8cccc74e99794b1cff1d29bd7bbeb019442fcf0c04c6cad9",
       "bytes": 1059,
       "mode": "0o644",
-      "origin": "unchanged_native_source"
+      "origin": "native_plugin_source_or_public_documentation"
     },
     {
       "path": "plugins/progress-checker/third-party/crates/iana-time-zone-haiku-0.1.2/LICENSE-APACHE",
       "sha256": "696759d65dfe558ff7d9f031c76db19ec5c0767470fb67c4e8d990820d1e99c9",
       "bytes": 10832,
       "mode": "0o644",
-      "origin": "unchanged_native_source"
+      "origin": "native_plugin_source_or_public_documentation"
     },
     {
       "path": "plugins/progress-checker/third-party/crates/iana-time-zone-haiku-0.1.2/LICENSE-MIT",
       "sha256": "da28ccc6b158fc2d8cccc74e99794b1cff1d29bd7bbeb019442fcf0c04c6cad9",
       "bytes": 1059,
       "mode": "0o644",
-      "origin": "unchanged_native_source"
+      "origin": "native_plugin_source_or_public_documentation"
     },
     {
       "path": "plugins/progress-checker/third-party/crates/id-arena-2.3.0/LICENSE-APACHE",
       "sha256": "a60eea817514531668d7e00765731449fe14d059d3249e0bc93b36de45f759f2",
       "bytes": 10847,
       "mode": "0o644",
-      "origin": "unchanged_native_source"
+      "origin": "native_plugin_source_or_public_documentation"
     },
     {
       "path": "plugins/progress-checker/third-party/crates/id-arena-2.3.0/LICENSE-MIT",
       "sha256": "378f5840b258e2779c39418f3f2d7b2ba96f1c7917dd6be0713f88305dbda397",
       "bytes": 1057,
       "mode": "0o644",
-      "origin": "unchanged_native_source"
+      "origin": "native_plugin_source_or_public_documentation"
     },
     {
       "path": "plugins/progress-checker/third-party/crates/indexmap-2.14.0/LICENSE-APACHE",
       "sha256": "a60eea817514531668d7e00765731449fe14d059d3249e0bc93b36de45f759f2",
       "bytes": 10847,
       "mode": "0o644",
-      "origin": "unchanged_native_source"
+      "origin": "native_plugin_source_or_public_documentation"
     },
     {
       "path": "plugins/progress-checker/third-party/crates/indexmap-2.14.0/LICENSE-MIT",
       "sha256": "ecc269ef87fd38a1d98e30bfac9ba964a9dbd9315c3770fed98d4d7cb5882055",
       "bytes": 1049,
       "mode": "0o644",
-      "origin": "unchanged_native_source"
+      "origin": "native_plugin_source_or_public_documentation"
     },
     {
       "path": "plugins/progress-checker/third-party/crates/is_terminal_polyfill-1.70.2/LICENSE-APACHE",
       "sha256": "c6596eb7be8581c18be736c846fb9173b69eccf6ef94c5135893ec56bd92ba08",
       "bytes": 11358,
       "mode": "0o644",
-      "origin": "unchanged_native_source"
+      "origin": "native_plugin_source_or_public_documentation"
     },
     {
       "path": "plugins/progress-checker/third-party/crates/is_terminal_polyfill-1.70.2/LICENSE-MIT",
       "sha256": "6efb0476a1cc085077ed49357026d8c173bf33017278ef440f222fb9cbcb66e6",
       "bytes": 1062,
       "mode": "0o644",
-      "origin": "unchanged_native_source"
+      "origin": "native_plugin_source_or_public_documentation"
     },
     {
       "path": "plugins/progress-checker/third-party/crates/itoa-1.0.17/LICENSE-APACHE",
       "sha256": "62c7a1e35f56406896d7aa7ca52d0cc0d272ac022b5d2796e7d6905db8a3636a",
       "bytes": 9723,
       "mode": "0o644",
-      "origin": "unchanged_native_source"
+      "origin": "native_plugin_source_or_public_documentation"
     },
     {
       "path": "plugins/progress-checker/third-party/crates/itoa-1.0.17/LICENSE-MIT",
       "sha256": "23f18e03dc49df91622fe2a76176497404e46ced8a715d9d2b67a7446571cca3",
       "bytes": 1023,
       "mode": "0o644",
-      "origin": "unchanged_native_source"
+      "origin": "native_plugin_source_or_public_documentation"
     },
     {
       "path": "plugins/progress-checker/third-party/crates/js-sys-0.3.85/LICENSE-APACHE",
       "sha256": "a60eea817514531668d7e00765731449fe14d059d3249e0bc93b36de45f759f2",
       "bytes": 10847,
       "mode": "0o644",
-      "origin": "unchanged_native_source"
+      "origin": "native_plugin_source_or_public_documentation"
     },
     {
       "path": "plugins/progress-checker/third-party/crates/js-sys-0.3.85/LICENSE-MIT",
       "sha256": "378f5840b258e2779c39418f3f2d7b2ba96f1c7917dd6be0713f88305dbda397",
       "bytes": 1057,
       "mode": "0o644",
-      "origin": "unchanged_native_source"
+      "origin": "native_plugin_source_or_public_documentation"
     },
     {
       "path": "plugins/progress-checker/third-party/crates/leb128fmt-0.1.0/LICENSE-APACHE",
       "sha256": "a60eea817514531668d7e00765731449fe14d059d3249e0bc93b36de45f759f2",
       "bytes": 10847,
       "mode": "0o644",
-      "origin": "unchanged_native_source"
+      "origin": "native_plugin_source_or_public_documentation"
     },
     {
       "path": "plugins/progress-checker/third-party/crates/leb128fmt-0.1.0/LICENSE-MIT",
       "sha256": "23f18e03dc49df91622fe2a76176497404e46ced8a715d9d2b67a7446571cca3",
       "bytes": 1023,
       "mode": "0o644",
-      "origin": "unchanged_native_source"
+      "origin": "native_plugin_source_or_public_documentation"
     },
     {
       "path": "plugins/progress-checker/third-party/crates/libc-0.2.186/LICENSE-APACHE",
       "sha256": "62c7a1e35f56406896d7aa7ca52d0cc0d272ac022b5d2796e7d6905db8a3636a",
       "bytes": 9723,
       "mode": "0o644",
-      "origin": "unchanged_native_source"
+      "origin": "native_plugin_source_or_public_documentation"
     },
     {
       "path": "plugins/progress-checker/third-party/crates/libc-0.2.186/LICENSE-MIT",
       "sha256": "123a331b5dbf04c30097fa43b8f858bc85df671fe776de498d01f3d6b7c1f69e",
       "bytes": 1066,
       "mode": "0o644",
-      "origin": "unchanged_native_source"
+      "origin": "native_plugin_source_or_public_documentation"
     },
     {
       "path": "plugins/progress-checker/third-party/crates/linux-raw-sys-0.12.1/COPYRIGHT",
       "sha256": "3290ae0fbc9ddb77d2239121d710f0bb9d31b3b4744e6d97fe01e652b4c1870b",
       "bytes": 881,
       "mode": "0o644",
-      "origin": "unchanged_native_source"
+      "origin": "native_plugin_source_or_public_documentation"
     },
     {
       "path": "plugins/progress-checker/third-party/crates/linux-raw-sys-0.12.1/LICENSE-APACHE",
       "sha256": "a60eea817514531668d7e00765731449fe14d059d3249e0bc93b36de45f759f2",
       "bytes": 10847,
       "mode": "0o644",
-      "origin": "unchanged_native_source"
+      "origin": "native_plugin_source_or_public_documentation"
     },
     {
       "path": "plugins/progress-checker/third-party/crates/linux-raw-sys-0.12.1/LICENSE-Apache-2.0_WITH_LLVM-exception",
       "sha256": "268872b9816f90fd8e85db5a28d33f8150ebb8dd016653fb39ef1f94f2686bc5",
       "bytes": 12243,
       "mode": "0o644",
-      "origin": "unchanged_native_source"
+      "origin": "native_plugin_source_or_public_documentation"
     },
     {
       "path": "plugins/progress-checker/third-party/crates/linux-raw-sys-0.12.1/LICENSE-MIT",
       "sha256": "23f18e03dc49df91622fe2a76176497404e46ced8a715d9d2b67a7446571cca3",
       "bytes": 1023,
       "mode": "0o644",
-      "origin": "unchanged_native_source"
+      "origin": "native_plugin_source_or_public_documentation"
     },
     {
       "path": "plugins/progress-checker/third-party/crates/log-0.4.34/LICENSE-APACHE",
       "sha256": "a60eea817514531668d7e00765731449fe14d059d3249e0bc93b36de45f759f2",
       "bytes": 10847,
       "mode": "0o644",
-      "origin": "unchanged_native_source"
+      "origin": "native_plugin_source_or_public_documentation"
     },
     {
       "path": "plugins/progress-checker/third-party/crates/log-0.4.34/LICENSE-MIT",
       "sha256": "6485b8ed310d3f0340bf1ad1f47645069ce4069dcc6bb46c7d5c6faf41de1fdb",
       "bytes": 1071,
       "mode": "0o644",
-      "origin": "unchanged_native_source"
+      "origin": "native_plugin_source_or_public_documentation"
     },
     {
       "path": "plugins/progress-checker/third-party/crates/memchr-2.8.1/COPYING",
       "sha256": "01c266bced4a434da0051174d6bee16a4c82cf634e2679b6155d40d75012390f",
       "bytes": 126,
       "mode": "0o644",
-      "origin": "unchanged_native_source"
+      "origin": "native_plugin_source_or_public_documentation"
     },
     {
       "path": "plugins/progress-checker/third-party/crates/memchr-2.8.1/LICENSE-MIT",
       "sha256": "0f96a83840e146e43c0ec96a22ec1f392e0680e6c1226e6f3ba87e0740af850f",
       "bytes": 1081,
       "mode": "0o644",
-      "origin": "unchanged_native_source"
+      "origin": "native_plugin_source_or_public_documentation"
     },
     {
       "path": "plugins/progress-checker/third-party/crates/mio-1.2.0/LICENSE",
       "sha256": "07919255c7e04793d8ea760d6c2ce32d19f9ff02bdbdde3ce90b1e1880929a9b",
       "bytes": 1082,
       "mode": "0o644",
-      "origin": "unchanged_native_source"
+      "origin": "native_plugin_source_or_public_documentation"
     },
     {
       "path": "plugins/progress-checker/third-party/crates/num-traits-0.2.19/LICENSE-APACHE",
       "sha256": "a60eea817514531668d7e00765731449fe14d059d3249e0bc93b36de45f759f2",
       "bytes": 10847,
       "mode": "0o644",
-      "origin": "unchanged_native_source"
+      "origin": "native_plugin_source_or_public_documentation"
     },
     {
       "path": "plugins/progress-checker/third-party/crates/num-traits-0.2.19/LICENSE-MIT",
       "sha256": "6485b8ed310d3f0340bf1ad1f47645069ce4069dcc6bb46c7d5c6faf41de1fdb",
       "bytes": 1071,
       "mode": "0o644",
-      "origin": "unchanged_native_source"
+      "origin": "native_plugin_source_or_public_documentation"
     },
     {
       "path": "plugins/progress-checker/third-party/crates/once_cell-1.21.4/LICENSE-APACHE",
       "sha256": "a60eea817514531668d7e00765731449fe14d059d3249e0bc93b36de45f759f2",
       "bytes": 10847,
       "mode": "0o644",
-      "origin": "unchanged_native_source"
+      "origin": "native_plugin_source_or_public_documentation"
     },
     {
       "path": "plugins/progress-checker/third-party/crates/once_cell-1.21.4/LICENSE-MIT",
       "sha256": "23f18e03dc49df91622fe2a76176497404e46ced8a715d9d2b67a7446571cca3",
       "bytes": 1023,
       "mode": "0o644",
-      "origin": "unchanged_native_source"
+      "origin": "native_plugin_source_or_public_documentation"
     },
     {
       "path": "plugins/progress-checker/third-party/crates/once_cell_polyfill-1.70.2/LICENSE-APACHE",
       "sha256": "c6596eb7be8581c18be736c846fb9173b69eccf6ef94c5135893ec56bd92ba08",
       "bytes": 11358,
       "mode": "0o644",
-      "origin": "unchanged_native_source"
+      "origin": "native_plugin_source_or_public_documentation"
     },
     {
       "path": "plugins/progress-checker/third-party/crates/once_cell_polyfill-1.70.2/LICENSE-MIT",
       "sha256": "6efb0476a1cc085077ed49357026d8c173bf33017278ef440f222fb9cbcb66e6",
       "bytes": 1062,
       "mode": "0o644",
-      "origin": "unchanged_native_source"
+      "origin": "native_plugin_source_or_public_documentation"
     },
     {
       "path": "plugins/progress-checker/third-party/crates/pin-project-lite-0.2.16/LICENSE-APACHE",
       "sha256": "0d542e0c8804e39aa7f37eb00da5a762149dc682d7829451287e11b938e94594",
       "bytes": 10174,
       "mode": "0o644",
-      "origin": "unchanged_native_source"
+      "origin": "native_plugin_source_or_public_documentation"
     },
     {
       "path": "plugins/progress-checker/third-party/crates/pin-project-lite-0.2.16/LICENSE-MIT",
       "sha256": "23f18e03dc49df91622fe2a76176497404e46ced8a715d9d2b67a7446571cca3",
       "bytes": 1023,
       "mode": "0o644",
-      "origin": "unchanged_native_source"
+      "origin": "native_plugin_source_or_public_documentation"
     },
     {
       "path": "plugins/progress-checker/third-party/crates/prettyplease-0.2.37/LICENSE-APACHE",
       "sha256": "62c7a1e35f56406896d7aa7ca52d0cc0d272ac022b5d2796e7d6905db8a3636a",
       "bytes": 9723,
       "mode": "0o644",
-      "origin": "unchanged_native_source"
+      "origin": "native_plugin_source_or_public_documentation"
     },
     {
       "path": "plugins/progress-checker/third-party/crates/prettyplease-0.2.37/LICENSE-MIT",
       "sha256": "23f18e03dc49df91622fe2a76176497404e46ced8a715d9d2b67a7446571cca3",
       "bytes": 1023,
       "mode": "0o644",
-      "origin": "unchanged_native_source"
+      "origin": "native_plugin_source_or_public_documentation"
     },
     {
       "path": "plugins/progress-checker/third-party/crates/proc-macro2-1.0.106/LICENSE-APACHE",
       "sha256": "62c7a1e35f56406896d7aa7ca52d0cc0d272ac022b5d2796e7d6905db8a3636a",
       "bytes": 9723,
       "mode": "0o644",
-      "origin": "unchanged_native_source"
+      "origin": "native_plugin_source_or_public_documentation"
     },
     {
       "path": "plugins/progress-checker/third-party/crates/proc-macro2-1.0.106/LICENSE-MIT",
       "sha256": "23f18e03dc49df91622fe2a76176497404e46ced8a715d9d2b67a7446571cca3",
       "bytes": 1023,
       "mode": "0o644",
-      "origin": "unchanged_native_source"
+      "origin": "native_plugin_source_or_public_documentation"
     },
     {
       "path": "plugins/progress-checker/third-party/crates/quote-1.0.45/LICENSE-APACHE",
       "sha256": "62c7a1e35f56406896d7aa7ca52d0cc0d272ac022b5d2796e7d6905db8a3636a",
       "bytes": 9723,
       "mode": "0o644",
-      "origin": "unchanged_native_source"
+      "origin": "native_plugin_source_or_public_documentation"
     },
     {
       "path": "plugins/progress-checker/third-party/crates/quote-1.0.45/LICENSE-MIT",
       "sha256": "23f18e03dc49df91622fe2a76176497404e46ced8a715d9d2b67a7446571cca3",
       "bytes": 1023,
       "mode": "0o644",
-      "origin": "unchanged_native_source"
+      "origin": "native_plugin_source_or_public_documentation"
     },
     {
       "path": "plugins/progress-checker/third-party/crates/r-efi-6.0.0/AUTHORS",
       "sha256": "d027e91dbc9cdbb2f1190068e498bd6b61cff022b6a032b191021ba658d96111",
       "bytes": 3733,
       "mode": "0o644",
-      "origin": "unchanged_native_source"
+      "origin": "native_plugin_source_or_public_documentation"
     },
     {
       "path": "plugins/progress-checker/third-party/crates/r-efi-6.0.0/LICENSE-SUPPLIED",
       "sha256": "074e6e32c86a4c0ef8b3ed25b721ca23aca83df277cd88106ef7177c354615ff",
       "bytes": 10280,
       "mode": "0o644",
-      "origin": "unchanged_native_source"
+      "origin": "native_plugin_source_or_public_documentation"
     },
     {
       "path": "plugins/progress-checker/third-party/crates/r-efi-6.0.0/UPSTREAM-README.md",
       "sha256": "420f65fec3ba2e89d49da51b222d2881d26959037a7b7d3794143db4bd4627b1",
       "bytes": 2919,
       "mode": "0o644",
-      "origin": "unchanged_native_source"
+      "origin": "native_plugin_source_or_public_documentation"
     },
     {
       "path": "plugins/progress-checker/third-party/crates/rustix-1.1.4/COPYRIGHT",
       "sha256": "377c2e7c53250cc5905c0b0532d35973392af16ffb9596a41d99d202cf3617c9",
       "bytes": 853,
       "mode": "0o644",
-      "origin": "unchanged_native_source"
+      "origin": "native_plugin_source_or_public_documentation"
     },
     {
       "path": "plugins/progress-checker/third-party/crates/rustix-1.1.4/LICENSE-APACHE",
       "sha256": "a60eea817514531668d7e00765731449fe14d059d3249e0bc93b36de45f759f2",
       "bytes": 10847,
       "mode": "0o644",
-      "origin": "unchanged_native_source"
+      "origin": "native_plugin_source_or_public_documentation"
     },
     {
       "path": "plugins/progress-checker/third-party/crates/rustix-1.1.4/LICENSE-Apache-2.0_WITH_LLVM-exception",
       "sha256": "268872b9816f90fd8e85db5a28d33f8150ebb8dd016653fb39ef1f94f2686bc5",
       "bytes": 12243,
       "mode": "0o644",
-      "origin": "unchanged_native_source"
+      "origin": "native_plugin_source_or_public_documentation"
     },
     {
       "path": "plugins/progress-checker/third-party/crates/rustix-1.1.4/LICENSE-MIT",
       "sha256": "23f18e03dc49df91622fe2a76176497404e46ced8a715d9d2b67a7446571cca3",
       "bytes": 1023,
       "mode": "0o644",
-      "origin": "unchanged_native_source"
+      "origin": "native_plugin_source_or_public_documentation"
     },
     {
       "path": "plugins/progress-checker/third-party/crates/rustversion-1.0.22/LICENSE-APACHE",
       "sha256": "62c7a1e35f56406896d7aa7ca52d0cc0d272ac022b5d2796e7d6905db8a3636a",
       "bytes": 9723,
       "mode": "0o644",
-      "origin": "unchanged_native_source"
+      "origin": "native_plugin_source_or_public_documentation"
     },
     {
       "path": "plugins/progress-checker/third-party/crates/rustversion-1.0.22/LICENSE-MIT",
       "sha256": "23f18e03dc49df91622fe2a76176497404e46ced8a715d9d2b67a7446571cca3",
       "bytes": 1023,
       "mode": "0o644",
-      "origin": "unchanged_native_source"
+      "origin": "native_plugin_source_or_public_documentation"
     },
     {
       "path": "plugins/progress-checker/third-party/crates/semver-1.0.27/LICENSE-APACHE",
       "sha256": "62c7a1e35f56406896d7aa7ca52d0cc0d272ac022b5d2796e7d6905db8a3636a",
       "bytes": 9723,
       "mode": "0o644",
-      "origin": "unchanged_native_source"
+      "origin": "native_plugin_source_or_public_documentation"
     },
     {
       "path": "plugins/progress-checker/third-party/crates/semver-1.0.27/LICENSE-MIT",
       "sha256": "23f18e03dc49df91622fe2a76176497404e46ced8a715d9d2b67a7446571cca3",
       "bytes": 1023,
       "mode": "0o644",
-      "origin": "unchanged_native_source"
+      "origin": "native_plugin_source_or_public_documentation"
     },
     {
       "path": "plugins/progress-checker/third-party/crates/serde-1.0.228/LICENSE-APACHE",
       "sha256": "62c7a1e35f56406896d7aa7ca52d0cc0d272ac022b5d2796e7d6905db8a3636a",
       "bytes": 9723,
       "mode": "0o644",
-      "origin": "unchanged_native_source"
+      "origin": "native_plugin_source_or_public_documentation"
     },
     {
       "path": "plugins/progress-checker/third-party/crates/serde-1.0.228/LICENSE-MIT",
       "sha256": "23f18e03dc49df91622fe2a76176497404e46ced8a715d9d2b67a7446571cca3",
       "bytes": 1023,
       "mode": "0o644",
-      "origin": "unchanged_native_source"
+      "origin": "native_plugin_source_or_public_documentation"
     },
     {
       "path": "plugins/progress-checker/third-party/crates/serde_core-1.0.228/LICENSE-APACHE",
       "sha256": "62c7a1e35f56406896d7aa7ca52d0cc0d272ac022b5d2796e7d6905db8a3636a",
       "bytes": 9723,
       "mode": "0o644",
-      "origin": "unchanged_native_source"
+      "origin": "native_plugin_source_or_public_documentation"
     },
     {
       "path": "plugins/progress-checker/third-party/crates/serde_core-1.0.228/LICENSE-MIT",
       "sha256": "23f18e03dc49df91622fe2a76176497404e46ced8a715d9d2b67a7446571cca3",
       "bytes": 1023,
       "mode": "0o644",
-      "origin": "unchanged_native_source"
+      "origin": "native_plugin_source_or_public_documentation"
     },
     {
       "path": "plugins/progress-checker/third-party/crates/serde_derive-1.0.228/LICENSE-APACHE",
       "sha256": "62c7a1e35f56406896d7aa7ca52d0cc0d272ac022b5d2796e7d6905db8a3636a",
       "bytes": 9723,
       "mode": "0o644",
-      "origin": "unchanged_native_source"
+      "origin": "native_plugin_source_or_public_documentation"
     },
     {
       "path": "plugins/progress-checker/third-party/crates/serde_derive-1.0.228/LICENSE-MIT",
       "sha256": "23f18e03dc49df91622fe2a76176497404e46ced8a715d9d2b67a7446571cca3",
       "bytes": 1023,
       "mode": "0o644",
-      "origin": "unchanged_native_source"
+      "origin": "native_plugin_source_or_public_documentation"
     },
     {
       "path": "plugins/progress-checker/third-party/crates/serde_json-1.0.149/LICENSE-APACHE",
       "sha256": "62c7a1e35f56406896d7aa7ca52d0cc0d272ac022b5d2796e7d6905db8a3636a",
       "bytes": 9723,
       "mode": "0o644",
-      "origin": "unchanged_native_source"
+      "origin": "native_plugin_source_or_public_documentation"
     },
     {
       "path": "plugins/progress-checker/third-party/crates/serde_json-1.0.149/LICENSE-MIT",
       "sha256": "23f18e03dc49df91622fe2a76176497404e46ced8a715d9d2b67a7446571cca3",
       "bytes": 1023,
       "mode": "0o644",
-      "origin": "unchanged_native_source"
+      "origin": "native_plugin_source_or_public_documentation"
     },
     {
       "path": "plugins/progress-checker/third-party/crates/sha2-0.10.9/LICENSE-APACHE",
       "sha256": "a9040321c3712d8fd0b09cf52b17445de04a23a10165049ae187cd39e5c86be5",
       "bytes": 10849,
       "mode": "0o644",
-      "origin": "unchanged_native_source"
+      "origin": "native_plugin_source_or_public_documentation"
     },
     {
       "path": "plugins/progress-checker/third-party/crates/sha2-0.10.9/LICENSE-MIT",
       "sha256": "b4eb00df6e2a4d22518fcaa6a2b4646f249b3a3c9814509b22bd2091f1392ff1",
       "bytes": 1138,
       "mode": "0o644",
-      "origin": "unchanged_native_source"
+      "origin": "native_plugin_source_or_public_documentation"
     },
     {
       "path": "plugins/progress-checker/third-party/crates/shlex-1.3.0/LICENSE-APACHE",
       "sha256": "553fffcd9b1cb158bc3e9edc35da85ca5c3b3d7d2e61c883ebcfa8a65814b583",
       "bytes": 566,
       "mode": "0o644",
-      "origin": "unchanged_native_source"
+      "origin": "native_plugin_source_or_public_documentation"
     },
     {
       "path": "plugins/progress-checker/third-party/crates/shlex-1.3.0/LICENSE-MIT",
       "sha256": "4455bf75a91154108304cb283e0fea9948c14f13e20d60887cf2552449dea3b1",
       "bytes": 1092,
       "mode": "0o644",
-      "origin": "unchanged_native_source"
+      "origin": "native_plugin_source_or_public_documentation"
     },
     {
       "path": "plugins/progress-checker/third-party/crates/signal-hook-registry-1.4.8/LICENSE-APACHE",
       "sha256": "a60eea817514531668d7e00765731449fe14d059d3249e0bc93b36de45f759f2",
       "bytes": 10847,
       "mode": "0o644",
-      "origin": "unchanged_native_source"
+      "origin": "native_plugin_source_or_public_documentation"
     },
     {
       "path": "plugins/progress-checker/third-party/crates/signal-hook-registry-1.4.8/LICENSE-MIT",
       "sha256": "503558bfefe66ca15e4e3f7955b3cb0ec87fd52f29bf24b336af7bd00e946d5c",
       "bytes": 1068,
       "mode": "0o644",
-      "origin": "unchanged_native_source"
+      "origin": "native_plugin_source_or_public_documentation"
     },
     {
       "path": "plugins/progress-checker/third-party/crates/slab-0.4.12/LICENSE",
       "sha256": "8ce0830173fdac609dfb4ea603fdc002c2f4af0dc9b1a005653f5da9cf534b18",
       "bytes": 1055,
       "mode": "0o644",
-      "origin": "unchanged_native_source"
+      "origin": "native_plugin_source_or_public_documentation"
     },
     {
       "path": "plugins/progress-checker/third-party/crates/socket2-0.6.3/LICENSE-APACHE",
       "sha256": "a60eea817514531668d7e00765731449fe14d059d3249e0bc93b36de45f759f2",
       "bytes": 10847,
       "mode": "0o644",
-      "origin": "unchanged_native_source"
+      "origin": "native_plugin_source_or_public_documentation"
     },
     {
       "path": "plugins/progress-checker/third-party/crates/socket2-0.6.3/LICENSE-MIT",
       "sha256": "378f5840b258e2779c39418f3f2d7b2ba96f1c7917dd6be0713f88305dbda397",
       "bytes": 1057,
       "mode": "0o644",
-      "origin": "unchanged_native_source"
+      "origin": "native_plugin_source_or_public_documentation"
     },
     {
       "path": "plugins/progress-checker/third-party/crates/strsim-0.11.1/LICENSE",
       "sha256": "1e697ce8d21401fbf1bddd9b5c3fd4c4c79ae1e3bdf51f81761c85e11d5a89cd",
       "bytes": 1166,
       "mode": "0o644",
-      "origin": "unchanged_native_source"
+      "origin": "native_plugin_source_or_public_documentation"
     },
     {
       "path": "plugins/progress-checker/third-party/crates/subtle-2.6.1/LICENSE",
       "sha256": "d1fc1bc0d155df60b2e7705b6b2ae02a05c96f948e1cec6e2fb86360b09f346b",
       "bytes": 1582,
       "mode": "0o644",
-      "origin": "unchanged_native_source"
+      "origin": "native_plugin_source_or_public_documentation"
     },
     {
       "path": "plugins/progress-checker/third-party/crates/syn-2.0.117/LICENSE-APACHE",
       "sha256": "62c7a1e35f56406896d7aa7ca52d0cc0d272ac022b5d2796e7d6905db8a3636a",
       "bytes": 9723,
       "mode": "0o644",
-      "origin": "unchanged_native_source"
+      "origin": "native_plugin_source_or_public_documentation"
     },
     {
       "path": "plugins/progress-checker/third-party/crates/syn-2.0.117/LICENSE-MIT",
       "sha256": "23f18e03dc49df91622fe2a76176497404e46ced8a715d9d2b67a7446571cca3",
       "bytes": 1023,
       "mode": "0o644",
-      "origin": "unchanged_native_source"
+      "origin": "native_plugin_source_or_public_documentation"
     },
     {
       "path": "plugins/progress-checker/third-party/crates/syn-3.0.3/LICENSE-APACHE",
       "sha256": "62c7a1e35f56406896d7aa7ca52d0cc0d272ac022b5d2796e7d6905db8a3636a",
       "bytes": 9723,
       "mode": "0o644",
-      "origin": "unchanged_native_source"
+      "origin": "native_plugin_source_or_public_documentation"
     },
     {
       "path": "plugins/progress-checker/third-party/crates/syn-3.0.3/LICENSE-MIT",
       "sha256": "23f18e03dc49df91622fe2a76176497404e46ced8a715d9d2b67a7446571cca3",
       "bytes": 1023,
       "mode": "0o644",
-      "origin": "unchanged_native_source"
+      "origin": "native_plugin_source_or_public_documentation"
     },
     {
       "path": "plugins/progress-checker/third-party/crates/tempfile-3.27.0/LICENSE-APACHE",
       "sha256": "a60eea817514531668d7e00765731449fe14d059d3249e0bc93b36de45f759f2",
       "bytes": 10847,
       "mode": "0o644",
-      "origin": "unchanged_native_source"
+      "origin": "native_plugin_source_or_public_documentation"
     },
     {
       "path": "plugins/progress-checker/third-party/crates/tempfile-3.27.0/LICENSE-MIT",
       "sha256": "8b427f5bc501764575e52ba4f9d95673cf8f6d80a86d0d06599852e1a9a20a36",
       "bytes": 1056,
       "mode": "0o644",
-      "origin": "unchanged_native_source"
+      "origin": "native_plugin_source_or_public_documentation"
     },
     {
       "path": "plugins/progress-checker/third-party/crates/tokio-1.52.3/LICENSE",
       "sha256": "253cd04c6714889df2d32f3f64d669179a1c95c76ac43c40882c52eb06bc3552",
       "bytes": 1070,
       "mode": "0o644",
-      "origin": "unchanged_native_source"
+      "origin": "native_plugin_source_or_public_documentation"
     },
     {
       "path": "plugins/progress-checker/third-party/crates/tokio-macros-2.7.0/LICENSE",
       "sha256": "0b83dc40cba89b9922bb84b0a9c7d2768ce37c1d7e138b7424fd4549915778c9",
       "bytes": 1102,
       "mode": "0o644",
-      "origin": "unchanged_native_source"
+      "origin": "native_plugin_source_or_public_documentation"
     },
     {
       "path": "plugins/progress-checker/third-party/crates/tokio-util-0.7.18/LICENSE",
       "sha256": "253cd04c6714889df2d32f3f64d669179a1c95c76ac43c40882c52eb06bc3552",
       "bytes": 1070,
       "mode": "0o644",
-      "origin": "unchanged_native_source"
+      "origin": "native_plugin_source_or_public_documentation"
     },
     {
       "path": "plugins/progress-checker/third-party/crates/typenum-1.20.0/LICENSE",
       "sha256": "db11fec9946737df39ca3898d9cd8c10ec6f6c3a884a6802b0ad0b81b4e8f23a",
       "bytes": 17,
       "mode": "0o644",
-      "origin": "unchanged_native_source"
+      "origin": "native_plugin_source_or_public_documentation"
     },
     {
       "path": "plugins/progress-checker/third-party/crates/typenum-1.20.0/LICENSE-APACHE",
       "sha256": "516b24e051bf5630880ebbd55c40a25ce9552ebaf8970a53e8976eb70e522406",
       "bytes": 10835,
       "mode": "0o644",
-      "origin": "unchanged_native_source"
+      "origin": "native_plugin_source_or_public_documentation"
     },
     {
       "path": "plugins/progress-checker/third-party/crates/typenum-1.20.0/LICENSE-MIT",
       "sha256": "a825bd853ab71619a4923d7b4311221427848070ff44d990da39b0b274c1683f",
       "bytes": 1083,
       "mode": "0o644",
-      "origin": "unchanged_native_source"
+      "origin": "native_plugin_source_or_public_documentation"
     },
     {
       "path": "plugins/progress-checker/third-party/crates/unicode-ident-1.0.22/LICENSE-APACHE",
       "sha256": "62c7a1e35f56406896d7aa7ca52d0cc0d272ac022b5d2796e7d6905db8a3636a",
       "bytes": 9723,
       "mode": "0o644",
-      "origin": "unchanged_native_source"
+      "origin": "native_plugin_source_or_public_documentation"
     },
     {
       "path": "plugins/progress-checker/third-party/crates/unicode-ident-1.0.22/LICENSE-MIT",
       "sha256": "23f18e03dc49df91622fe2a76176497404e46ced8a715d9d2b67a7446571cca3",
       "bytes": 1023,
       "mode": "0o644",
-      "origin": "unchanged_native_source"
+      "origin": "native_plugin_source_or_public_documentation"
     },
     {
       "path": "plugins/progress-checker/third-party/crates/unicode-ident-1.0.22/LICENSE-UNICODE",
       "sha256": "f7db81051789b729fea528a63ec4c938fdcb93d9d61d97dc8cc2e9df6d47f2a1",
       "bytes": 1995,
       "mode": "0o644",
-      "origin": "unchanged_native_source"
+      "origin": "native_plugin_source_or_public_documentation"
     },
     {
       "path": "plugins/progress-checker/third-party/crates/unicode-xid-0.2.6/COPYRIGHT",
       "sha256": "23860c2a7b5d96b21569afedf033469bab9fe14a1b24a35068b8641c578ce24d",
       "bytes": 321,
       "mode": "0o644",
-      "origin": "unchanged_native_source"
+      "origin": "native_plugin_source_or_public_documentation"
     },
     {
       "path": "plugins/progress-checker/third-party/crates/unicode-xid-0.2.6/LICENSE-APACHE",
       "sha256": "a60eea817514531668d7e00765731449fe14d059d3249e0bc93b36de45f759f2",
       "bytes": 10847,
       "mode": "0o644",
-      "origin": "unchanged_native_source"
+      "origin": "native_plugin_source_or_public_documentation"
     },
     {
       "path": "plugins/progress-checker/third-party/crates/unicode-xid-0.2.6/LICENSE-MIT",
       "sha256": "7b63ecd5f1902af1b63729947373683c32745c16a10e8e6292e2e2dcd7e90ae0",
       "bytes": 1071,
       "mode": "0o644",
-      "origin": "unchanged_native_source"
+      "origin": "native_plugin_source_or_public_documentation"
     },
     {
       "path": "plugins/progress-checker/third-party/crates/utf8parse-0.2.2/LICENSE-APACHE",
       "sha256": "62c7a1e35f56406896d7aa7ca52d0cc0d272ac022b5d2796e7d6905db8a3636a",
       "bytes": 9723,
       "mode": "0o644",
-      "origin": "unchanged_native_source"
+      "origin": "native_plugin_source_or_public_documentation"
     },
     {
       "path": "plugins/progress-checker/third-party/crates/utf8parse-0.2.2/LICENSE-MIT",
       "sha256": "e4c9b06fa850cb9b540a5e400e9f6394cf15efcf4098144de477d1d3dae10150",
       "bytes": 1052,
       "mode": "0o644",
-      "origin": "unchanged_native_source"
+      "origin": "native_plugin_source_or_public_documentation"
     },
     {
       "path": "plugins/progress-checker/third-party/crates/version_check-0.9.5/LICENSE-APACHE",
       "sha256": "a60eea817514531668d7e00765731449fe14d059d3249e0bc93b36de45f759f2",
       "bytes": 10847,
       "mode": "0o644",
-      "origin": "unchanged_native_source"
+      "origin": "native_plugin_source_or_public_documentation"
     },
     {
       "path": "plugins/progress-checker/third-party/crates/version_check-0.9.5/LICENSE-MIT",
       "sha256": "b7e650f3fce5c53249d1cdc608b54df156a97edd636cf9d23498d0cfe7aec63e",
       "bytes": 1085,
       "mode": "0o644",
-      "origin": "unchanged_native_source"
+      "origin": "native_plugin_source_or_public_documentation"
     },
     {
       "path": "plugins/progress-checker/third-party/crates/wasi-0.11.1+wasi-snapshot-preview1/LICENSE-APACHE",
       "sha256": "a60eea817514531668d7e00765731449fe14d059d3249e0bc93b36de45f759f2",
       "bytes": 10847,
       "mode": "0o644",
-      "origin": "unchanged_native_source"
+      "origin": "native_plugin_source_or_public_documentation"
     },
     {
       "path": "plugins/progress-checker/third-party/crates/wasi-0.11.1+wasi-snapshot-preview1/LICENSE-Apache-2.0_WITH_LLVM-exception",
       "sha256": "268872b9816f90fd8e85db5a28d33f8150ebb8dd016653fb39ef1f94f2686bc5",
       "bytes": 12243,
       "mode": "0o644",
-      "origin": "unchanged_native_source"
+      "origin": "native_plugin_source_or_public_documentation"
     },
     {
       "path": "plugins/progress-checker/third-party/crates/wasi-0.11.1+wasi-snapshot-preview1/LICENSE-MIT",
       "sha256": "23f18e03dc49df91622fe2a76176497404e46ced8a715d9d2b67a7446571cca3",
       "bytes": 1023,
       "mode": "0o644",
-      "origin": "unchanged_native_source"
+      "origin": "native_plugin_source_or_public_documentation"
     },
     {
       "path": "plugins/progress-checker/third-party/crates/wasip2-1.0.2+wasi-0.2.9/LICENSE-SUPPLIED",
       "sha256": "c5c933dd7fd534150d42e86f3755921644aeee9df2adde2d5a912c83c3c35647",
       "bytes": 11201,
       "mode": "0o644",
-      "origin": "unchanged_native_source"
+      "origin": "native_plugin_source_or_public_documentation"
     },
     {
       "path": "plugins/progress-checker/third-party/crates/wasip2-1.0.2+wasi-0.2.9/UPSTREAM-README.md",
       "sha256": "b768b011583d6c3f7d47c57de28f7dd9ade631b286753435ae1ae9acab6ce557",
       "bytes": 4144,
       "mode": "0o644",
-      "origin": "unchanged_native_source"
+      "origin": "native_plugin_source_or_public_documentation"
     },
     {
       "path": "plugins/progress-checker/third-party/crates/wasip3-0.4.0+wasi-0.3.0-rc-2026-01-06/LICENSE-SUPPLIED",
       "sha256": "c5c933dd7fd534150d42e86f3755921644aeee9df2adde2d5a912c83c3c35647",
       "bytes": 11201,
       "mode": "0o644",
-      "origin": "unchanged_native_source"
+      "origin": "native_plugin_source_or_public_documentation"
     },
     {
       "path": "plugins/progress-checker/third-party/crates/wasip3-0.4.0+wasi-0.3.0-rc-2026-01-06/UPSTREAM-README.md",
       "sha256": "325b35fceb296aef996435dc7d68537af56fa1983012a9e170630ac78ce0334e",
       "bytes": 1983,
       "mode": "0o644",
-      "origin": "unchanged_native_source"
+      "origin": "native_plugin_source_or_public_documentation"
     },
     {
       "path": "plugins/progress-checker/third-party/crates/wasm-bindgen-0.2.108/LICENSE-APACHE",
       "sha256": "a60eea817514531668d7e00765731449fe14d059d3249e0bc93b36de45f759f2",
       "bytes": 10847,
       "mode": "0o644",
-      "origin": "unchanged_native_source"
+      "origin": "native_plugin_source_or_public_documentation"
     },
     {
       "path": "plugins/progress-checker/third-party/crates/wasm-bindgen-0.2.108/LICENSE-MIT",
       "sha256": "378f5840b258e2779c39418f3f2d7b2ba96f1c7917dd6be0713f88305dbda397",
       "bytes": 1057,
       "mode": "0o644",
-      "origin": "unchanged_native_source"
+      "origin": "native_plugin_source_or_public_documentation"
     },
     {
       "path": "plugins/progress-checker/third-party/crates/wasm-bindgen-macro-0.2.108/LICENSE-APACHE",
       "sha256": "a60eea817514531668d7e00765731449fe14d059d3249e0bc93b36de45f759f2",
       "bytes": 10847,
       "mode": "0o644",
-      "origin": "unchanged_native_source"
+      "origin": "native_plugin_source_or_public_documentation"
     },
     {
       "path": "plugins/progress-checker/third-party/crates/wasm-bindgen-macro-0.2.108/LICENSE-MIT",
       "sha256": "378f5840b258e2779c39418f3f2d7b2ba96f1c7917dd6be0713f88305dbda397",
       "bytes": 1057,
       "mode": "0o644",
-      "origin": "unchanged_native_source"
+      "origin": "native_plugin_source_or_public_documentation"
     },
     {
       "path": "plugins/progress-checker/third-party/crates/wasm-bindgen-macro-support-0.2.108/LICENSE-APACHE",
       "sha256": "a60eea817514531668d7e00765731449fe14d059d3249e0bc93b36de45f759f2",
       "bytes": 10847,
       "mode": "0o644",
-      "origin": "unchanged_native_source"
+      "origin": "native_plugin_source_or_public_documentation"
     },
     {
       "path": "plugins/progress-checker/third-party/crates/wasm-bindgen-macro-support-0.2.108/LICENSE-MIT",
       "sha256": "378f5840b258e2779c39418f3f2d7b2ba96f1c7917dd6be0713f88305dbda397",
       "bytes": 1057,
       "mode": "0o644",
-      "origin": "unchanged_native_source"
+      "origin": "native_plugin_source_or_public_documentation"
     },
     {
       "path": "plugins/progress-checker/third-party/crates/wasm-bindgen-shared-0.2.108/LICENSE-APACHE",
       "sha256": "a60eea817514531668d7e00765731449fe14d059d3249e0bc93b36de45f759f2",
       "bytes": 10847,
       "mode": "0o644",
-      "origin": "unchanged_native_source"
+      "origin": "native_plugin_source_or_public_documentation"
     },
     {
       "path": "plugins/progress-checker/third-party/crates/wasm-bindgen-shared-0.2.108/LICENSE-MIT",
       "sha256": "378f5840b258e2779c39418f3f2d7b2ba96f1c7917dd6be0713f88305dbda397",
       "bytes": 1057,
       "mode": "0o644",
-      "origin": "unchanged_native_source"
+      "origin": "native_plugin_source_or_public_documentation"
     },
     {
       "path": "plugins/progress-checker/third-party/crates/wasm-encoder-0.244.0/LICENSE-SUPPLIED",
       "sha256": "c5c933dd7fd534150d42e86f3755921644aeee9df2adde2d5a912c83c3c35647",
       "bytes": 11201,
       "mode": "0o644",
-      "origin": "unchanged_native_source"
+      "origin": "native_plugin_source_or_public_documentation"
     },
     {
       "path": "plugins/progress-checker/third-party/crates/wasm-encoder-0.244.0/UPSTREAM-README.md",
       "sha256": "c65cc523cd46516311fca22c82284fa0979a4638aa1cb7a02268856f43a017a8",
       "bytes": 2340,
       "mode": "0o644",
-      "origin": "unchanged_native_source"
+      "origin": "native_plugin_source_or_public_documentation"
     },
     {
       "path": "plugins/progress-checker/third-party/crates/wasm-metadata-0.244.0/LICENSE-SUPPLIED",
       "sha256": "c5c933dd7fd534150d42e86f3755921644aeee9df2adde2d5a912c83c3c35647",
       "bytes": 11201,
       "mode": "0o644",
-      "origin": "unchanged_native_source"
+      "origin": "native_plugin_source_or_public_documentation"
     },
     {
       "path": "plugins/progress-checker/third-party/crates/wasm-metadata-0.244.0/UPSTREAM-README.md",
       "sha256": "13ad7caf9d57e5a3d011191deaf7546873e416e22cb1b065dd93158e9e9c4fa3",
       "bytes": 1165,
       "mode": "0o644",
-      "origin": "unchanged_native_source"
+      "origin": "native_plugin_source_or_public_documentation"
     },
     {
       "path": "plugins/progress-checker/third-party/crates/wasmparser-0.244.0/LICENSE-SUPPLIED",
       "sha256": "c5c933dd7fd534150d42e86f3755921644aeee9df2adde2d5a912c83c3c35647",
       "bytes": 11201,
       "mode": "0o644",
-      "origin": "unchanged_native_source"
+      "origin": "native_plugin_source_or_public_documentation"
     },
     {
       "path": "plugins/progress-checker/third-party/crates/wasmparser-0.244.0/UPSTREAM-README.md",
       "sha256": "aabf3b5930893b2a89d0114d8cd97e9b980f3c6f758b960484e06b69a504b823",
       "bytes": 1348,
       "mode": "0o644",
-      "origin": "unchanged_native_source"
+      "origin": "native_plugin_source_or_public_documentation"
     },
     {
       "path": "plugins/progress-checker/third-party/crates/windows-core-0.62.2/license-apache-2.0",
       "sha256": "c16f8dcf1a368b83be78d826ea23de4079fe1b4469a0ab9ee20563f37ff3d44b",
       "bytes": 11351,
       "mode": "0o644",
-      "origin": "unchanged_native_source"
+      "origin": "native_plugin_source_or_public_documentation"
     },
     {
       "path": "plugins/progress-checker/third-party/crates/windows-core-0.62.2/license-mit",
       "sha256": "c2cfccb812fe482101a8f04597dfc5a9991a6b2748266c47ac91b6a5aae15383",
       "bytes": 1141,
       "mode": "0o644",
-      "origin": "unchanged_native_source"
+      "origin": "native_plugin_source_or_public_documentation"
     },
     {
       "path": "plugins/progress-checker/third-party/crates/windows-implement-0.60.2/license-apache-2.0",
       "sha256": "c16f8dcf1a368b83be78d826ea23de4079fe1b4469a0ab9ee20563f37ff3d44b",
       "bytes": 11351,
       "mode": "0o644",
-      "origin": "unchanged_native_source"
+      "origin": "native_plugin_source_or_public_documentation"
     },
     {
       "path": "plugins/progress-checker/third-party/crates/windows-implement-0.60.2/license-mit",
       "sha256": "c2cfccb812fe482101a8f04597dfc5a9991a6b2748266c47ac91b6a5aae15383",
       "bytes": 1141,
       "mode": "0o644",
-      "origin": "unchanged_native_source"
+      "origin": "native_plugin_source_or_public_documentation"
     },
     {
       "path": "plugins/progress-checker/third-party/crates/windows-interface-0.59.3/license-apache-2.0",
       "sha256": "c16f8dcf1a368b83be78d826ea23de4079fe1b4469a0ab9ee20563f37ff3d44b",
       "bytes": 11351,
       "mode": "0o644",
-      "origin": "unchanged_native_source"
+      "origin": "native_plugin_source_or_public_documentation"
     },
     {
       "path": "plugins/progress-checker/third-party/crates/windows-interface-0.59.3/license-mit",
       "sha256": "c2cfccb812fe482101a8f04597dfc5a9991a6b2748266c47ac91b6a5aae15383",
       "bytes": 1141,
       "mode": "0o644",
-      "origin": "unchanged_native_source"
+      "origin": "native_plugin_source_or_public_documentation"
     },
     {
       "path": "plugins/progress-checker/third-party/crates/windows-link-0.2.1/license-apache-2.0",
       "sha256": "c16f8dcf1a368b83be78d826ea23de4079fe1b4469a0ab9ee20563f37ff3d44b",
       "bytes": 11351,
       "mode": "0o644",
-      "origin": "unchanged_native_source"
+      "origin": "native_plugin_source_or_public_documentation"
     },
     {
       "path": "plugins/progress-checker/third-party/crates/windows-link-0.2.1/license-mit",
       "sha256": "c2cfccb812fe482101a8f04597dfc5a9991a6b2748266c47ac91b6a5aae15383",
       "bytes": 1141,
       "mode": "0o644",
-      "origin": "unchanged_native_source"
+      "origin": "native_plugin_source_or_public_documentation"
     },
     {
       "path": "plugins/progress-checker/third-party/crates/windows-result-0.4.1/license-apache-2.0",
       "sha256": "c16f8dcf1a368b83be78d826ea23de4079fe1b4469a0ab9ee20563f37ff3d44b",
       "bytes": 11351,
       "mode": "0o644",
-      "origin": "unchanged_native_source"
+      "origin": "native_plugin_source_or_public_documentation"
     },
     {
       "path": "plugins/progress-checker/third-party/crates/windows-result-0.4.1/license-mit",
       "sha256": "c2cfccb812fe482101a8f04597dfc5a9991a6b2748266c47ac91b6a5aae15383",
       "bytes": 1141,
       "mode": "0o644",
-      "origin": "unchanged_native_source"
+      "origin": "native_plugin_source_or_public_documentation"
     },
     {
       "path": "plugins/progress-checker/third-party/crates/windows-strings-0.5.1/license-apache-2.0",
       "sha256": "c16f8dcf1a368b83be78d826ea23de4079fe1b4469a0ab9ee20563f37ff3d44b",
       "bytes": 11351,
       "mode": "0o644",
-      "origin": "unchanged_native_source"
+      "origin": "native_plugin_source_or_public_documentation"
     },
     {
       "path": "plugins/progress-checker/third-party/crates/windows-strings-0.5.1/license-mit",
       "sha256": "c2cfccb812fe482101a8f04597dfc5a9991a6b2748266c47ac91b6a5aae15383",
       "bytes": 1141,
       "mode": "0o644",
-      "origin": "unchanged_native_source"
+      "origin": "native_plugin_source_or_public_documentation"
     },
     {
       "path": "plugins/progress-checker/third-party/crates/windows-sys-0.61.2/license-apache-2.0",
       "sha256": "c16f8dcf1a368b83be78d826ea23de4079fe1b4469a0ab9ee20563f37ff3d44b",
       "bytes": 11351,
       "mode": "0o644",
-      "origin": "unchanged_native_source"
+      "origin": "native_plugin_source_or_public_documentation"
     },
     {
       "path": "plugins/progress-checker/third-party/crates/windows-sys-0.61.2/license-mit",
       "sha256": "c2cfccb812fe482101a8f04597dfc5a9991a6b2748266c47ac91b6a5aae15383",
       "bytes": 1141,
       "mode": "0o644",
-      "origin": "unchanged_native_source"
+      "origin": "native_plugin_source_or_public_documentation"
     },
     {
       "path": "plugins/progress-checker/third-party/crates/wit-bindgen-0.51.0/LICENSE-APACHE",
       "sha256": "a60eea817514531668d7e00765731449fe14d059d3249e0bc93b36de45f759f2",
       "bytes": 10847,
       "mode": "0o644",
-      "origin": "unchanged_native_source"
+      "origin": "native_plugin_source_or_public_documentation"
     },
     {
       "path": "plugins/progress-checker/third-party/crates/wit-bindgen-0.51.0/LICENSE-Apache-2.0_WITH_LLVM-exception",
       "sha256": "268872b9816f90fd8e85db5a28d33f8150ebb8dd016653fb39ef1f94f2686bc5",
       "bytes": 12243,
       "mode": "0o644",
-      "origin": "unchanged_native_source"
+      "origin": "native_plugin_source_or_public_documentation"
     },
     {
       "path": "plugins/progress-checker/third-party/crates/wit-bindgen-0.51.0/LICENSE-MIT",
       "sha256": "23f18e03dc49df91622fe2a76176497404e46ced8a715d9d2b67a7446571cca3",
       "bytes": 1023,
       "mode": "0o644",
-      "origin": "unchanged_native_source"
+      "origin": "native_plugin_source_or_public_documentation"
     },
     {
       "path": "plugins/progress-checker/third-party/crates/wit-bindgen-core-0.51.0/LICENSE-APACHE",
       "sha256": "a60eea817514531668d7e00765731449fe14d059d3249e0bc93b36de45f759f2",
       "bytes": 10847,
       "mode": "0o644",
-      "origin": "unchanged_native_source"
+      "origin": "native_plugin_source_or_public_documentation"
     },
     {
       "path": "plugins/progress-checker/third-party/crates/wit-bindgen-core-0.51.0/LICENSE-Apache-2.0_WITH_LLVM-exception",
       "sha256": "268872b9816f90fd8e85db5a28d33f8150ebb8dd016653fb39ef1f94f2686bc5",
       "bytes": 12243,
       "mode": "0o644",
-      "origin": "unchanged_native_source"
+      "origin": "native_plugin_source_or_public_documentation"
     },
     {
       "path": "plugins/progress-checker/third-party/crates/wit-bindgen-core-0.51.0/LICENSE-MIT",
       "sha256": "23f18e03dc49df91622fe2a76176497404e46ced8a715d9d2b67a7446571cca3",
       "bytes": 1023,
       "mode": "0o644",
-      "origin": "unchanged_native_source"
+      "origin": "native_plugin_source_or_public_documentation"
     },
     {
       "path": "plugins/progress-checker/third-party/crates/wit-bindgen-rust-0.51.0/LICENSE-APACHE",
       "sha256": "a60eea817514531668d7e00765731449fe14d059d3249e0bc93b36de45f759f2",
       "bytes": 10847,
       "mode": "0o644",
-      "origin": "unchanged_native_source"
+      "origin": "native_plugin_source_or_public_documentation"
     },
     {
       "path": "plugins/progress-checker/third-party/crates/wit-bindgen-rust-0.51.0/LICENSE-Apache-2.0_WITH_LLVM-exception",
       "sha256": "268872b9816f90fd8e85db5a28d33f8150ebb8dd016653fb39ef1f94f2686bc5",
       "bytes": 12243,
       "mode": "0o644",
-      "origin": "unchanged_native_source"
+      "origin": "native_plugin_source_or_public_documentation"
     },
     {
       "path": "plugins/progress-checker/third-party/crates/wit-bindgen-rust-0.51.0/LICENSE-MIT",
       "sha256": "23f18e03dc49df91622fe2a76176497404e46ced8a715d9d2b67a7446571cca3",
       "bytes": 1023,
       "mode": "0o644",
-      "origin": "unchanged_native_source"
+      "origin": "native_plugin_source_or_public_documentation"
     },
     {
       "path": "plugins/progress-checker/third-party/crates/wit-bindgen-rust-macro-0.51.0/LICENSE-APACHE",
       "sha256": "a60eea817514531668d7e00765731449fe14d059d3249e0bc93b36de45f759f2",
       "bytes": 10847,
       "mode": "0o644",
-      "origin": "unchanged_native_source"
+      "origin": "native_plugin_source_or_public_documentation"
     },
     {
       "path": "plugins/progress-checker/third-party/crates/wit-bindgen-rust-macro-0.51.0/LICENSE-Apache-2.0_WITH_LLVM-exception",
       "sha256": "268872b9816f90fd8e85db5a28d33f8150ebb8dd016653fb39ef1f94f2686bc5",
       "bytes": 12243,
       "mode": "0o644",
-      "origin": "unchanged_native_source"
+      "origin": "native_plugin_source_or_public_documentation"
     },
     {
       "path": "plugins/progress-checker/third-party/crates/wit-bindgen-rust-macro-0.51.0/LICENSE-MIT",
       "sha256": "23f18e03dc49df91622fe2a76176497404e46ced8a715d9d2b67a7446571cca3",
       "bytes": 1023,
       "mode": "0o644",
-      "origin": "unchanged_native_source"
+      "origin": "native_plugin_source_or_public_documentation"
     },
     {
       "path": "plugins/progress-checker/third-party/crates/wit-component-0.244.0/LICENSE-SUPPLIED",
       "sha256": "c5c933dd7fd534150d42e86f3755921644aeee9df2adde2d5a912c83c3c35647",
       "bytes": 11201,
       "mode": "0o644",
-      "origin": "unchanged_native_source"
+      "origin": "native_plugin_source_or_public_documentation"
     },
     {
       "path": "plugins/progress-checker/third-party/crates/wit-component-0.244.0/UPSTREAM-README.md",
       "sha256": "00d3b7547efc420a28ce22afd6d9f29f996e2a972ee0f753f988ee26e54ac8ea",
       "bytes": 9423,
       "mode": "0o644",
-      "origin": "unchanged_native_source"
+      "origin": "native_plugin_source_or_public_documentation"
     },
     {
       "path": "plugins/progress-checker/third-party/crates/wit-parser-0.244.0/LICENSE-SUPPLIED",
       "sha256": "c5c933dd7fd534150d42e86f3755921644aeee9df2adde2d5a912c83c3c35647",
       "bytes": 11201,
       "mode": "0o644",
-      "origin": "unchanged_native_source"
+      "origin": "native_plugin_source_or_public_documentation"
     },
     {
       "path": "plugins/progress-checker/third-party/crates/wit-parser-0.244.0/UPSTREAM-README.md",
       "sha256": "fb3e25cd96468cb3ca6b40dfa684504b316ea5b261f14109eb229c4f82442ef1",
       "bytes": 678,
       "mode": "0o644",
-      "origin": "unchanged_native_source"
+      "origin": "native_plugin_source_or_public_documentation"
     },
     {
       "path": "plugins/progress-checker/third-party/crates/zmij-1.0.19/LICENSE-MIT",
       "sha256": "23f18e03dc49df91622fe2a76176497404e46ced8a715d9d2b67a7446571cca3",
       "bytes": 1023,
       "mode": "0o644",
-      "origin": "unchanged_native_source"
+      "origin": "native_plugin_source_or_public_documentation"
     },
     {
       "path": "plugins/progress-checker/third-party/inventory.json",
       "sha256": "55294211399571dc16c073d942529f152c6172733fc96952d9082e62ba86d05d",
       "bytes": 88009,
       "mode": "0o644",
-      "origin": "unchanged_native_source"
+      "origin": "native_plugin_source_or_public_documentation"
     },
     {
       "path": "plugins/progress-checker/third-party/rust-standard-library/COPYRIGHT-library.html",
       "sha256": "90567e2718bf7fd65a71a3a43c5596488e80e5f51ed02bfea6fec54458b5f3d1",
       "bytes": 425661,
       "mode": "0o644",
-      "origin": "unchanged_native_source"
+      "origin": "native_plugin_source_or_public_documentation"
     },
     {
       "path": "plugins/progress-checker/third-party/rust-standard-library/licenses/Apache-2.0.txt",
       "sha256": "074e6e32c86a4c0ef8b3ed25b721ca23aca83df277cd88106ef7177c354615ff",
       "bytes": 10280,
       "mode": "0o644",
-      "origin": "unchanged_native_source"
+      "origin": "native_plugin_source_or_public_documentation"
     },
     {
       "path": "plugins/progress-checker/third-party/rust-standard-library/licenses/BSD-2-Clause.txt",
       "sha256": "f32fb3b417a194167cfad068223fc975ba96c5960513a10f66a3c28720aec1df",
       "bytes": 1267,
       "mode": "0o644",
-      "origin": "unchanged_native_source"
+      "origin": "native_plugin_source_or_public_documentation"
     },
     {
       "path": "plugins/progress-checker/third-party/rust-standard-library/licenses/CC-BY-SA-4.0.txt",
       "sha256": "23ee78c8bae49cf08ea2f0c84945c66b987ebe4520881fb51b3dad4fb43d07c2",
       "bytes": 20137,
       "mode": "0o644",
-      "origin": "unchanged_native_source"
+      "origin": "native_plugin_source_or_public_documentation"
     },
     {
       "path": "plugins/progress-checker/third-party/rust-standard-library/licenses/GCC-exception-3.1.txt",
       "sha256": "a3966c9410ef94a1efbfa9ec04e9c1994026a70623fbf0885ce36737bfba3b54",
       "bytes": 3320,
       "mode": "0o644",
-      "origin": "unchanged_native_source"
+      "origin": "native_plugin_source_or_public_documentation"
     },
     {
       "path": "plugins/progress-checker/third-party/rust-standard-library/licenses/GPL-2.0-only.txt",
       "sha256": "54b212ba1f97f6948fa5486239ab505dd820b02e50cbfd296b4062c8609a70af",
       "bytes": 17642,
       "mode": "0o644",
-      "origin": "unchanged_native_source"
+      "origin": "native_plugin_source_or_public_documentation"
     },
     {
       "path": "plugins/progress-checker/third-party/rust-standard-library/licenses/GPL-3.0-or-later.txt",
       "sha256": "05315fce6c35f79b8a35454828995fa26336f235895ac64557abc028f4ffcea2",
       "bytes": 34795,
       "mode": "0o644",
-      "origin": "unchanged_native_source"
+      "origin": "native_plugin_source_or_public_documentation"
     },
     {
       "path": "plugins/progress-checker/third-party/rust-standard-library/licenses/ISC.txt",
       "sha256": "0ff61769b238634e042ab759dddfd104a8e69d091e3600ae3410e401a6164381",
       "bytes": 730,
       "mode": "0o644",
-      "origin": "unchanged_native_source"
+      "origin": "native_plugin_source_or_public_documentation"
     },
     {
       "path": "plugins/progress-checker/third-party/rust-standard-library/licenses/LLVM-exception.txt",
       "sha256": "e34c58338bd89d43e709e226610d8f32b3e3c47f4ad9a99a8dc1d4ac7842488e",
       "bytes": 919,
       "mode": "0o644",
-      "origin": "unchanged_native_source"
+      "origin": "native_plugin_source_or_public_documentation"
     },
     {
       "path": "plugins/progress-checker/third-party/rust-standard-library/licenses/MIT.txt",
       "sha256": "b85dcd3e453d05982552c52b5fc9e0bdd6d23c6f8e844b984a88af32570b0cc0",
       "bytes": 1078,
       "mode": "0o644",
-      "origin": "unchanged_native_source"
+      "origin": "native_plugin_source_or_public_documentation"
     },
     {
       "path": "plugins/progress-checker/third-party/rust-standard-library/licenses/NCSA.txt",
       "sha256": "39cb0234065c92b9e6cee3830cbb52b1aa289aa8fe9ba2e66730fec5cf05c630",
       "bytes": 1676,
       "mode": "0o644",
-      "origin": "unchanged_native_source"
+      "origin": "native_plugin_source_or_public_documentation"
     },
     {
       "path": "plugins/progress-checker/third-party/rust-standard-library/licenses/OFL-1.1.txt",
       "sha256": "8eea8287e5876b539670cadb82e99f9a7afddec6f6730811be1daf25d2e9bcfd",
       "bytes": 4016,
       "mode": "0o644",
-      "origin": "unchanged_native_source"
+      "origin": "native_plugin_source_or_public_documentation"
     },
     {
       "path": "plugins/progress-checker/third-party/rust-standard-library/licenses/Unicode-3.0.txt",
       "sha256": "f5062c9a188d81dfe66b56db4182dcf9e4b17c0d9b0d311a8e20b3a1b075c443",
       "bytes": 1995,
       "mode": "0o644",
-      "origin": "unchanged_native_source"
+      "origin": "native_plugin_source_or_public_documentation"
     },
     {
       "path": "rust-toolchain.toml",
       "sha256": "97aab3493c1fb14fe9a21c760433577f434714f5725bbb176e67048dde581afe",
       "bytes": 86,
       "mode": "0o644",
-      "origin": "unchanged_native_source"
+      "origin": "native_plugin_source_or_public_documentation"
     },
     {
       "path": "schemas/README.md",
-      "sha256": "109888650ef818f9654295043667c5ec39b734e27be605d5fc0b2edbbf64b69a",
-      "bytes": 1888,
+      "sha256": "ea233783787333afc912e3575da95704fda9f669c9ff396bc5e2b8651e3a5480",
+      "bytes": 2104,
       "mode": "0o644",
-      "origin": "staging_documentation"
+      "origin": "native_plugin_source_or_public_documentation"
     },
     {
       "path": "schemas/progress-checker-result.schema.json",
       "sha256": "b90c3bd46ca5f1b64839088cd903ae77c615037cf788396bc47ab765b4ed0b56",
       "bytes": 8442,
       "mode": "0o644",
-      "origin": "unchanged_native_source"
+      "origin": "native_plugin_source_or_public_documentation"
     },
     {
       "path": "schemas/progress-checker-service.schema.json",
-      "sha256": "cb99663efe2098f906620f59a6d5387d7279364947dfcf4dffc7e6b1452c57ea",
-      "bytes": 39179,
+      "sha256": "9939ee103345443adecec631587abb23428e3ed2627087751a2445060286aab2",
+      "bytes": 44065,
       "mode": "0o644",
-      "origin": "unchanged_native_source"
+      "origin": "native_plugin_source_or_public_documentation"
     },
     {
       "path": "schemas/progress-checker-trust.schema.json",
       "sha256": "97d72fcfccb9436070cbd464cca4e63e9cfe1cfa6473951ce65d6e8936298be0",
       "bytes": 2481,
       "mode": "0o644",
-      "origin": "unchanged_native_source"
+      "origin": "native_plugin_source_or_public_documentation"
     },
     {
       "path": "schemas/progress-panel-config.schema.json",
       "sha256": "3ef9f7092e8f7025ed23e4aa193fb444c6eeb4bf9dbe9c31ced20bf7e792e2b6",
       "bytes": 6000,
       "mode": "0o644",
-      "origin": "unchanged_native_source"
+      "origin": "native_plugin_source_or_public_documentation"
     },
     {
       "path": "scripts/build-checker.sh",
       "sha256": "e0dec6acbc3e29a8dc648153e5cd2b4e748591a530414f3af122a9535da31ccc",
       "bytes": 255,
       "mode": "0o755",
-      "origin": "unchanged_native_source"
+      "origin": "native_plugin_source_or_public_documentation"
     },
     {
       "path": "scripts/build-service.sh",
       "sha256": "c461a31c49ab7c19467c3c7e681c78729525bbd09e522a7d0d02a0aedd951573",
       "bytes": 341,
       "mode": "0o755",
-      "origin": "unchanged_native_source"
+      "origin": "native_plugin_source_or_public_documentation"
     },
     {
       "path": "scripts/generate-plugin-notices.py",
       "sha256": "77323b5a613355c6b962190f3047ba6f2306d12e758ff80412908bb33a561f94",
       "bytes": 9998,
       "mode": "0o644",
-      "origin": "unchanged_native_source"
+      "origin": "native_plugin_source_or_public_documentation"
     },
     {
       "path": "scripts/package-plugin.py",
       "sha256": "9ce4c5fdb77e9561f980e830d6bff47fdd417e64391a84790ad2bab8f09afe6b",
       "bytes": 3369,
       "mode": "0o644",
-      "origin": "unchanged_native_source"
+      "origin": "native_plugin_source_or_public_documentation"
+    },
+    {
+      "path": "scripts/prepare-native-marketplace.py",
+      "sha256": "67f6e3e86204489493c8530b5663f674b38df860e1490b2b3cb8fce5478d9084",
+      "bytes": 9895,
+      "mode": "0o644",
+      "origin": "native_plugin_source_or_public_documentation"
     },
     {
       "path": "scripts/prototype-env.sh",
       "sha256": "f39b871e33794f63236df059088056238b3924271409c27034259620a929272c",
       "bytes": 705,
       "mode": "0o644",
-      "origin": "unchanged_native_source"
+      "origin": "native_plugin_source_or_public_documentation"
     },
     {
       "path": "scripts/run-checker-mcp.sh",
       "sha256": "eaf04f36aade8c757f206c45f642136fedb3fcf3ad2c1817e252c6761bc55ff5",
       "bytes": 352,
       "mode": "0o755",
-      "origin": "unchanged_native_source"
+      "origin": "native_plugin_source_or_public_documentation"
     },
     {
       "path": "scripts/run-checker.sh",
       "sha256": "d4efbe03391be7cfca0343b1f7d28c2093b9820ef0b5a56d3dbc6b6c8f04327e",
       "bytes": 417,
       "mode": "0o755",
-      "origin": "unchanged_native_source"
+      "origin": "native_plugin_source_or_public_documentation"
     },
     {
       "path": "scripts/run-service.sh",
       "sha256": "6dd76bfcea93e65b9da15658ca6f972c4055f3c795ace2b9e4cc6e9e505780b5",
       "bytes": 186,
       "mode": "0o755",
-      "origin": "unchanged_native_source"
+      "origin": "native_plugin_source_or_public_documentation"
     },
     {
       "path": "scripts/test-checker.sh",
       "sha256": "93cbbe8683b9012fdf78b549fea7682789bbd70e89cf3e89161aada418b22e51",
       "bytes": 228,
       "mode": "0o755",
-      "origin": "unchanged_native_source"
+      "origin": "native_plugin_source_or_public_documentation"
     },
     {
       "path": "scripts/test-global-plugin.py",
       "sha256": "c48158cfbac2a0c0c8733ad48d121b744b4b287cf3020d9c737ab648f0f28fb2",
       "bytes": 27996,
       "mode": "0o644",
-      "origin": "unchanged_native_source"
+      "origin": "native_plugin_source_or_public_documentation"
+    },
+    {
+      "path": "scripts/test-live-approval-negative.py",
+      "sha256": "620b671253b33af498c42f8539f6ce722e6f98765887dc1469cf81286fbf251e",
+      "bytes": 13455,
+      "mode": "0o644",
+      "origin": "native_plugin_source_or_public_documentation"
+    },
+    {
+      "path": "scripts/test-native-marketplace.py",
+      "sha256": "7678b9c136ac0f5ba2038a0d3ceda94116e35255405eb090ccc93bf94708f2bd",
+      "bytes": 24157,
+      "mode": "0o644",
+      "origin": "native_plugin_source_or_public_documentation"
+    },
+    {
+      "path": "scripts/test-native-onboarding.py",
+      "sha256": "1b17a8aa707f74fc2475ba9f3bf826f44072e839e1c1166f9841bffb82a2c2a0",
+      "bytes": 26948,
+      "mode": "0o644",
+      "origin": "native_plugin_source_or_public_documentation"
+    },
+    {
+      "path": "scripts/test-prepare-native-marketplace.py",
+      "sha256": "2567fbd6b24b334b6839406bb91ebbf15ab597bf2463262424576c09c69ca18c",
+      "bytes": 7934,
+      "mode": "0o644",
+      "origin": "native_plugin_source_or_public_documentation"
     }
-  ],
-  "manifest_self_excluded": true,
-  "source_audit": {
-    "status": "passed",
-    "unchanged_copied_files": 289,
-    "staging_documentation_files": [
-      ".gitignore",
-      "DIRECTORY_READINESS.md",
-      "LAUNCH_PLAN.md",
-      "QUALIFICATION.json",
-      "README.md",
-      "dist/0.2.1-dev/INSTALL.md",
-      "schemas/README.md"
-    ],
-    "external_dependencies": 110,
-    "retained_license_files": 234,
-    "compiled_binaries": 0,
-    "fork_source_included": false,
-    "configured_checks_executed": false,
-    "builds_or_tests_executed": false,
-    "problems": []
-  }
+  ]
 }

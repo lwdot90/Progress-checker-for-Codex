@@ -1,0 +1,39 @@
+{
+  "schema_version": 1,
+  "version": "0.4.0-dev",
+  "archive_sha256": "4bd153b6c43b843114f76228382c9c76ebb7c3553e1d776cb31c77a8a07c7228",
+  "native_payload_commit": "6cec3dbc00c417bd05b5b4b1b3a61ad01ef44371",
+  "platform": "Fedora 44 x86_64",
+  "status": "beta_candidate_human_trial_pending",
+  "development_validation": {
+    "rust_unit_tests": 28,
+    "strict_clippy": "passed",
+    "marketplace_preparation_tests": 12,
+    "native_marketplace": {
+      "codex_version": "0.161.0",
+      "assertions_passed": 57,
+      "coverage": "native Git-backed payload materialization, skill/tool discovery, tracking, same-pin refresh and removal in a clean unauthenticated profile",
+      "visual_keyboard_automation": false,
+      "authenticated_model_prompt": false
+    },
+    "approval_negative_controls": 5,
+    "source_free_recipient": {
+      "platform": "Fedora 44 x86_64",
+      "codex_version": "0.160.0",
+      "global_integration_assertions_passed": 75,
+      "approval_denial_controls_passed": 5,
+      "commands_approved": false,
+      "configured_commands_executed": false,
+      "private_records_read": false
+    }
+  },
+  "human_live_approval": "pending",
+  "root_checker_verification": "not claimed",
+  "limits": [
+    "Custom Git marketplace, not universal public-directory listing.",
+    "Fedora 44 x86_64 only; other platforms unqualified.",
+    "Older active writer requires one-time close/reopen during upgrade.",
+    "Native default preserves ordinary default state, not custom legacy bindings.",
+    "Podman development recipient allows nested namespaces with seccomp=unconfined,label=disable,unmask=ALL; no host mounts/network/capabilities added."
+  ]
+}

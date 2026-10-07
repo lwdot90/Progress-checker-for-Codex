@@ -1,26 +1,30 @@
 # Progress Checker plugin
 
-Install once for your Codex profile, then use it in your projects.
-Supported beta: Fedora 44 x86_64 and standard Codex 0.160.0.
+Install once for your Codex profile, then use it in your projects. The
+**0.4.0-dev candidate is in preparation**: publication of the native marketplace
+and qualification of this onboarding flow are pending. Earlier archive results
+do not qualify this candidate.
+
+Supported beta target: Fedora 44 x86_64 and standard Codex 0.160.0.
 Runtime prerequisites: Python 3.11+ at /usr/bin/python3, Git at /usr/bin/git,
 glibc 2.39+, /usr/bin/rpm and /usr/lib/sysimage/rpm. Approved checks also need
 /usr/bin/bwrap with working namespaces. Recipients need no Rust or source build.
 
 ## Install once
 
-Download the release archive and SHA256SUMS. From that download directory:
+Once the candidate is published, use the native Codex plugin browser:
 
-```sh
-set -eu
-sha256sum -c SHA256SUMS
-tar -xzf progress-checker-0.3.0-dev-linux-x86_64.tar.gz
-cd progress-checker-0.3.0-dev-linux-x86_64
-python3 install.py
-```
-
-Restart Codex. Open any Git project and say:
+1. Open `/plugins` and choose **Add marketplace**.
+2. Enter `lwdot90/Progress-checker-for-Codex`.
+3. Select **Progress Checker** and choose **Install**.
+4. Start a new chat if Codex requests one so the plugin tools and skill load.
+5. Open the Git project you want to track and say:
 
 > Track this project. Propose milestones and acceptance checks for my review.
+
+This is a Git custom marketplace. Availability in Codex's universal plugin
+directory is separate and is not claimed. New users do not need an archive
+installer or a terminal installation command.
 
 The skill passes the current session's Git worktree root to checker_track_project.
 Codex starts bundled MCP servers in the plugin cache; this plugin cannot
@@ -35,9 +39,31 @@ Each project has its own plan, implementation claims, evidence and exact command
 grants. Standard Codex reports progress in conversation. The persistent terminal
 panel belongs to the optional maintained fork.
 
-## Update and remove
+## Verification approval
 
-Close Codex sessions using this plugin. From the extracted new archive:
+Planning, claims and progress reads need no execution approval. For each new or
+changed check, Codex prints the packaged human CLI approval command with the
+correct project and state path. **Keep Codex open.** Run that command yourself in
+a separate interactive terminal, review the exact check definition, and confirm
+only if you trust it. Agents must never answer the confirmation. Approval saves
+a grant; it does not execute the check. Return to the same Codex chat and request
+the approved check.
+
+There is no approval MCP tool. Plans and instructions cannot approve execution.
+Source edits stale evidence but keep an unchanged grant; plan revisions invalidate
+grants. No check runs on installation, tracking or service startup. Same-user
+direct tampering with private state is outside the human-authentication guarantee.
+
+## Update, remove and migrate
+
+For a native browser installation, manage the plugin through `/plugins` in the
+same Codex profile. Load an update in a new chat if requested. Removal preserves
+project plans, managed project instructions and private evidence; it removes the
+plugin rather than the tracking records. Updates must retain the state binding.
+
+The archive installer remains a fallback for offline setup and existing custom
+profiles or state locations. From a trusted, checksum-verified extracted archive,
+close sessions using that installation before an archive update or removal:
 
 ```sh
 python3 install.py update
@@ -45,29 +71,20 @@ python3 install.py list
 python3 install.py remove
 ```
 
-Update is global, once per profile. Removal preserves every project configuration,
-managed instructions and private evidence. It disables/removes the plugin, not
-project tracking records. If you used --codex-home, --data-home or --state-dir,
-retain those choices. Custom state bindings cannot be changed silently.
+For a first fallback installation, use `python3 install.py`. Retain any original
+`--codex-home`, `--data-home` and `--state-dir` arguments. Custom state bindings
+cannot be changed silently.
 
-Legacy installations using `--project /absolute/worktree` remain supported. They
-are separate plugin entries; remove those entries with the same `--project`
-argument when migrating. Global installation does not silently remove them.
-The default private state base remains ~/.local/share/progress-checker, so
-existing projects using that base retain their evidence. For custom legacy state,
-choose the same --state-dir when installing globally or continue the legacy entry.
-
-## Verification approval
-
-Planning, claims and progress reads need no execution approval. For each new or
-changed check, Codex prints the packaged human CLI approval command with the
-correct project and state path. Review it in your own terminal; agents must never
-answer its confirmation. Stop the project's checker sessions before approval,
-then reopen Codex and request the check. Source edits stale evidence but keep an
-unchanged grant; plan revisions invalidate grants. No check runs on installation,
-tracking or service startup. Same-user direct tampering with private state is
-outside the human-authentication guarantee.
+Legacy installations using `--project /absolute/worktree` are separate plugin
+entries. Use that same argument to update or remove them; a native installation
+does not silently migrate or remove them. The default private state base remains
+`~/.local/share/progress-checker`. If a legacy installation uses a custom state
+base, keep using it through the archive installer with the same `--state-dir`, or
+continue the legacy entry until an explicit migration is arranged. Do not enable
+both entries for one project without reviewing their state bindings. Older
+packages retain their own approval instructions; the live approval flow above
+belongs to 0.4.0-dev.
 
 If the checker is unavailable, continue normal work and report progress as
-unverified. Directory listing approval remains separate from GitHub distribution.
-The previous 0.2.1-dev qualification does not verify these new 0.3.0-dev bytes.
+unverified. The frozen 0.2.1-dev and 0.3.0-dev archives retain their identities;
+neither supplies verification for the new 0.4.0-dev package or marketplace flow.

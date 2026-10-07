@@ -3,11 +3,16 @@ use crate::{
     client::Endpoint,
     protocol::{MAX_FRAME_BYTES, Operation, Request, Response, SCHEMA_VERSION, ServiceError},
 };
+use checker_core::security::ApprovalBinding;
 use checker_core::{
     engine::{CompletedRun, Engine, PrepareBatchOutcome},
     fingerprint::{FingerprintOptions, SourceWatch},
 };
 use serde_json::{Value, json};
+use sha2::{Digest, Sha256};
+use std::io::Read;
+use std::os::fd::AsRawFd;
+use std::os::unix::fs::OpenOptionsExt;
 use std::os::unix::fs::{MetadataExt, PermissionsExt};
 use std::{
     collections::BTreeMap,
@@ -24,10 +29,203 @@ use tokio_util::sync::CancellationToken;
 
 struct Command {
     operation: Operation,
+    approval_peer: Option<ApprovalPeer>,
     response: oneshot::Sender<Result<Value, String>>,
 }
+// Peer authority is constructed from SO_PEERCRED and /proc only, never JSON.
+#[derive(Clone, Debug, PartialEq, Eq)]
+struct ApprovalPeer {
+    pid: u32,
+    starttime: String,
+    executable_hash: String,
+}
+const APPROVAL_TTL: Duration = Duration::from_secs(300);
+const MAX_APPROVAL_CHALLENGES: usize = 128;
+struct ApprovalChallenge {
+    check_id: String,
+    binding: ApprovalBinding,
+    peer: ApprovalPeer,
+    expires: std::time::Instant,
+}
+#[derive(Default)]
+struct ApprovalChallenges {
+    pending: BTreeMap<String, ApprovalChallenge>,
+}
+impl ApprovalChallenges {
+    fn issue(
+        &mut self,
+        check_id: String,
+        binding: ApprovalBinding,
+        peer: ApprovalPeer,
+        now: std::time::Instant,
+    ) -> Result<String, String> {
+        self.pending.retain(|_, challenge| challenge.expires > now);
+        if self.pending.len() >= MAX_APPROVAL_CHALLENGES {
+            return Err("APPROVAL_BUSY: too many pending human confirmations".into());
+        }
+        for _ in 0..4 {
+            let mut random = [0u8; 32];
+            std::fs::File::open("/dev/urandom")
+                .and_then(|mut file| file.read_exact(&mut random))
+                .map_err(|e| format!("APPROVAL_CHALLENGE_INVALID: random source: {e}"))?;
+            let id = random
+                .iter()
+                .map(|byte| format!("{byte:02x}"))
+                .collect::<String>();
+            if !self.pending.contains_key(&id) {
+                self.pending.insert(
+                    id.clone(),
+                    ApprovalChallenge {
+                        check_id,
+                        binding,
+                        peer,
+                        expires: now + APPROVAL_TTL,
+                    },
+                );
+                return Ok(id);
+            }
+        }
+        Err("APPROVAL_CHALLENGE_INVALID: nonce collision".into())
+    }
+    fn consume(
+        &mut self,
+        id: &str,
+        peer: Option<&ApprovalPeer>,
+        binding: &ApprovalBinding,
+        now: std::time::Instant,
+    ) -> Result<ApprovalChallenge, String> {
+        // Consume before every comparison, including an unauthorized commit.
+        let challenge = self
+            .pending
+            .remove(id)
+            .ok_or("APPROVAL_CHALLENGE_INVALID: absent or already consumed")?;
+        if challenge.expires <= now
+            || peer != Some(&challenge.peer)
+            || binding != &challenge.binding
+        {
+            return Err("APPROVAL_CHALLENGE_INVALID: expired, peer or definition mismatch".into());
+        }
+        Ok(challenge)
+    }
+}
+fn approval_starttime(pid: u32) -> Result<String, String> {
+    let proc = std::path::PathBuf::from(format!("/proc/{pid}"));
+    let metadata = std::fs::metadata(&proc).map_err(|_| "APPROVAL_PEER_REQUIRED: peer absent")?;
+    if metadata.uid() != unsafe { libc::geteuid() } {
+        return Err("APPROVAL_PEER_REQUIRED: wrong peer owner".into());
+    }
+    let value = std::fs::read_to_string(proc.join("stat"))
+        .map_err(|_| "APPROVAL_PEER_REQUIRED: peer stat unavailable")?;
+    let fields = value
+        .rsplit_once(')')
+        .ok_or("APPROVAL_PEER_REQUIRED: malformed peer stat")?
+        .1
+        .split_whitespace()
+        .collect::<Vec<_>>();
+    if fields.len() <= 19
+        || matches!(fields[0], "Z" | "X" | "x")
+        || fields[19].is_empty()
+        || !fields[19].bytes().all(|b| b.is_ascii_digit())
+    {
+        return Err("APPROVAL_PEER_REQUIRED: invalid peer lifetime".into());
+    }
+    Ok(fields[19].into())
+}
+fn approval_executable_hash(path: &Path) -> Result<String, String> {
+    let mut file =
+        std::fs::File::open(path).map_err(|_| "APPROVAL_PEER_REQUIRED: executable unavailable")?;
+    let before = file.metadata().map_err(|e| e.to_string())?;
+    if !before.is_file()
+        || before.len() > 64 * 1024 * 1024
+        || before.mode() & 0o022 != 0
+        || (before.uid() != unsafe { libc::geteuid() } && before.uid() != 0)
+    {
+        return Err("APPROVAL_PEER_REQUIRED: untrusted executable".into());
+    }
+    let mut bytes = Vec::new();
+    (&mut file)
+        .take(64 * 1024 * 1024 + 1)
+        .read_to_end(&mut bytes)
+        .map_err(|e| e.to_string())?;
+    let after = file.metadata().map_err(|e| e.to_string())?;
+    if bytes.len() as u64 != before.len()
+        || before.dev() != after.dev()
+        || before.ino() != after.ino()
+        || before.len() != after.len()
+        || before.mtime_nsec() != after.mtime_nsec()
+        || before.mtime() != after.mtime()
+        || before.ctime() != after.ctime()
+        || before.ctime_nsec() != after.ctime_nsec()
+    {
+        return Err("APPROVAL_PEER_REQUIRED: executable changed".into());
+    }
+    Ok(format!("{:x}", Sha256::digest(bytes)))
+}
+fn approval_terminal(pid: u32, descriptor: u32) -> bool {
+    // Reopen the actual peer descriptor solely for tcgetattr; never read input.
+    let Ok(file) = std::fs::OpenOptions::new()
+        .read(true)
+        .custom_flags(libc::O_NOCTTY | libc::O_NONBLOCK | libc::O_CLOEXEC)
+        .open(format!("/proc/{pid}/fd/{descriptor}"))
+    else {
+        return false;
+    };
+    let mut termios = std::mem::MaybeUninit::<libc::termios>::uninit();
+    unsafe { libc::tcgetattr(file.as_raw_fd(), termios.as_mut_ptr()) == 0 }
+}
+fn approval_peer_requirements(
+    stdin_terminal: bool,
+    stdout_terminal: bool,
+    actual_hash: &str,
+    expected_hash: &str,
+) -> Result<(), String> {
+    if !stdin_terminal || !stdout_terminal || actual_hash != expected_hash {
+        return Err("APPROVAL_PEER_REQUIRED: exact human-terminal CLI required".into());
+    }
+    Ok(())
+}
+fn authorize_approval_peer(pid: u32) -> Result<ApprovalPeer, String> {
+    let starttime = approval_starttime(pid)?;
+    let server = std::env::current_exe().map_err(|e| e.to_string())?;
+    let expected = if server
+        .file_name()
+        .is_some_and(|name| name == "progress-checker")
+    {
+        server.clone()
+    } else {
+        server
+            .parent()
+            .ok_or("APPROVAL_PEER_REQUIRED: CLI sibling absent")?
+            .join("progress-checker")
+    };
+    let executable_hash = approval_executable_hash(Path::new(&format!("/proc/{pid}/exe")))?;
+    let expected_hash = approval_executable_hash(&expected)?;
+    approval_peer_requirements(
+        approval_terminal(pid, 0),
+        approval_terminal(pid, 1),
+        &executable_hash,
+        &expected_hash,
+    )?;
+    if approval_starttime(pid)? != starttime {
+        return Err("APPROVAL_PEER_REQUIRED: peer lifetime changed".into());
+    }
+    Ok(ApprovalPeer {
+        pid,
+        starttime,
+        executable_hash,
+    })
+}
+impl ApprovalPeer {
+    fn recheck(&self) -> Result<(), String> {
+        if authorize_approval_peer(self.pid)? != *self {
+            return Err("APPROVAL_PEER_REQUIRED: peer identity changed".into());
+        }
+        Ok(())
+    }
+}
+
 enum Message {
-    Command(Command),
+    Command(Box<Command>),
     Finished(
         String,
         Box<CompletedRun>,
@@ -140,6 +338,7 @@ fn actor(
     let _options = options;
     let mut active = BTreeMap::<String, CancellationToken>::new();
     let mut batches = BTreeMap::<String, Vec<String>>::new();
+    let mut approvals = ApprovalChallenges::default();
     let mut shutting_down = false;
     let mut last_refresh = std::time::Instant::now();
     loop {
@@ -179,6 +378,7 @@ fn actor(
                 let _ = ack.send(result);
             }
             Ok(Message::Command(command)) => {
+                let command = *command;
                 let result = (|| -> Result<Value, String> {
                     if shutting_down {
                         return Err("SERVICE_STOPPING".into());
@@ -193,6 +393,46 @@ fn actor(
                         shared.publish(&mut engine)?;
                     }
                     match command.operation {
+                        Operation::ApprovalChallenge { check_id } => {
+                            let peer = command.approval_peer.as_ref().ok_or(
+                                "APPROVAL_PEER_REQUIRED: exact human-terminal CLI required",
+                            )?;
+                            peer.recheck()?;
+                            if !active.is_empty() {
+                                return Err("APPROVAL_BUSY: checks are active".into());
+                            }
+                            engine.refresh_configuration()?;
+                            let binding = engine.approval_binding(&check_id)?;
+                            peer.recheck()?;
+                            let challenge_id = approvals.issue(
+                                check_id.clone(),
+                                binding.clone(),
+                                peer.clone(),
+                                std::time::Instant::now(),
+                            )?;
+                            Ok(json!({"challenge_id":challenge_id,"binding":binding,
+                                "check_id":check_id,"revision":engine.revision()}))
+                        }
+                        Operation::ApprovalCommit {
+                            challenge_id,
+                            binding,
+                        } => {
+                            let challenge = approvals.consume(
+                                &challenge_id,
+                                command.approval_peer.as_ref(),
+                                &binding,
+                                std::time::Instant::now(),
+                            )?;
+                            challenge.peer.recheck()?;
+                            if !active.is_empty() {
+                                return Err("APPROVAL_BUSY: checks are active".into());
+                            }
+                            // Engine re-reads the current definition and validates exact binding.
+                            engine.approve(&challenge.check_id, binding)?;
+                            shared.publish(&mut engine)?;
+                            Ok(json!({"approved":true,"check_id":challenge.check_id,
+                                "revision":engine.revision()}))
+                        }
                         Operation::SubmitPlan {
                             config,
                             reason,
@@ -523,6 +763,9 @@ fn service_run_record(
 }
 fn error_code(message: &str) -> String {
     for code in [
+        "APPROVAL_PEER_REQUIRED",
+        "APPROVAL_CHALLENGE_INVALID",
+        "APPROVAL_BUSY",
         "REVISION_CONFLICT",
         "CONFIG_CONFLICT",
         "PLAN_CONFLICT",
@@ -606,12 +849,24 @@ async fn handle(
         }
         other => other,
     };
+    let approval_peer = if matches!(
+        &operation,
+        Operation::ApprovalChallenge { .. } | Operation::ApprovalCommit { .. }
+    ) {
+        credentials
+            .pid()
+            .and_then(|pid| u32::try_from(pid).ok())
+            .and_then(|pid| authorize_approval_peer(pid).ok())
+    } else {
+        None
+    };
     let (tx, rx) = oneshot::channel();
     sender
-        .send(Message::Command(Command {
+        .send(Message::Command(Box::new(Command {
             operation,
+            approval_peer,
             response: tx,
-        }))
+        })))
         .map_err(|_| "service actor stopped")?;
     let result = rx.await.map_err(|_| "service actor stopped")?;
     let mut response = Response {
@@ -767,6 +1022,122 @@ pub async fn serve(
 #[cfg(test)]
 mod tests {
     use super::*;
+    fn nonce_fixture() -> (
+        ApprovalChallenges,
+        ApprovalPeer,
+        ApprovalBinding,
+        std::time::Instant,
+    ) {
+        // Supplied nonce data only: no Engine, trust store, process or terminal acceptance.
+        let now = std::time::Instant::now();
+        let peer = ApprovalPeer {
+            pid: 42,
+            starttime: "123".into(),
+            executable_hash: "fixture-cli".into(),
+        };
+        let binding = ApprovalBinding {
+            canonical_root: "/fixture".into(),
+            config_hash: format!("sha256:{}", "a".repeat(64)),
+            command_hash: format!("sha256:{}", "b".repeat(64)),
+            argv: vec!["/usr/bin/true".into()],
+            cwd: "/fixture".into(),
+            environment: BTreeMap::new(),
+            sandbox_profile: checker_core::security::SANDBOX_PROFILE.into(),
+            executable_hash: format!("sha256:{}", "c".repeat(64)),
+            sandbox_binary_hash: format!("sha256:{}", "d".repeat(64)),
+        };
+        let mut challenges = ApprovalChallenges::default();
+        challenges.pending.insert(
+            "a".repeat(64),
+            ApprovalChallenge {
+                check_id: "check".into(),
+                binding: binding.clone(),
+                peer: peer.clone(),
+                expires: now + APPROVAL_TTL,
+            },
+        );
+        (challenges, peer, binding, now)
+    }
+    #[test]
+    fn approval_denies_pipes_and_non_cli_images() {
+        for (stdin, stdout, actual) in [
+            (false, false, "cli"),
+            (false, true, "cli"),
+            (true, false, "cli"),
+            (true, true, "mcp"),
+        ] {
+            assert!(approval_peer_requirements(stdin, stdout, actual, "cli").is_err());
+        }
+    }
+    #[test]
+    fn approval_nonce_is_single_use_without_creating_a_grant() {
+        let (mut pending, peer, binding, now) = nonce_fixture();
+        assert!(
+            pending
+                .consume(&"a".repeat(64), Some(&peer), &binding, now)
+                .is_ok()
+        );
+        assert!(
+            pending
+                .consume(&"a".repeat(64), Some(&peer), &binding, now)
+                .is_err()
+        );
+    }
+    #[test]
+    fn denied_or_reused_peer_consumes_nonce() {
+        for peer_kind in 0..3 {
+            let (mut pending, mut peer, binding, now) = nonce_fixture();
+            if peer_kind == 1 {
+                peer.pid += 1;
+            }
+            if peer_kind == 2 {
+                peer.starttime = "124".into();
+            }
+            let peer = if peer_kind == 0 { None } else { Some(&peer) };
+            assert!(
+                pending
+                    .consume(&"a".repeat(64), peer, &binding, now)
+                    .is_err()
+            );
+            assert!(pending.pending.is_empty());
+        }
+    }
+    #[test]
+    fn expired_or_changed_binding_consumes_nonce() {
+        let (mut pending, peer, binding, now) = nonce_fixture();
+        assert!(
+            pending
+                .consume(&"a".repeat(64), Some(&peer), &binding, now + APPROVAL_TTL)
+                .is_err()
+        );
+        assert!(pending.pending.is_empty());
+        let (mut pending, peer, mut binding, now) = nonce_fixture();
+        binding.argv.push("different".into());
+        assert!(
+            pending
+                .consume(&"a".repeat(64), Some(&peer), &binding, now)
+                .is_err()
+        );
+        assert!(pending.pending.is_empty());
+    }
+    #[test]
+    fn approval_nonce_capacity_refuses_before_randomness_or_engine_access() {
+        let (mut pending, peer, binding, now) = nonce_fixture();
+        pending.pending.clear();
+        for index in 0..MAX_APPROVAL_CHALLENGES {
+            pending.pending.insert(
+                format!("{index:064x}"),
+                ApprovalChallenge {
+                    check_id: "check".into(),
+                    binding: binding.clone(),
+                    peer: peer.clone(),
+                    expires: now + APPROVAL_TTL,
+                },
+            );
+        }
+        assert!(pending.issue("check".into(), binding, peer, now).is_err());
+        assert_eq!(pending.pending.len(), MAX_APPROVAL_CHALLENGES);
+    }
     #[test]
     fn changed_then_reverted_run_never_becomes_current_again() {
         let snapshot = json!({"health":"ready","status":{"source":{"fingerprint":"same"}}});

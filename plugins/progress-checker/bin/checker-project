@@ -120,7 +120,7 @@ def main():
         binary = Path(__file__).resolve().parent / 'progress-checker'
         if not binary.is_file():
             parser.error('Packaged checker executable is missing')
-        print('Stop Codex sessions and any checker service for this project first. Run the command below in your human terminal; review the exact command definition and type confirmation only if you trust it. Restart Codex afterward.', file=sys.stderr)
+        print('Keep Codex open. Run the command below in your human terminal; review the exact command definition and type confirmation only if you trust it. Approval does not execute the check.', file=sys.stderr)
         print(shlex.join([str(binary), '--root', str(root), '--state-dir', str(state), 'approve', args.check]))
         return
     if args.state_dir is not None or args.check is not None:

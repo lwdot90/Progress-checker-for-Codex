@@ -167,7 +167,7 @@ class Gateway:
             if not isinstance(params, dict) or not isinstance(params.get('protocolVersion'), str) or not isinstance(params.get('capabilities'), dict) or not isinstance(params.get('clientInfo'), dict):
                 return {'jsonrpc':'2.0','id':id_value,'error':{'code':-32602,'message':'Invalid initialization'}}
             self.initialized = True
-            return reply({'protocolVersion':'2025-06-18','capabilities':{'tools':{'listChanged':False}},'serverInfo':{'name':'progress-checker-global','version':'0.3.0-dev'},'instructions':'Install once globally. When the user requests tracking, call checker_track_project with the current session Git worktree root. Never use cache cwd. The connection cannot switch projects. Claims are not verification; commands require exact human approval.'})
+            return reply({'protocolVersion':'2025-06-18','capabilities':{'tools':{'listChanged':False}},'serverInfo':{'name':'progress-checker-global','version':'0.4.0-dev'},'instructions':'Install once globally. When the user requests tracking, call checker_track_project with the current session Git worktree root. Never use cache cwd. The connection cannot switch projects. Claims are not verification; commands require exact human approval.'})
         if not self.ready:return reply(failure('NOT_INITIALIZED','Initialize first.'))
         if not isinstance(params, dict):return reply(failure('INVALID_ARGUMENT','Expected an object.'))
         meta=params.get('_meta')
@@ -196,8 +196,11 @@ class Gateway:
 
 
 def main():
-    parser=argparse.ArgumentParser(description=__doc__);parser.add_argument('--state-dir',type=Path,required=True);args=parser.parse_args()
-    gateway=Gateway(args.state_dir)
+    parser=argparse.ArgumentParser(description=__doc__);parser.add_argument('--state-dir',type=Path);args=parser.parse_args()
+    data_home = Path(os.environ.get('XDG_DATA_HOME', str(Path.home() / '.local/share')))
+    if args.state_dir is None and not data_home.is_absolute():
+        parser.error('XDG_DATA_HOME must be absolute')
+    gateway=Gateway(args.state_dir if args.state_dir is not None else data_home / 'progress-checker')
     def interrupted(*_):raise KeyboardInterrupt()
     signal.signal(signal.SIGTERM,interrupted);signal.signal(signal.SIGINT,interrupted)
     try:

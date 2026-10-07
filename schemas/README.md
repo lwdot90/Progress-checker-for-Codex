@@ -30,3 +30,7 @@ Passing records must survive integrity and freshness checks before the engine
 derives verification. Full logs are available only through explicit bounded
 retrieval. Run summaries omit stdout/stderr payloads. No schema, implementation
 claim, or accepted plan supplies permission to execute a check.
+
+Approval challenge and commit are human CLI IPC operations only. They require the
+exact terminal CLI peer, a single-use expiring challenge and a current command
+binding; neither operation is exposed as an MCP tool.

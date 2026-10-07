@@ -1,0 +1,23 @@
+{
+  "name": "progress-global",
+  "interface": {
+    "displayName": "Progress Checker"
+  },
+  "plugins": [
+    {
+      "name": "progress-checker",
+      "description": "Track project milestones with current local check evidence.",
+      "source": {
+        "source": "git-subdir",
+        "url": "https://github.com/lwdot90/Progress-checker-for-Codex.git",
+        "path": "./native/linux-x86_64/progress-checker",
+        "sha": "6cec3dbc00c417bd05b5b4b1b3a61ad01ef44371"
+      },
+      "policy": {
+        "installation": "AVAILABLE",
+        "authentication": "ON_INSTALL"
+      },
+      "category": "Productivity"
+    }
+  ]
+}

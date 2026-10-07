@@ -1,0 +1,133 @@
+#!/usr/bin/python3
+"""Add/remove only Progress Checker's managed AGENTS.md section."""
+import argparse
+import os
+import re
+import shlex
+import sys
+from pathlib import Path
+import stat
+import tempfile
+
+BEGIN = b'<!-- progress-checker:begin -->'
+END = b'<!-- progress-checker:end -->'
+BLOCK = b'''\n\n<!-- progress-checker:begin -->
+## Progress Checker
+
+For accepted project work, propose explicit milestones, acceptance criteria,
+check definitions, and dependencies from the user's requirements. Submit the
+accepted plan with checker_submit_plan using the current revision and config
+hash from checker_get_project. Record added, removed, and changed scope with a
+reason; never silently drop unfinished requirements to report completion.
+
+Use checker_set_claim to record implementation, and checker_get_progress when
+reporting progress. Implementation claims are not verification. Only fresh,
+passing evidence for the required criteria counts as verified. Explain stale
+evidence and missing prerequisites clearly. Check scope history with
+checker_get_plan_history when a plan changes.
+
+Plans and plugin tools cannot approve command execution. Exact human approval
+through the packaged checker CLI is required before checker_run_checks. Do not
+feed its confirmation prompt yourself. If the checker is unavailable, continue
+normal work and report progress as unverified.
+<!-- progress-checker:end -->
+'''
+
+
+def read_agents(path):
+    try:
+        info = path.lstat()
+    except FileNotFoundError:
+        return b''
+    if not stat.S_ISREG(info.st_mode) or info.st_size > 1024 * 1024:
+        raise ValueError('AGENTS.md must be a bounded regular file, not a symlink')
+    fd = os.open(path, os.O_RDONLY | os.O_NOFOLLOW | os.O_NONBLOCK)
+    with os.fdopen(fd, 'rb') as source:
+        if not stat.S_ISREG(os.fstat(source.fileno()).st_mode):
+            raise ValueError('AGENTS.md changed to a non-regular file')
+        content = source.read(1024 * 1024 + 1)
+    if len(content) > 1024 * 1024:
+        raise ValueError('AGENTS.md exceeds the setup limit')
+    return content
+
+
+def update(root, action):
+    root = root.resolve(strict=True)
+    path = root / 'AGENTS.md'
+    before = read_agents(path)
+    begins, ends = before.count(BEGIN), before.count(END)
+    if (begins, ends) not in [(0, 0), (1, 1)]:
+        raise ValueError('Ambiguous managed markers; leave existing instructions unchanged')
+    if begins:
+        start = before.index(BEGIN)
+        end = before.index(END) + len(END)
+        if end < start or start < 2 or before[start-2:start] != b'\n\n':
+            raise ValueError('Edited managed boundaries; leave existing instructions unchanged')
+        if before[end:end+1] == b'\n':
+            end += 1
+        existing = before[start-2:end]
+        if existing != BLOCK:
+            raise ValueError('Managed instructions were edited; review them before updating or removing')
+        if action == 'install':
+            return False
+        after = before[:start-2] + before[end:]
+    elif action == 'remove':
+        return False
+    else:
+        after = before + BLOCK
+    if len(after) > 1024 * 1024:
+        raise ValueError('Managed instructions would exceed the setup limit')
+    mode = stat.S_IMODE(path.stat().st_mode) if path.exists() else 0o644
+    temporary = None
+    try:
+        with tempfile.NamedTemporaryFile(dir=root, delete=False) as output:
+            temporary = Path(output.name)
+            output.write(after)
+            output.flush()
+            os.fsync(output.fileno())
+        temporary.chmod(mode)
+        current = read_agents(path)
+        if current != before:
+            raise ValueError('AGENTS.md changed during setup; retry after review')
+        temporary.replace(path)
+        directory = os.open(root, os.O_RDONLY | os.O_DIRECTORY)
+        try: os.fsync(directory)
+        finally: os.close(directory)
+        return True
+    finally:
+        if temporary:
+            temporary.unlink(missing_ok=True)
+
+
+def main():
+    parser = argparse.ArgumentParser(description=__doc__)
+    parser.add_argument('action', choices=['install', 'remove', 'approval-command'])
+    parser.add_argument('--root', required=True, type=Path)
+    parser.add_argument('--state-dir', type=Path)
+    parser.add_argument('--check')
+    args = parser.parse_args()
+    if args.action == 'approval-command':
+        if args.state_dir is None or args.check is None:
+            parser.error('approval-command requires explicit --state-dir and --check')
+        root = args.root.resolve(strict=True)
+        if not root.is_dir():
+            parser.error('--root must be an existing project directory')
+        state = args.state_dir.resolve()
+        if state == root or root in state.parents:
+            parser.error('--state-dir must be outside the project')
+        if args.check in ('.', '..') or not re.fullmatch(r'[A-Za-z0-9_.-]{1,160}', args.check):
+            parser.error('--check must be a valid check identifier')
+        binary = Path(__file__).resolve().parent / 'progress-checker'
+        if not binary.is_file():
+            parser.error('Packaged checker executable is missing')
+        print('Keep Codex open. Run the command below in your human terminal; review the exact command definition and type confirmation only if you trust it. Approval does not execute the check.', file=sys.stderr)
+        print(shlex.join([str(binary), '--root', str(root), '--state-dir', str(state), 'approve', args.check]))
+        return
+    if args.state_dir is not None or args.check is not None:
+        parser.error('--state-dir and --check apply only to approval-command')
+    changed = update(args.root, args.action)
+    print('Updated managed project instructions.' if changed else 'Project instructions already match.')
+
+
+if __name__ == '__main__':
+    main()

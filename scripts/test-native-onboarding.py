@@ -113,7 +113,7 @@ def validate_manifest(path, report):
         raise ValueError('Installed native Codex needs exact executable and version pins')
     binary = Path(codex['path'])
     check(report, 'installed native Codex executable matches release pin',
-          hashlib.sha256(regular_bytes(binary, 256 * 1024 * 1024)).hexdigest() == codex['sha256']
+          hashlib.sha256(regular_bytes(binary, 512 * 1024 * 1024)).hexdigest() == codex['sha256']
           and os.access(binary, os.X_OK))
     market = manifest['marketplace']
     exact_fields(market, ('source_url', 'catalog_commit', 'payload_commit',

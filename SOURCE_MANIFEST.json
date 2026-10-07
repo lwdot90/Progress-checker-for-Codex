@@ -2131,7 +2131,7 @@
     },
     {
       "path": "scripts/test-native-onboarding.py",
-      "sha256": "1b17a8aa707f74fc2475ba9f3bf826f44072e839e1c1166f9841bffb82a2c2a0",
+      "sha256": "c7fc63332fde737159a28fa57e5b2c1ff392d8a423aa89b7a12d0f4d9ba1ea10",
       "bytes": 26948,
       "mode": "0o644",
       "origin": "native_plugin_source_or_public_documentation"

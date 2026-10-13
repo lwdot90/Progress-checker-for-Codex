@@ -80,8 +80,8 @@
     },
     {
       "path": "README.md",
-      "sha256": "0689ad248c0e47d1f3aeb12177555f4daecf2037ecf50ea32a51efa645adc74d",
-      "bytes": 4689,
+      "sha256": "b72699fc30c391ed1b0287237c48f901b6b56e54a99a85902e090ab48637e667",
+      "bytes": 4205,
       "mode": "0o644",
       "origin": "native_plugin_source_or_public_documentation"
     },
@@ -292,6 +292,62 @@
       "path": "dist/0.4.0-dev/SHA256SUMS",
       "sha256": "abdc533ff781a6b5c3c5be1a2093705e289bbfea93995cfacbddd44cbe52ccf2",
       "bytes": 113,
+      "mode": "0o644",
+      "origin": "native_plugin_source_or_public_documentation"
+    },
+    {
+      "path": "docs/PORTABILITY.md",
+      "sha256": "faaf12621ace95f870e2987eb3099e51624d65d515cd6657d6482367e402eba0",
+      "bytes": 5276,
+      "mode": "0o644",
+      "origin": "native_plugin_source_or_public_documentation"
+    },
+    {
+      "path": "docs/USER_GUIDE.md",
+      "sha256": "171d34b7b0c52acf554cd3899dcda953b249460b13a819184550c130bff673ae",
+      "bytes": 4170,
+      "mode": "0o644",
+      "origin": "native_plugin_source_or_public_documentation"
+    },
+    {
+      "path": "docs/assets/progress-demo.gif",
+      "sha256": "e330ed45d02ce70e61a4501450f9d07c927e95e6c8d9f5a5fba7b9570b2c273f",
+      "bytes": 74122,
+      "mode": "0o644",
+      "origin": "native_plugin_source_or_public_documentation"
+    },
+    {
+      "path": "docs/development-history.md",
+      "sha256": "0c138c8ea57f2ed7f6879a789364d48d0139c8a94d478302b972a0954111eb8d",
+      "bytes": 4710,
+      "mode": "0o644",
+      "origin": "native_plugin_source_or_public_documentation"
+    },
+    {
+      "path": "docs/receipts/portability-source.json",
+      "sha256": "ff9bff7b6f5dc9c00e3a33b21acdc8bdb67da8cc81d5d568b143a13ad84da2ad",
+      "bytes": 922,
+      "mode": "0o644",
+      "origin": "native_plugin_source_or_public_documentation"
+    },
+    {
+      "path": "docs/receipts/progress-demo.json",
+      "sha256": "f27ce209a2ed006dde9ee7e32c3b1f60a668086f502d0b79c30c95a01b0ce895",
+      "bytes": 567,
+      "mode": "0o644",
+      "origin": "native_plugin_source_or_public_documentation"
+    },
+    {
+      "path": "docs/receipts/repository-metadata.json",
+      "sha256": "f5bffaa0e399ddb16c4b489b213d12744c202acfb784becbb780c379f0353d88",
+      "bytes": 486,
+      "mode": "0o644",
+      "origin": "native_plugin_source_or_public_documentation"
+    },
+    {
+      "path": "docs/release-status.md",
+      "sha256": "756b71e98bd7a014b7c2f7f08881651cc6247bc350d797442bb3bc5a5bcf290c",
+      "bytes": 2074,
       "mode": "0o644",
       "origin": "native_plugin_source_or_public_documentation"
     },
@@ -2077,6 +2133,13 @@
       "path": "scripts/prototype-env.sh",
       "sha256": "f39b871e33794f63236df059088056238b3924271409c27034259620a929272c",
       "bytes": 705,
+      "mode": "0o644",
+      "origin": "native_plugin_source_or_public_documentation"
+    },
+    {
+      "path": "scripts/render-progress-demo.py",
+      "sha256": "88bbbe79223ba1a9c88400de269212be900a6f864f1e95d3e66a45fb079b0912",
+      "bytes": 2270,
       "mode": "0o644",
       "origin": "native_plugin_source_or_public_documentation"
     },

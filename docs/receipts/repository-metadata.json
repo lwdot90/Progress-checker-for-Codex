@@ -1,0 +1,15 @@
+{
+  "description": "A Codex plugin that ties project milestones to fresh passing checks, so agent completion claims come with evidence.",
+  "full_name": "lwdot90/Progress-checker-for-Codex",
+  "html_url": "https://github.com/lwdot90/Progress-checker-for-Codex",
+  "topics": [
+    "ai-agents",
+    "codex",
+    "codex-plugin",
+    "developer-tools",
+    "mcp",
+    "verification"
+  ],
+  "observed_at": "2026-10-13T00:16:31.174Z",
+  "observation_source": "GitHub public repository API"
+}

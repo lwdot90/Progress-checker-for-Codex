@@ -1,0 +1,19 @@
+{
+  "schema_version": 1,
+  "observed_at": "2026-10-13T00:16:17.477Z",
+  "plugin_version": "0.4.0-dev",
+  "tool": "checker_get_progress",
+  "request_id": "client-21908-8",
+  "service_instance_id": "service-21802-1791850230408606020",
+  "revision": 1044,
+  "counts": {
+    "implemented": 13,
+    "planned": 7,
+    "verified": 0,
+    "scoped": 20
+  },
+  "health": "ready",
+  "checks_executed": false,
+  "rendering": "dated MCP result rendered as conversation; not a screen recording",
+  "gif_sha256": "e330ed45d02ce70e61a4501450f9d07c927e95e6c8d9f5a5fba7b9570b2c273f"
+}

@@ -53,6 +53,8 @@ If upgrading from an older archive installation, close its project Codex session
 
 Report problems in the [GitHub issue tracker](https://github.com/lwdot90/Progress-checker-for-Codex/issues). Include your operating system, Codex version, plugin version and a redacted error. Avoid attaching credentials or private checker files.
 
+For first-time testers: [first-user trial guide](docs/TRY_IT.md).
+
 For contributors: [development history](docs/development-history.md), [Ubuntu portability assessment](docs/PORTABILITY.md), and [release records](docs/release-status.md).
 
 Progress Checker is licensed under Apache-2.0. Codex is obtained separately. This project is maintained independently of OpenAI.

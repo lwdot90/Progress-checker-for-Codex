@@ -16,6 +16,13 @@
       "origin": "native_plugin_source_or_public_documentation"
     },
     {
+      "path": ".github/ISSUE_TEMPLATE/beta-feedback.md",
+      "sha256": "fc177766150f57c53c1c3b6b0cf3ebb7d69a65fdcb511d897f8ee27448ad65f9",
+      "bytes": 1243,
+      "mode": "0o644",
+      "origin": "native_plugin_source_or_public_documentation"
+    },
+    {
       "path": ".gitignore",
       "sha256": "0a1f325f09c666a4dccab87290ee892bda39c0bb737a6e30971d01ae40e29a1d",
       "bytes": 91,
@@ -80,8 +87,8 @@
     },
     {
       "path": "README.md",
-      "sha256": "b72699fc30c391ed1b0287237c48f901b6b56e54a99a85902e090ab48637e667",
-      "bytes": 4205,
+      "sha256": "7a8b1b443cbf1ae139f69837dae2603b680efa8cf563f6518b6c81e0ff4b5215",
+      "bytes": 4272,
       "mode": "0o644",
       "origin": "native_plugin_source_or_public_documentation"
     },
@@ -303,9 +310,16 @@
       "origin": "native_plugin_source_or_public_documentation"
     },
     {
+      "path": "docs/TRY_IT.md",
+      "sha256": "93f5a785e0e22cb373b0bda74354ef1bd804566f63d61e03be1e577e67cc5afa",
+      "bytes": 2160,
+      "mode": "0o644",
+      "origin": "native_plugin_source_or_public_documentation"
+    },
+    {
       "path": "docs/USER_GUIDE.md",
-      "sha256": "171d34b7b0c52acf554cd3899dcda953b249460b13a819184550c130bff673ae",
-      "bytes": 4170,
+      "sha256": "b25b6c3f0653b2595add3378d203c02d3208b329e78900a3a7909c1465f9bf67",
+      "bytes": 4232,
       "mode": "0o644",
       "origin": "native_plugin_source_or_public_documentation"
     },

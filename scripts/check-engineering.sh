@@ -10,6 +10,9 @@ case "${1:-}" in
     python3 scripts/check-source-version.py
     python3 scripts/check-first-example.py
     python3 scripts/check-engineering-docs.py
+    python3 scripts/test-native-packaging.py
+    python3 scripts/test-ubuntu-qualification.py
+    python3 scripts/test-platform-support.py
     ;;
   benchmark)
     cargo build -p checker-core --example fingerprint-benchmark --offline --locked

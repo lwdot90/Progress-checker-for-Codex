@@ -1,0 +1,53 @@
+{
+  "schema_version": 1,
+  "run_id": "run-example",
+  "check_id": "sample",
+  "started_at": "2026-10-03T00:00:00Z",
+  "finished_at": "2026-10-03T00:00:01Z",
+  "duration_ms": 1000,
+  "before": {
+    "git_commit": "0123456789abcdef0123456789abcdef01234567",
+    "fingerprint": "sha256:0000000000000000000000000000000000000000000000000000000000000000",
+    "config_hash": "sha256:0000000000000000000000000000000000000000000000000000000000000000",
+    "checker_version": "0.1.0",
+    "environment_signature": "sha256:0000000000000000000000000000000000000000000000000000000000000000"
+  },
+  "after": {
+    "git_commit": "0123456789abcdef0123456789abcdef01234567",
+    "fingerprint": "sha256:0000000000000000000000000000000000000000000000000000000000000000",
+    "config_hash": "sha256:0000000000000000000000000000000000000000000000000000000000000000",
+    "checker_version": "0.1.0",
+    "environment_signature": "sha256:0000000000000000000000000000000000000000000000000000000000000000"
+  },
+  "changed_during_run": false,
+  "evidence": {
+    "run_id": "run-example",
+    "check_id": "sample",
+    "execution_state": "finished",
+    "outcome": "passed",
+    "freshness": "current",
+    "source": {
+      "git_commit": "0123456789abcdef0123456789abcdef01234567",
+      "fingerprint": "sha256:0000000000000000000000000000000000000000000000000000000000000000",
+      "config_hash": "sha256:0000000000000000000000000000000000000000000000000000000000000000",
+      "checker_version": "0.1.0",
+      "environment_signature": "sha256:0000000000000000000000000000000000000000000000000000000000000000"
+    },
+    "command_hash": "sha256:0000000000000000000000000000000000000000000000000000000000000000",
+    "log_ref": "run-example",
+    "log_sha256": "sha256:0000000000000000000000000000000000000000000000000000000000000000"
+  },
+  "result": {
+    "outcome": "passed",
+    "exit_code": 0,
+    "stdout": {
+      "text": "",
+      "truncated": false
+    },
+    "stderr": {
+      "text": "",
+      "truncated": false
+    },
+    "reason": null
+  }
+}

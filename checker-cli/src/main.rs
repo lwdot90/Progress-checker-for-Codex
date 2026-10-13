@@ -1,4 +1,6 @@
 //! Human-facing local checker commands. Approval is deliberately interactive.
+#[cfg(windows)]
+mod windows_approval;
 use std::io::{self, IsTerminal, Write};
 use std::path::PathBuf;
 
@@ -106,6 +108,17 @@ async fn main() {
     }
 }
 
+/// Parsing help/version is available during a port, but no command may open
+/// private state or offer approval before the native security boundary exists.
+#[cfg(not(target_os = "linux"))]
+async fn execute(_cli: Cli) -> Result<(), String> {
+    Err(format!(
+        "PLATFORM_UNQUALIFIED: native {} commands are disabled until private state, authenticated IPC, sandbox execution, and human approval are qualified. No state was opened and no approval was requested.",
+        std::env::consts::OS
+    ))
+}
+
+#[cfg(target_os = "linux")]
 async fn execute(cli: Cli) -> Result<(), String> {
     use checker_core::engine::Engine;
     let state_base = match cli.state_dir {
@@ -158,6 +171,7 @@ async fn execute(cli: Cli) -> Result<(), String> {
     }
 }
 
+#[cfg(target_os = "linux")]
 async fn approve(
     root: &std::path::Path,
     state: &std::path::Path,
@@ -212,6 +226,7 @@ async fn approve(
     print_json(&serde_json::json!({"approved": check}))
 }
 
+#[cfg(target_os = "linux")]
 async fn approval_rpc(
     client: &checker_service::client::Client,
     operation: checker_service::protocol::Operation,
@@ -230,6 +245,7 @@ async fn approval_rpc(
     })
 }
 
+#[cfg(target_os = "linux")]
 async fn serve(root: &std::path::Path, state_base: &std::path::Path) -> Result<(), String> {
     use tokio::signal::unix::{SignalKind, signal};
     let mut interrupt = signal(SignalKind::interrupt()).map_err(|error| error.to_string())?;
@@ -248,12 +264,14 @@ async fn serve(root: &std::path::Path, state_base: &std::path::Path) -> Result<(
     result
 }
 
+#[cfg(target_os = "linux")]
 fn service_unavailable(error: String) -> String {
     format!(
         "Shared service unavailable: {error}. Start `progress-checker serve` for this root and state directory."
     )
 }
 
+#[cfg(target_os = "linux")]
 async fn rpc(
     client: &checker_service::client::Client,
     operation: checker_service::protocol::Operation,
@@ -270,6 +288,7 @@ async fn rpc(
         .ok_or_else(|| "service returned no result".into())
 }
 
+#[cfg(target_os = "linux")]
 async fn status(client: &checker_service::client::Client) -> Result<serde_json::Value, String> {
     let response = client
         .async_call(checker_service::protocol::Operation::Progress)
@@ -287,6 +306,7 @@ async fn status(client: &checker_service::client::Client) -> Result<serde_json::
     Ok(status)
 }
 
+#[cfg(target_os = "linux")]
 async fn run_check(client: &checker_service::client::Client, check: String) -> Result<(), String> {
     use checker_service::protocol::Operation;
     let mut interrupt = tokio::signal::unix::signal(tokio::signal::unix::SignalKind::interrupt())
@@ -349,6 +369,7 @@ async fn run_check(client: &checker_service::client::Client, check: String) -> R
     }
 }
 
+#[cfg(target_os = "linux")]
 fn default_state_directory() -> Result<PathBuf, String> {
     if let Some(path) = std::env::var_os("XDG_DATA_HOME") {
         let path = PathBuf::from(path);

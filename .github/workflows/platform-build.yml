@@ -1,0 +1,176 @@
+name: Native platform compile gates
+
+on:
+  pull_request:
+  push:
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  native-compile:
+    name: Compile / ${{ matrix.platform }}
+    strategy:
+      fail-fast: false
+      matrix:
+        include:
+          - platform: Fedora 44 x86_64
+            runner: ubuntu-24.04
+            container: fedora:44
+            rust_host: x86_64-unknown-linux-gnu
+          - platform: Ubuntu 24.04 x86_64
+            runner: ubuntu-24.04
+            container: ''
+            rust_host: x86_64-unknown-linux-gnu
+          - platform: macOS ARM64
+            runner: macos-15
+            container: ''
+            rust_host: aarch64-apple-darwin
+          - platform: Native Windows x86_64 MSVC
+            runner: windows-2022
+            container: ''
+            rust_host: x86_64-pc-windows-msvc
+    runs-on: ${{ matrix.runner }}
+    container: ${{ matrix.container }}
+    defaults:
+      run:
+        shell: bash
+    steps:
+      - name: Install Fedora build prerequisites
+        if: matrix.container != ''
+        run: dnf install -y git curl gcc glibc-devel ca-certificates python3
+      - uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262 # v4
+      - name: Install project-local Rust toolchain
+        env:
+          RUST_HOST: ${{ matrix.rust_host }}
+        run: |
+          source scripts/prototype-env.sh
+          if [[ '${{ runner.os }}' == Windows ]]; then
+            export CARGO_HOME="$(cygpath -w "$CARGO_HOME")"
+            export RUSTUP_HOME="$(cygpath -w "$RUSTUP_HOME")"
+          fi
+          mkdir -p "$PROTOTYPE_ROOT/.local/ci"
+          extension=''
+          if [[ "$RUST_HOST" == *windows* ]]; then extension='.exe'; fi
+          installer="$PROTOTYPE_ROOT/.local/ci/rustup-init$extension"
+          curl --fail --silent --show-error --location \
+            "https://static.rust-lang.org/rustup/dist/$RUST_HOST/rustup-init$extension" \
+            --output "$installer"
+          chmod +x "$installer"
+          rust_version="$(sed -n 's/^channel = "\(.*\)"$/\1/p' rust-toolchain.toml)"
+          [[ "$rust_version" =~ ^[0-9]+\.[0-9]+\.[0-9]+$ ]] || exit 1
+          "$installer" -y --no-modify-path --profile minimal --default-toolchain "$rust_version"
+      - name: Report native compile context
+        run: |
+          source scripts/prototype-env.sh
+          if [[ '${{ runner.os }}' == Windows ]]; then
+            export CARGO_HOME="$(cygpath -w "$CARGO_HOME")"
+            export RUSTUP_HOME="$(cygpath -w "$RUSTUP_HOME")"
+          fi
+          uname -a
+          rustc --version --verbose
+          expected_host='${{ matrix.rust_host }}'
+          actual_host="$(rustc --version --verbose | sed -n 's/^host: //p')"
+          [[ "$actual_host" == "$expected_host" ]] || exit 1
+          cargo --version
+          echo 'Compilation signal only: native runtime and installation support are unqualified.'
+      - name: Compile every workspace target on native runner
+        run: |
+          source scripts/prototype-env.sh
+          if [[ '${{ runner.os }}' == Windows ]]; then
+            export CARGO_HOME="$(cygpath -w "$CARGO_HOME")"
+            export RUSTUP_HOME="$(cygpath -w "$RUSTUP_HOME")"
+          fi
+          cargo check --workspace --all-targets --locked
+      - name: Compile Python gateway source syntax
+        run: |
+          python_command=python3
+          if [[ '${{ runner.os }}' == Windows ]]; then python_command=python; fi
+          "$python_command" - <<'PYTHON'
+          from pathlib import Path
+          for name in ('checker-global', 'checker-plugin'):
+              path = Path('plugins/progress-checker/bin') / name
+              compile(path.read_bytes(), str(path), 'exec')
+              print(f'Compiled syntax: {path}; no gateway execution or runtime qualification')
+          PYTHON
+      - name: Build native Windows diagnostic executables
+        if: runner.os == 'Windows'
+        run: |
+          source scripts/prototype-env.sh
+          export CARGO_HOME="$(cygpath -w "$CARGO_HOME")"
+          export RUSTUP_HOME="$(cygpath -w "$RUSTUP_HOME")"
+          export CARGO_TARGET_DIR="$(cygpath -w "$PROTOTYPE_ROOT/.local/checker-target")"
+          export RUSTFLAGS='-C target-feature=+crt-static'
+          cargo build --locked --target x86_64-pc-windows-msvc -p checker-cli -p checker-mcp -p checker-global
+      - name: Compile collector PowerShell syntax and embedded CSharp only
+        if: runner.os == 'Windows'
+        shell: powershell
+        run: |
+          $ErrorActionPreference = 'Stop'
+          $tokens = $null
+          $parseErrors = $null
+          $collector = Join-Path $env:GITHUB_WORKSPACE 'scripts/collect-windows-prebuilt.ps1'
+          $ast = [System.Management.Automation.Language.Parser]::ParseFile($collector, [ref]$tokens, [ref]$parseErrors)
+          if ($parseErrors.Count -ne 0) { throw ($parseErrors | Out-String) }
+          $commands = @($ast.FindAll({ param($node)
+            $node -is [System.Management.Automation.Language.CommandAst] -and $node.GetCommandName() -eq 'Add-Type'
+          }, $true))
+          if ($commands.Count -ne 1) { throw 'Expected exactly one embedded CSharp compiler command' }
+          $literal = @($commands[0].CommandElements | Where-Object {
+            $_ -is [System.Management.Automation.Language.StringConstantExpressionAst] -and
+            $_.StringConstantType -eq 'SingleQuotedHereString'
+          })
+          if ($literal.Count -ne 1) { throw 'Expected one literal CSharp source; no expression evaluation allowed' }
+          $output = Join-Path $env:GITHUB_WORKSPACE '.local/ci/collector-compile'
+          New-Item -ItemType Directory -Path $output -Force | Out-Null
+          Add-Type -TypeDefinition $literal[0].Value -OutputAssembly (Join-Path $output 'collector-prototype.dll') -ErrorAction Stop
+          Write-Output 'Parsed collector and compiled literal CSharp only; collector and native probes were not invoked.'
+      - name: Prepare unqualified Windows diagnostic artifact
+        if: runner.os == 'Windows'
+        run: |
+          python - <<'PYTHON'
+          import hashlib, json, os, re, shutil
+          from pathlib import Path
+          root = Path.cwd()
+          bundle = root / '.local/ci/windows-native-diagnostics'
+          (bundle / 'bin').mkdir(parents=True)
+          files = {}
+          for name in ('progress-checker.exe', 'progress-checker-mcp.exe', 'checker-global.exe'):
+              source = root / '.local/checker-target/x86_64-pc-windows-msvc/debug' / name
+              target = bundle / 'bin' / name
+              shutil.copyfile(source, target)
+              files['bin/' + name] = hashlib.sha256(target.read_bytes()).hexdigest()
+          source_commit = os.environ['GITHUB_SHA']
+          if not re.fullmatch('[0-9a-f]{40}', source_commit):
+              raise ValueError('Invalid source commit')
+          version = re.search(r'^version = "([^"]+)"', (root / 'Cargo.toml').read_text(), re.M).group(1)
+          manifest = {'schema_version': 1, 'source_commit': source_commit,
+              'cargo_lock_sha256': hashlib.sha256((root / 'Cargo.lock').read_bytes()).hexdigest(),
+              'version': version, 'target': 'x86_64-pc-windows-msvc', 'profile': 'debug',
+              'status': 'unqualified diagnostic build; not a supported release',
+              'rustflags': '-C target-feature=+crt-static', 'complete_dll_closure_qualified': False,
+              'runtime_tests_executed': False, 'files': files}
+          for name in ('LICENSE', 'NOTICE'):
+              shutil.copyfile(root / name, bundle / name)
+          shutil.copyfile(root / 'plugins/progress-checker/THIRD_PARTY_NOTICES.md', bundle / 'THIRD_PARTY_NOTICES.md')
+          shutil.copytree(root / 'plugins/progress-checker/third-party', bundle / 'third-party')
+          shutil.copyfile(root / 'scripts/collect-windows-prebuilt.ps1', bundle / 'collect-windows-prebuilt.ps1')
+          shutil.copyfile(root / 'docs/WINDOWS_FRIEND_TRIAL.md', bundle / 'WINDOWS_FRIEND_TRIAL.md')
+          manifest['files'] = {
+              path.relative_to(bundle).as_posix(): hashlib.sha256(path.read_bytes()).hexdigest()
+              for path in sorted(bundle.rglob('*')) if path.is_file()
+          }
+          # The manifest cannot recursively hash itself; every supplied payload file is covered.
+          (bundle / 'artifact-manifest.json').write_text(json.dumps(manifest, indent=2) + '\n')
+          print(json.dumps(manifest, indent=2))
+          PYTHON
+      - name: Upload Windows diagnostic build only
+        if: runner.os == 'Windows'
+        uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02 # v4
+        with:
+          name: windows-native-debug-${{ github.sha }}
+          path: .local/ci/windows-native-diagnostics/
+          if-no-files-found: error
+          include-hidden-files: true
+          retention-days: 14

@@ -1,0 +1,23 @@
+# Maintenance pilot
+
+This pilot uses a disposable, tracked copy of the actual progress-checker source. It does not approve or modify the host project's worktree. Run it after final packaging and checker builds:
+
+```sh
+python3 scripts/pilot-project.py
+```
+
+The default retained JSON report is `.local/pilot/report.json`; `--output PATH` selects a separate evidence directory. It records the disposable path, complete source-file inventory and hashes, checker binary hash, exact check definitions, outcomes, and twenty-sample warm read and run-acceptance measurements. The copied Git repository and external state directory remain available for inspection. The harness stops its service when done. These results apply to the recorded source size and host; they do not promise performance for every repository.
+
+The completed representative run is [.local/pilot-optimized/report.json](../../.local/pilot-optimized/report.json): all **31 assertions passed** against **235 files / 4,917,632 bytes**. Twenty samples measured warm snapshot p95 at **62.227 ms** and accepted-run-start p95 at **128.982 ms**, below the 250 ms gates. [The decoded immutable run evidence](../../.local/pilot-optimized/run-evidence.json) records 28 actual runs, including both expected verifier failures and fresh passing restoration checks. Service restart retained current passing evidence with a new service identity.
+
+The earlier unoptimized run is retained at [.local/pilot/report.json](../../.local/pilot/report.json); its snapshot p95 of **547.741 ms** failed the gate. The project now optimizes the `sha2` dependency in development builds. Every verification refresh still fingerprints current source bytes and retains the existing consistency and edit/revert monitoring checks. This change accelerates hashing without replacing source reads with metadata-only cache results.
+
+The config has two deliberately narrow milestones. `pinned-source` runs the project's actual `scripts/check-source.py` against the recorded upstream Git blob manifest. `patch-roundtrip` runs the project's actual `scripts/verify-patches.py`, checking combined and staged upgrades, byte-exact reverse rollback, dependency manifests, and external lockfile packages. Packaging integrity does not prove all runtime checker behavior or provide a general project-completion score. The second milestone depends on the first. Independent negative controls corrupt a tracked patch and a manifest-listed baseline file, check that old verification becomes stale immediately, and require each actual verifier to fail; both restorations require fresh passing checks.
+
+All tracked source remains fingerprinted. There are no extra ignored inputs. The only excluded output is the ignored `pilot-output/` directory. The packaging wrapper copies the actual verifier and its tracked inputs there, so the verifier's temporary upgrade trees cannot invalidate the source evidence. Execution has the existing no-network/no-home sandbox, fixed environment and exact executable/command/config approval binding. This automated terminal approval is restricted to the disposable fixture. Humans must review approvals for any real repository themselves.
+
+Upgrade procedure: retain the current source and state, select an explicit new upstream revision, regenerate the baseline manifest and coherent patch stages, then run the complete checker/TUI tests and this pilot against a fresh disposable copy. Accept the new revision only when its actual criteria and negative controls pass. This pilot's verifier measures package application and reversal for the current pinned revision; it does not claim compatibility with an untested future Codex release.
+
+Rollback procedure: stop the service, restore the retained previous source package and matching executable, and validate its exact config and approvals. Reverse application is checked byte-for-byte by the packaging verifier. Existing evidence must pass the restored version's source/environment/config freshness checks before being shown as verified; do not rewrite evidence hashes to force compatibility. Preserve original state for diagnosis. Do not edit authenticated state manually.
+
+The environment signature uses fixed sandbox settings, executable identities, kernel information, and the RPM package inventory guarded by database metadata. It does not hash every installed library byte. State history has a 64 MiB / 2,048-file cap and fails closed at the limit; archive the entire stopped service state outside the worktree before choosing a fresh state directory, then review command approvals again. Same-UID host processes remain trusted. Luis owns the local maintained fork and its update decisions. This local pilot is not distribution approval.

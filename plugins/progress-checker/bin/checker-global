@@ -10,10 +10,11 @@ import json
 import os
 from pathlib import Path
 import runpy
-import select
+import queue
 import signal
 import subprocess
 import sys
+import threading
 import time
 
 MAX_FRAME = 256 * 1024
@@ -21,6 +22,18 @@ BIN = Path(__file__).resolve().parent
 TRACK = {'name': 'checker_track_project', 'description': 'Enable tracking for the current project after the user requests it. Supply the absolute Git worktree root from the current Codex session. This connection stays bound to that project; never choose another project or the plugin cache. Preserves existing plans. Never approves or executes checks.',
          'inputSchema': {'type': 'object', 'properties': {'project_root': {'type': 'string', 'minLength': 1, 'maxLength': 4096}}, 'required': ['project_root'], 'additionalProperties': False},
          'annotations': {'readOnlyHint': False, 'destructiveHint': False, 'idempotentHint': True, 'openWorldHint': False}}
+
+
+def require_supported_runtime():
+    # Backend pipes, process identities, private-state permissions and sandbox
+    # execution currently use Linux interfaces. Finding a similarly named
+    # executable on another OS must not silently enable an unqualified runtime.
+    if not sys.platform.startswith('linux'):
+        raise RuntimeError(
+            'This plugin payload requires Linux. Native Windows and macOS '
+            'runtime support is not yet qualified. Do not substitute binaries '
+            'or disable sandbox checks to use this payload on another OS.'
+        )
 
 
 def result(value, error=False):
@@ -33,9 +46,17 @@ def failure(code, message):
 
 class Gateway:
     def __init__(self, state):
+        require_supported_runtime()
         self.state = state.resolve()
         self.root = None
         self.child = None
+        self.child_group = None
+        self.reader = None
+        self.reader_stop = None
+        self.responses = None
+        self.writer = None
+        self.writer_stop = None
+        self.writes = None
         self.buffer = b''
         self.sequence = 0
         self.version = json.loads((BIN.parent / 'plugin.json').read_text())['version']
@@ -43,21 +64,132 @@ class Gateway:
         self.tools = json.loads(subprocess.check_output([str(BIN / 'progress-checker-mcp'), '--describe-tools'], timeout=10))['tools']
         self.names = {tool['name'] for tool in self.tools}
 
+    def start_reader(self):
+        # select() cannot wait on anonymous subprocess pipes on Windows. A
+        # bounded queue also prevents an unsolicited backend stream from
+        # growing memory without limit while the client is idle.
+        responses = self.responses = queue.Queue(maxsize=4)
+        stopped = self.reader_stop = threading.Event()
+        output = self.child.stdout
+
+        def enqueue(value):
+            while not stopped.is_set():
+                try:
+                    responses.put(value, timeout=.2)
+                    return True
+                except queue.Full:
+                    pass
+            return False
+
+        def read_output():
+            try:
+                while not stopped.is_set():
+                    chunk = os.read(output.fileno(), 65536)
+                    if not enqueue(chunk) or not chunk:
+                        return
+            except (OSError, ValueError) as error:
+                enqueue(error)
+
+        self.reader = threading.Thread(target=read_output, daemon=True,
+                                       name='checker-backend-reader')
+        self.reader.start()
+
+    def start_writer(self):
+        writes = self.writes = queue.Queue(maxsize=1)
+        stopped = self.writer_stop = threading.Event()
+        descriptor = self.child.stdin.fileno()
+
+        def write_input():
+            while not stopped.is_set():
+                try:
+                    payload, completed, errors = writes.get(timeout=.2)
+                except queue.Empty:
+                    continue
+                try:
+                    remaining = memoryview(payload)
+                    while remaining and not stopped.is_set():
+                        count = os.write(descriptor, remaining[:65536])
+                        if count <= 0:
+                            raise RuntimeError('Bound checker input closed')
+                        remaining = remaining[count:]
+                    if remaining:
+                        raise RuntimeError('Bound checker writer stopped')
+                except (OSError, ValueError, RuntimeError) as error:
+                    errors.append(error)
+                finally:
+                    completed.set()
+
+        self.writer = threading.Thread(target=write_input, daemon=True,
+                                       name='checker-backend-writer')
+        self.writer.start()
+
+    def send(self, payload, deadline):
+        if len(payload) > MAX_FRAME:
+            raise RuntimeError('Bound checker request exceeded frame limit')
+        completed, errors = threading.Event(), []
+        try:
+            self.writes.put((payload, completed, errors),
+                            timeout=max(0, deadline - time.monotonic()))
+        except queue.Full:
+            self.abort_stuck_writer()
+            raise RuntimeError('Bound checker request timed out')
+        if not completed.wait(timeout=max(0, deadline - time.monotonic())):
+            self.abort_stuck_writer()
+            raise RuntimeError('Bound checker request timed out')
+        if errors:
+            raise RuntimeError('Bound checker request could not be written') from errors[0]
+
+    def abort_stuck_writer(self):
+        # Only terminate the Popen child owned by this connection, never the
+        # shared checker writer or an arbitrary PID from a state record.
+        if self.child is not None:
+            self.signal_owned(signal.SIGKILL)
+            self.child_group = None
+            try:
+                self.child.wait(timeout=5)
+            except subprocess.TimeoutExpired:
+                pass
+        self.close()
+
+    def child_exited(self):
+        if self.child.returncode is not None:
+            return True
+        # Observe without reaping: the retained child PID reserves its process
+        # group identity until close has signalled descendants holding pipes.
+        return os.waitid(os.P_PID, self.child.pid,
+                         os.WEXITED | os.WNOHANG | os.WNOWAIT) is not None
+
+    def signal_owned(self, signum):
+        if self.child_group is not None:
+            try:
+                os.killpg(self.child_group, signum)
+            except ProcessLookupError:
+                pass
+        elif self.child is not None and self.child.returncode is None:
+            # Mock fixtures and partially initialized connections have no group.
+            if signum == signal.SIGKILL:
+                self.child.kill()
+            else:
+                self.child.terminate()
+
     def exchange(self, method, params):
         self.sequence += 1
-        self.child.stdin.write((json.dumps({'jsonrpc': '2.0', 'id': self.sequence, 'method': method, 'params': params}) + '\n').encode())
-        self.child.stdin.flush()
         deadline = time.monotonic() + 50
+        self.send((json.dumps({'jsonrpc': '2.0', 'id': self.sequence, 'method': method, 'params': params}) + '\n').encode(), deadline)
         while b'\n' not in self.buffer:
             if time.monotonic() >= deadline:
                 raise RuntimeError('Bound checker response timed out')
-            if select.select([self.child.stdout], [], [], .2)[0]:
-                chunk = os.read(self.child.stdout.fileno(), 65536)
-                if not chunk:
-                    raise RuntimeError('Bound checker connection closed')
-                self.buffer += chunk
-                if len(self.buffer) > MAX_FRAME:
-                    raise RuntimeError('Bound checker exceeded frame limit')
+            try:
+                chunk = self.responses.get(timeout=min(.2, max(0, deadline - time.monotonic())))
+            except queue.Empty:
+                continue
+            if isinstance(chunk, Exception):
+                raise RuntimeError('Bound checker output could not be read') from chunk
+            if not chunk:
+                raise RuntimeError('Bound checker connection closed')
+            self.buffer += chunk
+            if len(self.buffer) > MAX_FRAME:
+                raise RuntimeError('Bound checker exceeded frame limit')
         line, self.buffer = self.buffer.split(b'\n', 1)
         answer = json.loads(line)
         if answer.get('id') != self.sequence:
@@ -65,6 +197,7 @@ class Gateway:
         return answer
 
     def track(self, arguments):
+        require_supported_runtime()
         if not isinstance(arguments, dict) or set(arguments) != {'project_root'}:
             return failure('INVALID_ARGUMENT', 'Supply only project_root.')
         supplied = arguments['project_root']
@@ -81,7 +214,7 @@ class Gateway:
             return failure('INVALID_ARGUMENT', 'The plugin cache is not a project.')
         if root == self.state or root in self.state.parents or self.state in root.parents:
             return failure('INVALID_ARGUMENT', 'Evidence storage and the project must not overlap.')
-        if self.child is not None and self.child.poll() is not None:
+        if self.child is not None and self.child_exited():
             self.close()
         if self.child is not None:
             return result({'canonical_root': str(self.root), 'state_directory': str(self.state), 'already_tracking': True})
@@ -124,12 +257,15 @@ class Gateway:
         helper['update'](root, 'install')
         # Latch before starting any backend. Failure cannot redirect this session.
         self.root = root
-        self.child = subprocess.Popen([str(BIN / 'checker-plugin'), '--root', str(root), '--state-dir', str(self.state)], stdin=subprocess.PIPE, stdout=subprocess.PIPE, stderr=sys.stderr)
+        self.child = subprocess.Popen([str(BIN / 'checker-plugin'), '--root', str(root), '--state-dir', str(self.state)], stdin=subprocess.PIPE, stdout=subprocess.PIPE, stderr=sys.stderr, start_new_session=True)
+        self.child_group = self.child.pid
         try:
+            self.start_reader()
+            self.start_writer()
             answer = self.exchange('initialize', {'protocolVersion': '2025-06-18', 'capabilities': {}, 'clientInfo': {'name': 'progress-global', 'version': '1'}})
             if 'error' in answer:
                 raise RuntimeError('Bound checker initialization failed')
-            self.child.stdin.write(b'{"jsonrpc":"2.0","method":"notifications/initialized"}\n'); self.child.stdin.flush()
+            self.send(b'{"jsonrpc":"2.0","method":"notifications/initialized"}\n', time.monotonic() + 50)
             project = self.exchange('tools/call', {'name': 'checker_get_project', 'arguments': {}})
             value = project.get('result', {})
             if value.get('isError'):
@@ -143,14 +279,44 @@ class Gateway:
     def close(self):
         if self.child is None:
             return
-        child, self.child = self.child, None
-        if child.poll() is None:
-            child.stdin.close()
+        child = self.child
+        if self.reader_stop is not None:
+            self.reader_stop.set()
+        if self.writer_stop is not None:
+            self.writer_stop.set()
+        child.stdin.close()
+        # The wrapper and inherited MCP adapter share this connection-owned
+        # group. Its writer and watcher deliberately detach into other sessions.
+        # Signal before wait() reaps the leader, so the group ID cannot be reused.
+        if child.returncode is not None:
+            self.child_group = None
+        self.signal_owned(signal.SIGTERM)
+        if self.child_group is not None:
+            deadline = time.monotonic() + 15
+            while not self.child_exited() and time.monotonic() < deadline:
+                threading.Event().wait(.05)
+            # Even an exited wrapper can leave an adapter holding inherited
+            # pipes. Kill that group while its leader remains unreaped.
+            self.signal_owned(signal.SIGKILL)
+            self.child_group = None
+        if child.returncode is None:
             try:
-                child.wait(timeout=15)
+                child.wait(timeout=5)
             except subprocess.TimeoutExpired:
-                child.terminate(); child.wait(timeout=50)
+                self.signal_owned(signal.SIGKILL)
+                try:
+                    child.wait(timeout=5)
+                except subprocess.TimeoutExpired:
+                    pass
+        self.child = None
+        self.child_group = None
         child.stdout.close()
+        if self.reader is not None:
+            self.reader.join(timeout=1)
+        if self.writer is not None:
+            self.writer.join(timeout=1)
+        self.reader = self.reader_stop = self.responses = None
+        self.writer = self.writer_stop = self.writes = None
         self.buffer = b''
 
     def dispatch(self, request):
@@ -198,6 +364,10 @@ class Gateway:
 
 def main():
     parser=argparse.ArgumentParser(description=__doc__);parser.add_argument('--state-dir',type=Path);args=parser.parse_args()
+    try:
+        require_supported_runtime()
+    except RuntimeError as error:
+        parser.error(str(error))
     data_home = Path(os.environ.get('XDG_DATA_HOME', str(Path.home() / '.local/share')))
     if args.state_dir is None and not data_home.is_absolute():
         parser.error('XDG_DATA_HOME must be absolute')

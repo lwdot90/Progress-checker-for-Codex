@@ -2,6 +2,7 @@
 use std::time::Duration;
 
 use serde::{Deserialize, Serialize};
+#[cfg(any(target_os = "linux", test))]
 use tokio::io::{AsyncRead, AsyncReadExt};
 use tokio_util::sync::CancellationToken;
 
@@ -9,7 +10,9 @@ use crate::model::Outcome;
 use crate::security::AuthorizedExecution;
 
 pub const LOG_LIMIT_BYTES: usize = 64 * 1024;
+#[cfg(target_os = "linux")]
 const TERMINATION_GRACE: Duration = Duration::from_millis(200);
+#[cfg(any(target_os = "linux", test))]
 const DRAIN_GRACE: Duration = Duration::from_millis(500);
 
 #[derive(Clone, Debug, Deserialize, Serialize, PartialEq, Eq)]
@@ -67,10 +70,23 @@ pub async fn run_command(
     #[cfg(not(target_os = "linux"))]
     {
         let _ = authorized;
-        RunResult::empty(
-            Outcome::Unknown,
-            "verified sandbox unavailable on this platform",
-        )
+        RunResult::empty(Outcome::Unknown, unavailable_backend_reason())
+    }
+}
+
+#[cfg(not(target_os = "linux"))]
+fn unavailable_backend_reason() -> &'static str {
+    #[cfg(target_os = "windows")]
+    {
+        "native Windows execution unavailable: AppContainer/ACL isolation and descendant cleanup are unqualified"
+    }
+    #[cfg(target_os = "macos")]
+    {
+        "native macOS execution unavailable: sandbox enforcement and detached-descendant cleanup are unqualified"
+    }
+    #[cfg(not(any(target_os = "windows", target_os = "macos")))]
+    {
+        "verified sandbox unavailable on this platform"
     }
 }
 
@@ -243,12 +259,14 @@ fn sandbox_exit_code(bytes: &[u8]) -> Option<i32> {
     exit_code
 }
 
+#[cfg(any(target_os = "linux", test))]
 struct RawLog {
     bytes: Vec<u8>,
     truncated: bool,
     complete: bool,
 }
 
+#[cfg(any(target_os = "linux", test))]
 async fn collect(mut pipe: impl AsyncRead + Unpin) -> RawLog {
     let mut log = RawLog {
         bytes: Vec::new(),
@@ -274,13 +292,22 @@ async fn collect(mut pipe: impl AsyncRead + Unpin) -> RawLog {
     log
 }
 
+#[cfg(any(target_os = "linux", test))]
 async fn finish_log(
     mut task: tokio::task::JoinHandle<RawLog>,
     secrets: &[&str],
 ) -> (BoundedLog, bool) {
     match tokio::time::timeout(DRAIN_GRACE, &mut task).await {
         Ok(Ok(log)) => {
-            let mut text = sanitize(&log.bytes, secrets);
+            // A byte cap can split the last UTF-8 code point of a credential.
+            // Drop only an incomplete final code point before suffix redaction;
+            // replacement characters would otherwise break the known prefix.
+            let bytes = if log.truncated {
+                trim_incomplete_utf8_tail(&log.bytes)
+            } else {
+                &log.bytes
+            };
+            let mut text = sanitize(bytes, secrets);
             let expanded = text.len() > LOG_LIMIT_BYTES;
             if expanded {
                 let mut end = LOG_LIMIT_BYTES;
@@ -310,7 +337,26 @@ async fn finish_log(
     }
 }
 
+#[cfg(any(target_os = "linux", test))]
+fn trim_incomplete_utf8_tail(bytes: &[u8]) -> &[u8] {
+    let mut offset = 0;
+    while offset < bytes.len() {
+        match std::str::from_utf8(&bytes[offset..]) {
+            Ok(_) => return bytes,
+            Err(error) => {
+                offset += error.valid_up_to();
+                match error.error_len() {
+                    Some(length) => offset += length,
+                    None => return &bytes[..offset],
+                }
+            }
+        }
+    }
+    bytes
+}
+
 /// Remove terminal escapes/control characters before exposing logs to any UI.
+#[cfg(any(target_os = "linux", test))]
 fn sanitize(bytes: &[u8], secrets: &[&str]) -> String {
     let raw = String::from_utf8_lossy(bytes);
     let mut chars = raw.chars().peekable();
@@ -347,30 +393,71 @@ fn sanitize(bytes: &[u8], secrets: &[&str]) -> String {
     }
     // Explicit credential argument values are known secrets. Project files and
     // arbitrary printed values are not scanned or claimed to be secret-free.
-    for secret in secrets.iter().filter(|secret| !secret.is_empty()) {
-        let secret = sanitize(secret.as_bytes(), &[]);
-        if secret.is_empty() {
-            continue;
-        }
-        clean = clean.replace(&secret, "[REDACTED]");
-        // A bounded capture can end in the middle of a secret. Hide that suffix.
-        for (boundary, _) in secret.char_indices().rev() {
-            if boundary == 0 {
-                continue;
+    let mut secrets: Vec<String> = secrets
+        .iter()
+        .map(|secret| sanitize(secret.as_bytes(), &[]))
+        .filter(|secret| !secret.is_empty())
+        .collect();
+    secrets.sort_by(|left, right| right.len().cmp(&left.len()).then(left.cmp(right)));
+    secrets.dedup();
+    if secrets.is_empty() {
+        return clean;
+    }
+    // Match on the original text and merge intervals before emitting markers.
+    // Crossing credentials (abc and bcd in abcd) must hide their whole union;
+    // consuming the first match alone would expose the second one's suffix.
+    let mut intervals: Vec<(usize, usize)> = Vec::new();
+    for (offset, _) in clean.char_indices() {
+        let remaining = &clean[offset..];
+        let end = secrets
+            .iter()
+            .filter_map(|secret| {
+                if remaining.starts_with(secret.as_str()) {
+                    Some(offset + secret.len())
+                } else if secret.starts_with(remaining) {
+                    // A bounded capture can end in the middle of a known secret.
+                    Some(clean.len())
+                } else {
+                    None
+                }
+            })
+            .max();
+        if let Some(end) = end {
+            if let Some(previous) = intervals.last_mut() {
+                if offset <= previous.1 {
+                    previous.1 = previous.1.max(end);
+                    continue;
+                }
             }
-            if clean.ends_with(&secret[..boundary]) {
-                clean.truncate(clean.len() - boundary);
-                clean.push_str("[REDACTED]");
-                break;
-            }
+            intervals.push((offset, end));
         }
     }
+    let mut redacted = String::with_capacity(clean.len());
+    let mut offset = 0;
+    for (start, end) in intervals {
+        redacted.push_str(&clean[offset..start]);
+        redacted.push_str("[REDACTED]");
+        offset = end;
+    }
+    redacted.push_str(&clean[offset..]);
+    clean = redacted;
     clean
 }
 
 #[cfg(test)]
 mod tests {
     use super::*;
+
+    #[cfg(not(target_os = "linux"))]
+    #[test]
+    fn native_backend_reason_does_not_claim_qualified_execution() {
+        let reason = unavailable_backend_reason();
+        assert!(reason.contains("unavailable"));
+        #[cfg(target_os = "windows")]
+        assert!(reason.contains("Windows") && reason.contains("AppContainer/ACL"));
+        #[cfg(target_os = "macos")]
+        assert!(reason.contains("macOS") && reason.contains("detached-descendant"));
+    }
 
     #[cfg(target_os = "linux")]
     fn authorized(root: &std::path::Path, program: &str, args: &[&str]) -> AuthorizedExecution {
@@ -407,6 +494,95 @@ mod tests {
         assert_eq!(sanitize("a\u{202e}b".as_bytes(), &[]), "ab");
         assert_eq!(sanitize(b"value a\x1b[31mbc", &["abc"]), "value [REDACTED]");
         assert_eq!(sanitize(b"value abc", &["a\x1b[31mbc"]), "value [REDACTED]");
+    }
+
+    #[test]
+    fn credential_normalization_preserves_newlines_and_removes_controls() {
+        assert_eq!(
+            sanitize(b"value abc\r\0def\n", &["abc\r\0def"]),
+            "value [REDACTED]\n"
+        );
+        assert_eq!(
+            sanitize(b"before first\nsecond after", &["first\nsecond"]),
+            "before [REDACTED] after"
+        );
+        assert_eq!(
+            sanitize(b"tab\tcredential", &["tab\tcredential"]),
+            "[REDACTED]"
+        );
+        assert_eq!(
+            sanitize(b"ordinary text", &["\r\0\x1b[0m"]),
+            "ordinary text"
+        );
+    }
+
+    #[test]
+    fn overlapping_credentials_do_not_expose_suffixes_or_rewrite_markers() {
+        assert_eq!(
+            sanitize(b"abc-secret", &["abc", "abc-secret"]),
+            "[REDACTED]"
+        );
+        assert_eq!(
+            sanitize(b"credential", &["credential", "REDACTED"]),
+            "[REDACTED]"
+        );
+        assert_eq!(
+            sanitize("prefix café-".as_bytes(), &["café-token"]),
+            "prefix [REDACTED]"
+        );
+    }
+
+    #[test]
+    fn crossing_credential_intervals_hide_the_entire_union() {
+        assert_eq!(sanitize(b"abcd", &["abc", "bcd"]), "[REDACTED]");
+        assert_eq!(sanitize(b"abcde", &["abc", "bcde"]), "[REDACTED]");
+        assert_eq!(
+            sanitize(b"abcd tail abcd", &["abc", "bcd"]),
+            "[REDACTED] tail [REDACTED]"
+        );
+        assert_eq!(
+            sanitize("café-token".as_bytes(), &["café", "fé-token"]),
+            "[REDACTED]"
+        );
+        assert_eq!(sanitize(b"abcd", &["abc", "bcdef"]), "[REDACTED]");
+    }
+
+    #[tokio::test]
+    async fn credential_split_at_capture_limit_is_hidden_and_output_stays_bounded() {
+        let secret = "credential-at-boundary";
+        let mut bytes = vec![b'x'; LOG_LIMIT_BYTES - 10];
+        bytes.extend_from_slice(&secret.as_bytes()[..10]);
+        let task = tokio::spawn(async move {
+            RawLog {
+                bytes,
+                truncated: true,
+                complete: true,
+            }
+        });
+        let (log, complete) = finish_log(task, &[secret]).await;
+        assert!(complete && log.truncated);
+        assert!(log.text.len() <= LOG_LIMIT_BYTES);
+        assert!(log.text.ends_with("[REDACTED]"));
+        assert!(!log.text.contains("credential"));
+    }
+
+    #[tokio::test]
+    async fn split_utf8_at_capture_limit_cannot_expose_credential_prefix() {
+        let mut bytes = vec![b'x'; LOG_LIMIT_BYTES - 5];
+        bytes.extend_from_slice(b"caf\xc3\xa9");
+        bytes.truncate(LOG_LIMIT_BYTES - 1);
+        let task = tokio::spawn(async move {
+            RawLog {
+                bytes,
+                truncated: true,
+                complete: true,
+            }
+        });
+        let (log, complete) = finish_log(task, &["café-token"]).await;
+        assert!(complete && log.truncated);
+        assert!(log.text.ends_with("[REDACTED]"));
+        assert!(!log.text.contains("caf"));
+        assert!(!log.text.contains('\u{fffd}'));
     }
 
     #[cfg(target_os = "linux")]

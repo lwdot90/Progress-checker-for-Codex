@@ -1,0 +1,48 @@
+{
+  "schema_version": 1,
+  "revision": 1,
+  "project_id": "example-project",
+  "source": {
+    "git_commit": "0123456789abcdef0123456789abcdef01234567",
+    "fingerprint": "sha256:0000000000000000000000000000000000000000000000000000000000000000",
+    "config_hash": "sha256:0000000000000000000000000000000000000000000000000000000000000000",
+    "checker_version": "0.1.0",
+    "environment_signature": "sha256:0000000000000000000000000000000000000000000000000000000000000000"
+  },
+  "latest": {
+    "sample": {
+      "run_id": "run-example",
+      "check_id": "sample",
+      "execution_state": "finished",
+      "outcome": "passed",
+      "freshness": "current",
+      "source": {
+        "git_commit": "0123456789abcdef0123456789abcdef01234567",
+        "fingerprint": "sha256:0000000000000000000000000000000000000000000000000000000000000000",
+        "config_hash": "sha256:0000000000000000000000000000000000000000000000000000000000000000",
+        "checker_version": "0.1.0",
+        "environment_signature": "sha256:0000000000000000000000000000000000000000000000000000000000000000"
+      },
+      "command_hash": "sha256:0000000000000000000000000000000000000000000000000000000000000000",
+      "log_ref": "run-example",
+      "log_sha256": "sha256:0000000000000000000000000000000000000000000000000000000000000000"
+    }
+  },
+  "progress": {
+    "verified": 0,
+    "scoped": 1,
+    "percent": 0,
+    "milestones": [
+      {
+        "milestone_id": "sample",
+        "implementation_claim": "planned",
+        "verified": false,
+        "blockers": [
+          "implementation not claimed"
+        ],
+        "evidence_refs": []
+      }
+    ]
+  },
+  "warnings": []
+}

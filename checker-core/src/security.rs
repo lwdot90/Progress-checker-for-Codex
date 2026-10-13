@@ -24,6 +24,7 @@ pub struct ApprovalBinding {
 
 pub const SANDBOX_PROFILE: &str = "linux-bwrap-no-network-no-home-v1";
 
+#[cfg(unix)]
 fn binary_hash(path: &Path) -> Result<String, String> {
     use std::os::unix::fs::MetadataExt;
     let metadata = std::fs::metadata(path)
@@ -34,11 +35,41 @@ fn binary_hash(path: &Path) -> Result<String, String> {
             path.display()
         ));
     }
-    if metadata.len() > 64 * 1024 * 1024 || metadata.uid() != 0 || metadata.mode() & 0o022 != 0 {
-        return Err("sandbox and executable must be bounded root-owned non-writable files".into());
+    if metadata.len() > 64 * 1024 * 1024 {
+        return Err(format!(
+            "UNSUPPORTED_EXECUTABLE: {} exceeds the 64 MiB executable limit; use a supported system interpreter for project scripts",
+            path.display()
+        ));
+    }
+    if metadata.uid() != 0 || metadata.mode() & 0o022 != 0 {
+        return Err(format!(
+            "UNTRUSTED_EXECUTABLE: {} must be root-owned and not writable by group or others; use a system-package executable under /usr (user-managed venv/nvm/pyenv executables are unsupported)",
+            path.display()
+        ));
     }
     let bytes = std::fs::read(path).map_err(|e| format!("{}: {e}", path.display()))?;
     Ok(format!("sha256:{:x}", Sha256::digest(bytes)))
+}
+
+#[cfg(not(unix))]
+fn binary_hash(_path: &Path) -> Result<String, String> {
+    Err(native_execution_unavailable().into())
+}
+
+#[cfg(not(target_os = "linux"))]
+fn native_execution_unavailable() -> &'static str {
+    #[cfg(target_os = "macos")]
+    {
+        "macOS restricted execution is unavailable: native sandbox containment, inherited descriptors, and descendant cleanup have not been qualified"
+    }
+    #[cfg(target_os = "windows")]
+    {
+        "native Windows restricted execution is not implemented or qualified; no command was started"
+    }
+    #[cfg(not(any(target_os = "macos", target_os = "windows")))]
+    {
+        "restricted execution is unsupported on this operating system; no command was started"
+    }
 }
 
 /// The writable worktree must never expose the trust store or evidence writer.
@@ -52,6 +83,18 @@ pub fn validate_state_separation(root: &Path, state_directory: &Path) -> Result<
 }
 
 impl ApprovalBinding {
+    #[cfg(not(target_os = "linux"))]
+    pub fn new(
+        _root: &Path,
+        _config_hash: String,
+        _command_hash: String,
+        _argv: Vec<String>,
+        _cwd: &Path,
+    ) -> Result<Self, String> {
+        Err(native_execution_unavailable().into())
+    }
+
+    #[cfg(target_os = "linux")]
     pub fn new(
         root: &Path,
         config_hash: String,
@@ -75,7 +118,7 @@ impl ApprovalBinding {
         argv[0] = resolved.to_str().ok_or("non-UTF-8 executable")?.to_owned();
         let executable = &argv[0];
         let executable_hash = binary_hash(Path::new(executable))?;
-        let sandbox_binary_hash = binary_hash(Path::new("/usr/bin/bwrap"))?;
+        let sandbox_binary_hash = sandbox_binary_hash()?;
         let binding = Self {
             canonical_root,
             config_hash,
@@ -100,6 +143,13 @@ impl ApprovalBinding {
         Ok(format!("sha256:{:x}", Sha256::digest(bytes)))
     }
 
+    #[cfg(not(target_os = "linux"))]
+    fn validate(&self) -> Result<(), String> {
+        // Old Linux grants are never valid on a different execution backend.
+        Err(native_execution_unavailable().into())
+    }
+
+    #[cfg(target_os = "linux")]
     fn validate(&self) -> Result<(), String> {
         if self.sandbox_profile != SANDBOX_PROFILE {
             return Err("unsupported sandbox profile".into());
@@ -136,7 +186,7 @@ impl ApprovalBinding {
             return Err("supported check executables must resolve under /usr; use a system interpreter for project scripts (user-managed venv/nvm/pyenv executables are unsupported)".into());
         }
         if binary_hash(executable)? != self.executable_hash
-            || binary_hash(Path::new("/usr/bin/bwrap"))? != self.sandbox_binary_hash
+            || sandbox_binary_hash()? != self.sandbox_binary_hash
         {
             return Err("PERMISSION_REQUIRED: executable or sandbox binary changed".into());
         }
@@ -158,6 +208,15 @@ impl ApprovalBinding {
         }
         Ok(())
     }
+}
+
+#[cfg(target_os = "linux")]
+fn sandbox_binary_hash() -> Result<String, String> {
+    binary_hash(Path::new("/usr/bin/bwrap")).map_err(|error| {
+        format!(
+            "SANDBOX_UNAVAILABLE: install a trusted system bubblewrap package providing /usr/bin/bwrap; checks cannot run without the restricted sandbox ({error})"
+        )
+    })
 }
 
 #[derive(Debug, Clone, Serialize, Deserialize)]
@@ -240,6 +299,12 @@ impl AuthorizedExecution {
         self.build_sandbox_command(Some(fd))
     }
 
+    #[cfg(not(target_os = "linux"))]
+    fn build_sandbox_command(&self, _status_fd: Option<i32>) -> Result<Command, String> {
+        Err(native_execution_unavailable().into())
+    }
+
+    #[cfg(target_os = "linux")]
     fn build_sandbox_command(&self, status_fd: Option<i32>) -> Result<Command, String> {
         self.binding.validate()?;
         let bwrap = Path::new("/usr/bin/bwrap");
@@ -305,7 +370,25 @@ fn credential_argument(value: &str) -> bool {
     )
 }
 
-#[cfg(test)]
+#[cfg(all(test, not(target_os = "linux")))]
+mod native_gate_tests {
+    use super::*;
+
+    #[test]
+    fn native_platform_refuses_to_create_linux_approval_binding() {
+        let root = tempfile::tempdir().unwrap();
+        let result = ApprovalBinding::new(
+            root.path(),
+            format!("sha256:{}", "a".repeat(64)),
+            format!("sha256:{}", "b".repeat(64)),
+            vec!["unstarted-command".into()],
+            root.path(),
+        );
+        assert_eq!(result.unwrap_err(), native_execution_unavailable());
+    }
+}
+
+#[cfg(all(test, target_os = "linux"))]
 mod tests {
     use super::*;
 
@@ -410,6 +493,41 @@ mod tests {
                 .unwrap_err()
                 .starts_with("UNKNOWN_EXECUTABLE:")
         );
+    }
+
+    #[test]
+    fn untrusted_executable_diagnostic_identifies_path_and_remedy() {
+        use std::os::unix::fs::PermissionsExt;
+        let directory = tempfile::tempdir().unwrap();
+        let executable = directory.path().join("project-python");
+        std::fs::write(&executable, b"#!/bin/sh\nexit 0\n").unwrap();
+        std::fs::set_permissions(&executable, std::fs::Permissions::from_mode(0o777)).unwrap();
+        let error = binary_hash(&executable).unwrap_err();
+        assert!(error.starts_with("UNTRUSTED_EXECUTABLE:"));
+        assert!(error.contains(executable.to_str().unwrap()));
+        assert!(error.contains("root-owned"));
+        assert!(error.contains("system-package executable"));
+    }
+
+    #[test]
+    fn credential_names_match_exact_options_and_assignment_keys() {
+        for option in [
+            "--API_KEY",
+            "--access-token",
+            "CLIENT_SECRET",
+            "--authorization",
+        ] {
+            assert!(credential_argument(option), "{option}");
+        }
+        for argument in [
+            "--token-count",
+            "--password-file",
+            "my-token",
+            "secret.txt",
+            "",
+        ] {
+            assert!(!credential_argument(argument), "{argument}");
+        }
     }
 
     #[test]

@@ -83,6 +83,53 @@ fn invalid(message: impl std::fmt::Display) -> io::Error {
     io::Error::new(io::ErrorKind::InvalidData, message.to_string())
 }
 
+/// Windows requires qualified ACL, reparse-point and writer-lock handling before
+/// protected state can be opened. Refuse before creating any directory or file.
+fn require_protected_state_platform() -> io::Result<()> {
+    #[cfg(unix)]
+    {
+        Ok(())
+    }
+    #[cfg(not(unix))]
+    {
+        Err(io::Error::new(
+            io::ErrorKind::Unsupported,
+            "protected state requires qualified native ACL, secure-file and writer-lock support on this platform",
+        ))
+    }
+}
+
+#[cfg(unix)]
+fn enforce_private_directory(path: &Path) -> io::Result<()> {
+    use std::os::unix::fs::{MetadataExt, PermissionsExt};
+    if fs::metadata(path)?.uid() != unsafe { libc::geteuid() } {
+        return Err(invalid("state directory is owned by another user"));
+    }
+    fs::set_permissions(path, fs::Permissions::from_mode(0o700))
+}
+
+#[cfg(not(unix))]
+fn enforce_private_directory(_path: &Path) -> io::Result<()> {
+    require_protected_state_platform()
+}
+
+#[cfg(unix)]
+fn validate_private_key(path: &Path) -> io::Result<()> {
+    use std::os::unix::fs::MetadataExt;
+    let metadata = fs::symlink_metadata(path)?;
+    if metadata.uid() != unsafe { libc::geteuid() } || metadata.mode() & 0o077 != 0 {
+        return Err(invalid(
+            "authentication key must be private and owned by current user",
+        ));
+    }
+    Ok(())
+}
+
+#[cfg(not(unix))]
+fn validate_private_key(_path: &Path) -> io::Result<()> {
+    require_protected_state_platform()
+}
+
 fn reject_symlink(path: &Path) -> io::Result<()> {
     match fs::symlink_metadata(path) {
         Ok(metadata) if metadata.file_type().is_symlink() => Err(invalid(format!(
@@ -128,20 +175,14 @@ fn prospective_path(path: &Path) -> io::Result<PathBuf> {
 }
 
 fn private_directory(path: &Path) -> io::Result<()> {
+    require_protected_state_platform()?;
     reject_symlink(path)?;
     fs::create_dir_all(path)?;
-    #[cfg(unix)]
-    {
-        use std::os::unix::fs::{MetadataExt, PermissionsExt};
-        if fs::metadata(path)?.uid() != unsafe { libc::geteuid() } {
-            return Err(invalid("state directory is owned by another user"));
-        }
-        fs::set_permissions(path, fs::Permissions::from_mode(0o700))?;
-    }
-    Ok(())
+    enforce_private_directory(path)
 }
 
 fn stable_lock_directory() -> io::Result<PathBuf> {
+    require_protected_state_platform()?;
     #[cfg(unix)]
     {
         use std::os::unix::fs::MetadataExt;
@@ -225,6 +266,7 @@ fn encode<T: Serialize>(value: &T, key: &[u8; 32], context: &str) -> io::Result<
 }
 
 fn decode<T: DeserializeOwned>(path: &Path, key: &[u8; 32]) -> io::Result<T> {
+    require_protected_state_platform()?;
     reject_symlink(path)?;
     let mut options = OpenOptions::new();
     options.read(true);
@@ -255,6 +297,7 @@ fn decode<T: DeserializeOwned>(path: &Path, key: &[u8; 32]) -> io::Result<T> {
 }
 
 fn atomic_write(path: &Path, bytes: &[u8], immutable: bool) -> io::Result<()> {
+    require_protected_state_platform()?;
     reject_symlink(path)?;
     let parent = path
         .parent()
@@ -275,7 +318,9 @@ fn atomic_write(path: &Path, bytes: &[u8], immutable: bool) -> io::Result<()> {
 impl StateStore {
     /// Distinct canonical linked worktrees and project IDs receive distinct
     /// stores. The base itself must be outside the worktree.
+    #[cfg(unix)]
     pub fn open(base: &Path, worktree: &Path, project_id: &str) -> io::Result<Self> {
+        require_protected_state_platform()?;
         let worktree = fs::canonicalize(worktree)?;
         if project_id.is_empty() {
             return Err(invalid("empty project identity"));
@@ -320,11 +365,6 @@ impl StateStore {
                 ));
             }
         }
-        #[cfg(not(unix))]
-        return Err(io::Error::new(
-            io::ErrorKind::Unsupported,
-            "Phase 1 writer locking requires Linux",
-        ));
         let directory = worktree_directory.join(digest(project_id.as_bytes()));
         private_directory(&directory)?;
         private_directory(&directory.join("attempts"))?;
@@ -335,15 +375,10 @@ impl StateStore {
             options.read(true);
             #[cfg(unix)]
             {
-                use std::os::unix::fs::{MetadataExt, OpenOptionsExt};
+                use std::os::unix::fs::OpenOptionsExt;
                 options.custom_flags(libc::O_NOFOLLOW | libc::O_NONBLOCK);
-                let metadata = fs::symlink_metadata(&key_path)?;
-                if metadata.uid() != unsafe { libc::geteuid() } || metadata.mode() & 0o077 != 0 {
-                    return Err(invalid(
-                        "authentication key must be private and owned by current user",
-                    ));
-                }
             }
+            validate_private_key(&key_path)?;
             let file = options.open(&key_path)?;
             if !file.metadata()?.is_file() {
                 return Err(invalid("authentication key must be a regular file"));
@@ -364,6 +399,16 @@ impl StateStore {
             _lock: lock,
             key,
         })
+    }
+
+    /// Native state is deliberately unavailable until ACLs, secure handle IO
+    /// and writer exclusion have been qualified. This stub performs no IO.
+    #[cfg(not(unix))]
+    pub fn open(_base: &Path, _worktree: &Path, _project_id: &str) -> io::Result<Self> {
+        Err(io::Error::new(
+            io::ErrorKind::Unsupported,
+            "protected state requires qualified native ACL, secure-file and writer-lock support on this platform",
+        ))
     }
 
     pub fn directory(&self) -> &Path {

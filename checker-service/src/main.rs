@@ -26,9 +26,13 @@ async fn main() {
     let shutdown = CancellationToken::new();
     let signal = shutdown.clone();
     tokio::spawn(async move {
+        #[cfg(unix)]
         let mut term = tokio::signal::unix::signal(tokio::signal::unix::SignalKind::terminate())
             .expect("SIGTERM handler");
+        #[cfg(unix)]
         tokio::select! {_ = term.recv()=>{},_ = tokio::signal::ctrl_c()=>{}}
+        #[cfg(not(unix))]
+        let _ = tokio::signal::ctrl_c().await;
         signal.cancel();
     });
     if let Err(error) = checker_service::server::serve(&root, &state, shutdown).await {

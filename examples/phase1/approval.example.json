@@ -1,0 +1,21 @@
+{
+  "schema_version": 1,
+  "binding": {
+    "canonical_root": "/home/example/project",
+    "config_hash": "sha256:0000000000000000000000000000000000000000000000000000000000000000",
+    "command_hash": "sha256:0000000000000000000000000000000000000000000000000000000000000000",
+    "argv": [
+      "/usr/bin/true"
+    ],
+    "cwd": "/home/example/project",
+    "environment": {
+      "PATH": "/usr/bin:/bin",
+      "HOME": "/tmp",
+      "LANG": "C.UTF-8"
+    },
+    "sandbox_profile": "linux-bwrap-no-network-no-home-v1",
+    "executable_hash": "sha256:0000000000000000000000000000000000000000000000000000000000000000",
+    "sandbox_binary_hash": "sha256:0000000000000000000000000000000000000000000000000000000000000000"
+  },
+  "binding_digest": "sha256:0000000000000000000000000000000000000000000000000000000000000000"
+}

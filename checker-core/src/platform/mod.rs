@@ -1,0 +1,21 @@
+//! Native platform components under development; APIs retain explicit qualification gates.
+pub mod approval_identity;
+pub mod macos_helper;
+pub mod macos_inventory;
+pub mod macos_macho;
+pub mod macos_process;
+pub mod macos_sandbox;
+pub mod macos_trust;
+pub mod windows_arguments;
+pub mod windows_console;
+pub mod windows_ffi;
+pub mod windows_fingerprint;
+pub mod windows_inventory;
+pub mod windows_ipc;
+pub mod windows_pe;
+pub mod windows_process;
+pub mod windows_project;
+pub mod windows_sandbox;
+pub mod windows_state;
+pub mod windows_token;
+pub mod windows_trust;

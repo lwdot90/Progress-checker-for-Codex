@@ -1,5 +1,5 @@
 [workspace]
-members = ["checker-core", "checker-cli", "checker-service", "checker-mcp"]
+members = ["checker-core", "checker-cli", "checker-service", "checker-mcp", "checker-global"]
 resolver = "2"
 
 [workspace.package]

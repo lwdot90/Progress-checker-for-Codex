@@ -1,0 +1,47 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "urn:progress-checker:phase-0:cached-claims",
+  "title": "Phase 0 cached implementation claims",
+  "description": "Sample state for a read-only prototype. Every restored claim remains unvalidated with unknown freshness. This is not an evidence or verification result schema.",
+  "$comment": "The panel requires project_id to match the loaded configuration and rejects duplicate or unknown milestone IDs. uniqueItems checks whole-object equality only and does not enforce ID uniqueness. Missing milestones default to planned. No edited JSON value grants verification.",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "schema_version",
+    "project_id",
+    "milestones"
+  ],
+  "properties": {
+    "schema_version": {
+      "const": 1
+    },
+    "project_id": {
+      "type": "string",
+      "pattern": "[^\\u0009-\\u000D\\u0020\\u0085\\u00A0\\u1680\\u2000-\\u200A\\u2028\\u2029\\u202F\\u205F\\u3000]"
+    },
+    "milestones": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": [
+          "milestone_id",
+          "implementation_claim"
+        ],
+        "properties": {
+          "milestone_id": {
+            "type": "string",
+            "pattern": "[^\\u0009-\\u000D\\u0020\\u0085\\u00A0\\u1680\\u2000-\\u200A\\u2028\\u2029\\u202F\\u205F\\u3000]"
+          },
+          "implementation_claim": {
+            "enum": [
+              "planned",
+              "implemented"
+            ]
+          }
+        }
+      },
+      "uniqueItems": true
+    }
+  }
+}

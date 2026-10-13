@@ -1,0 +1,125 @@
+{
+  "schema_version": 1,
+  "recorded_at_utc": "2026-10-13T01:02:50.420925+00:00",
+  "status": "compatibility_notice_only",
+  "scope": "read-only ELF inspection of existing Fedora-development debug artifacts and documented Ubuntu recipient prerequisites",
+  "ubuntu_runtime_observed": false,
+  "artifact_execution_performed": false,
+  "artifact_profile": "debug_not_release",
+  "binaries": [
+    {
+      "name": "progress-checker",
+      "sha256": "950896b854cfa2aec994047cbdc73e16d9ece4680ab41c009cd188654d86bab3",
+      "profile": "existing_debug_artifact_not_release",
+      "architecture": "x86_64",
+      "elf_interpreter": "/lib64/ld-linux-x86-64.so.2",
+      "needed_libraries": [
+        "libgcc_s.so.1",
+        "libm.so.6",
+        "libc.so.6",
+        "ld-linux-x86-64.so.2"
+      ],
+      "required_glibc_versions": [
+        "2.2.5",
+        "2.3",
+        "2.3.2",
+        "2.3.4",
+        "2.4",
+        "2.7",
+        "2.9",
+        "2.10",
+        "2.14",
+        "2.15",
+        "2.16",
+        "2.17",
+        "2.18",
+        "2.25",
+        "2.27",
+        "2.28",
+        "2.29",
+        "2.30",
+        "2.32",
+        "2.33",
+        "2.34",
+        "2.39"
+      ],
+      "highest_required_glibc_version": "2.39"
+    },
+    {
+      "name": "progress-checker-mcp",
+      "sha256": "ae427b26f693215314ae76e7dea214b4b999fccfbafd26eacfdc459a11571ab5",
+      "profile": "existing_debug_artifact_not_release",
+      "architecture": "x86_64",
+      "elf_interpreter": "/lib64/ld-linux-x86-64.so.2",
+      "needed_libraries": [
+        "libgcc_s.so.1",
+        "libm.so.6",
+        "libc.so.6",
+        "ld-linux-x86-64.so.2"
+      ],
+      "required_glibc_versions": [
+        "2.2.5",
+        "2.3",
+        "2.3.2",
+        "2.3.4",
+        "2.7",
+        "2.9",
+        "2.14",
+        "2.16",
+        "2.17",
+        "2.18",
+        "2.25",
+        "2.28",
+        "2.29",
+        "2.30",
+        "2.32",
+        "2.33",
+        "2.34"
+      ],
+      "highest_required_glibc_version": "2.34"
+    }
+  ],
+  "proposed_target": {
+    "distribution": "Ubuntu",
+    "release": "24.04",
+    "architecture": "x86_64",
+    "qualified": false
+  },
+  "recipient_prerequisites": {
+    "system_tools": [
+      "/usr/bin/python3",
+      "/usr/bin/git",
+      "/usr/bin/bwrap",
+      "/usr/bin/dpkg-query"
+    ],
+    "elf_libraries": [
+      "libgcc_s.so.1",
+      "libm.so.6",
+      "libc.so.6",
+      "ld-linux-x86-64.so.2"
+    ],
+    "glibc_symbol_floor": "2.39",
+    "rust_toolchain_required": false,
+    "actual_package_versions_observed": false
+  },
+  "documented_bubblewrap": {
+    "manual_url": "https://manpages.ubuntu.com/manpages/noble/man1/bwrap.1.html",
+    "manual_package_version": "0.9.0-1ubuntu0.3",
+    "required_option_documented": "--json-status-fd",
+    "actual_target_execution_observed": false
+  },
+  "builder_requirements": {
+    "rust_toolchain_file": "rust-toolchain.toml",
+    "rust_version": "1.95.0",
+    "cargo_lock_sha256": "c5bb9a24a1b93c4ac38400547620019923e18a4a550c12b4ad705de235e101b3",
+    "image_digest": "unresolved",
+    "apt_snapshot": "unresolved",
+    "reproducible_build_established": false
+  },
+  "limitations": [
+    "ELF requirements do not establish Ubuntu runtime compatibility",
+    "No Ubuntu system package inventory or ordinary-host AppArmor observation exists",
+    "Debug artifact hashes must be replaced by actual candidate release hashes before qualification",
+    "No build, container launch, image pull or configured check was executed for this receipt"
+  ]
+}

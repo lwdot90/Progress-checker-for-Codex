@@ -10,6 +10,16 @@ const MAX_LIST: usize = 8 * 1024 * 1024;
 const MAX_INPUTS: usize = 50_000;
 const MAX_FILE: u64 = 64 * 1024 * 1024;
 const MAX_TOTAL: u64 = 512 * 1024 * 1024;
+// Keep allocations for ordinary inputs, release unusually large file buffers.
+const MAX_RETAINED_BUFFER: usize = 1024 * 1024;
+
+fn reset_read_buffer(bytes: &mut Vec<u8>) {
+    if bytes.capacity() > MAX_RETAINED_BUFFER {
+        *bytes = Vec::new();
+    } else {
+        bytes.clear();
+    }
+}
 
 #[derive(Clone, Debug, Default)]
 pub struct FingerprintOptions {
@@ -115,6 +125,19 @@ fn paths(bytes: &[u8]) -> io::Result<BTreeSet<PathBuf>> {
 
 /// Fingerprint tracked paths (including deleted files) and nonignored untracked files.
 /// Symlinks are identified by their target bytes, never followed for content.
+#[cfg(not(unix))]
+pub fn fingerprint(_root: &Path, _options: &FingerprintOptions) -> io::Result<WorktreeFingerprint> {
+    // Reject before canonicalization, Git invocation or source reads. Native
+    // Windows requires handle-relative traversal, reparse-point confinement,
+    // volume/file IDs and read handles that deny write/delete sharing. Ordinary
+    // path metadata cannot substitute for these identity and race checks.
+    Err(io::Error::new(
+        io::ErrorKind::Unsupported,
+        "native source fingerprinting requires a qualified handle-confinement backend",
+    ))
+}
+
+#[cfg(unix)]
 pub fn fingerprint(root: &Path, options: &FingerprintOptions) -> io::Result<WorktreeFingerprint> {
     let root = root.canonicalize()?;
     let git_root = git(&root, &["rev-parse", "--show-toplevel"])?;
@@ -206,6 +229,7 @@ pub fn fingerprint(root: &Path, options: &FingerprintOptions) -> io::Result<Work
     frame(&mut hash, b"progress-checker/source/v1");
     frame(&mut hash, head.as_deref().unwrap_or("unborn").as_bytes());
     let mut total = 0u64;
+    let mut bytes = Vec::new();
     for path in &inputs {
         frame(
             &mut hash,
@@ -271,7 +295,7 @@ pub fn fingerprint(root: &Path, options: &FingerprintOptions) -> io::Result<Work
             }
             #[cfg(not(unix))]
             frame(&mut hash, b"regular");
-            let mut bytes = Vec::new();
+            reset_read_buffer(&mut bytes);
             let file = confined_file(&root, path)?;
             let opened = file.metadata()?;
             if !opened.is_file() {
@@ -692,7 +716,7 @@ impl SourceWatch {
     }
 }
 
-#[cfg(test)]
+#[cfg(all(test, unix))]
 mod tests {
     use super::*;
     fn repo() -> tempfile::TempDir {
@@ -827,6 +851,46 @@ mod tests {
         assert!(fingerprint(root.path(), &options).is_err());
     }
     #[test]
+    fn reused_read_buffer_is_empty_and_retains_only_bounded_capacity() {
+        let mut bytes = Vec::with_capacity(4096);
+        bytes.extend_from_slice(b"previous content");
+        let capacity = bytes.capacity();
+        reset_read_buffer(&mut bytes);
+        assert!(bytes.is_empty());
+        assert_eq!(bytes.capacity(), capacity);
+        bytes.reserve(MAX_RETAINED_BUFFER + 1);
+        bytes.extend_from_slice(b"large previous content");
+        reset_read_buffer(&mut bytes);
+        assert!(bytes.is_empty());
+        assert_eq!(bytes.capacity(), 0);
+    }
+
+    #[test]
+    fn differently_sized_inputs_keep_exact_content_framing() {
+        let root = repo();
+        let contents = [
+            ("a-large", vec![b'a'; MAX_RETAINED_BUFFER + 1]),
+            ("b-small", b"short".to_vec()),
+            ("c-empty", Vec::new()),
+            ("tracked", b"initial".to_vec()),
+        ];
+        for (path, bytes) in &contents {
+            fs::write(root.path().join(path), bytes).unwrap();
+        }
+        let report = fingerprint(root.path(), &FingerprintOptions::default()).unwrap();
+        let mut expected = Sha256::new();
+        frame(&mut expected, b"progress-checker/source/v1");
+        frame(&mut expected, b"unborn");
+        for (path, bytes) in &contents {
+            frame(&mut expected, path.as_bytes());
+            frame(&mut expected, b"regular");
+            frame(&mut expected, bytes);
+        }
+        assert_eq!(report.input_count, contents.len());
+        assert_eq!(report.digest, format!("sha256:{:x}", expected.finalize()));
+    }
+
+    #[test]
     fn domains_and_part_boundaries_are_distinct() {
         assert_ne!(
             hash_parts("command", &[b"ab", b"c"]),
@@ -919,5 +983,18 @@ mod tests {
         );
         fingerprint(root.path(), &FingerprintOptions::default()).unwrap();
         assert!(!marker.exists());
+    }
+}
+
+#[cfg(all(test, not(unix)))]
+mod unsupported_platform_tests {
+    use super::*;
+
+    #[test]
+    fn native_fingerprint_refuses_before_touching_a_source_path() {
+        let missing = Path::new("nonexistent-fingerprint-fixture");
+        let error = fingerprint(missing, &FingerprintOptions::default()).unwrap_err();
+        assert_eq!(error.kind(), io::ErrorKind::Unsupported);
+        assert!(error.to_string().contains("handle-confinement backend"));
     }
 }

@@ -187,9 +187,71 @@ pub struct Engine {
     poisoned: bool,
 }
 
+/// Package records are order-independent, but record boundaries and the provider
+/// identity line remain part of the environment binding. Hash parts separately
+/// to prevent ambiguous concatenation between bindings, inventory and kernel.
+fn environment_signature(bindings: &[u8], inventory: &[u8], kernel: &[u8]) -> String {
+    let mut package_lines = inventory.split(|byte| *byte == b'\n').collect::<Vec<_>>();
+    package_lines.sort();
+    fingerprint::hash_parts(
+        "phase1-environment",
+        &[bindings, &package_lines.join(&[b'\n'][..]), kernel],
+    )
+}
+
+#[cfg(test)]
+mod environment_framing_tests {
+    use super::environment_signature;
+
+    #[test]
+    fn inventory_record_order_is_irrelevant_but_boundaries_are_preserved() {
+        let signature = |inventory: &[u8]| environment_signature(b"binding", inventory, b"kernel");
+        assert_eq!(
+            signature(b"provider:rpm-v1\npkg-a\npkg-b\n"),
+            signature(b"pkg-b\nprovider:rpm-v1\npkg-a\n")
+        );
+        assert_ne!(
+            signature(b"provider:rpm-v1\nab\nc\n"),
+            signature(b"provider:rpm-v1\na\nbc\n")
+        );
+        assert_ne!(
+            signature(b"provider:rpm-v1\npkg\n"),
+            signature(b"provider:dpkg-v1\npkg\n")
+        );
+    }
+
+    #[test]
+    fn status_kernel_and_command_bindings_change_environment_identity() {
+        let inventory = b"provider:dpkg-v1\npkg\tamd64\t1.0\tinstall ok installed\n";
+        let baseline = environment_signature(b"command-a", inventory, b"kernel-a");
+        assert_ne!(
+            baseline,
+            environment_signature(b"command-b", inventory, b"kernel-a")
+        );
+        assert_ne!(
+            baseline,
+            environment_signature(b"command-a", inventory, b"kernel-b")
+        );
+        assert_ne!(
+            baseline,
+            environment_signature(
+                b"command-a",
+                b"provider:dpkg-v1\npkg\tamd64\t1.0\tinstall ok unpacked\n",
+                b"kernel-a"
+            )
+        );
+        // hash_parts must preserve boundaries even when concatenated bytes match.
+        assert_ne!(
+            environment_signature(b"ab", b"c", b"d"),
+            environment_signature(b"a", b"bc", b"d")
+        );
+    }
+}
+
 fn error(e: impl std::fmt::Display) -> String {
     e.to_string()
 }
+#[cfg(unix)]
 fn read_config(root: &Path) -> Result<Config, String> {
     use std::os::fd::{AsRawFd, FromRawFd};
     use std::os::unix::fs::OpenOptionsExt;
@@ -219,6 +281,7 @@ fn read_config(root: &Path) -> Result<Config, String> {
     )?;
     read_config_directory(&config_directory)
 }
+#[cfg(unix)]
 fn read_config_directory(directory: &fs::File) -> Result<Config, String> {
     use std::io::Read;
     use std::os::fd::{AsRawFd, FromRawFd};
@@ -246,6 +309,13 @@ fn read_config_directory(directory: &fs::File) -> Result<Config, String> {
     }
     Config::parse(&bytes)
 }
+// Native Windows must use qualified handle-relative opens and reparse-point
+// rejection. Do not substitute a path-based read that weakens the Unix policy.
+#[cfg(not(unix))]
+fn read_config(_root: &Path) -> Result<Config, String> {
+    Err("UNSUPPORTED_PLATFORM: secure native configuration reads are not qualified on this platform".into())
+}
+
 fn log_bytes(result: &RunResult) -> Result<Vec<u8>, String> {
     serde_json::to_vec(result).map_err(error)
 }
@@ -394,21 +464,14 @@ impl Engine {
             .iter()
             .map(|check| self.approval_binding(&check.id))
             .collect::<Result<Vec<_>, _>>()?;
-        // Fedora package inventory captures installed compiler/library versions.
+        // Platform package inventory captures installed compiler/library versions.
         // Unavailable environment inspection never yields current verification.
         let package_bytes = crate::environment::package_inventory()?;
-        let mut package_lines = package_bytes
-            .split(|byte| *byte == b'\n')
-            .collect::<Vec<_>>();
-        package_lines.sort();
         let kernel = fs::read("/proc/sys/kernel/osrelease").map_err(error)?;
-        let environment_signature = fingerprint::hash_parts(
-            "phase1-environment",
-            &[
-                &serde_json::to_vec(&bindings).map_err(error)?,
-                &package_lines.concat(),
-                &kernel,
-            ],
+        let environment_signature = environment_signature(
+            &serde_json::to_vec(&bindings).map_err(error)?,
+            &package_bytes,
+            &kernel,
         );
         if consistency_watch.changed().map_err(error)?
             || read_config(&self.root)?.hash() != self.config.hash()
@@ -948,10 +1011,10 @@ impl Engine {
     }
 }
 
-#[cfg(test)]
+#[cfg(all(test, target_os = "linux"))]
 #[path = "engine_tests.rs"]
 mod tests;
 
-#[cfg(test)]
+#[cfg(all(test, target_os = "linux"))]
 #[path = "service_engine_tests.rs"]
 mod service_tests;

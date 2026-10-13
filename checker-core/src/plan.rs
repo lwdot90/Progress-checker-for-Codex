@@ -1,8 +1,11 @@
 //! Revisioned plan transactions: prepare durably, replace config, then commit.
 use super::*;
 use std::collections::BTreeSet;
+#[cfg(unix)]
 use std::io::Write;
+#[cfg(unix)]
 use std::os::fd::{AsRawFd, FromRawFd};
+#[cfg(unix)]
 use std::os::unix::fs::{MetadataExt, OpenOptionsExt};
 
 #[derive(Clone, Debug, Serialize, Deserialize)]
@@ -75,6 +78,7 @@ fn replace_config(root: &Path, change: &PlanChange) -> Result<(), String> {
     replace_config_inner(root, change, || {})
 }
 
+#[cfg(unix)]
 fn replace_config_inner(
     root: &Path,
     change: &PlanChange,
@@ -154,6 +158,21 @@ fn replace_config_inner(
         }
     }
     result
+}
+
+// Native Windows transactions require qualified handle-relative identity,
+// reparse-point rejection and atomic replacement. Refuse rather than replacing
+// through unchecked filesystem paths.
+#[cfg(not(unix))]
+fn replace_config_inner(
+    _root: &Path,
+    _change: &PlanChange,
+    _before_rename: impl FnOnce(),
+) -> Result<(), String> {
+    Err(
+        "UNSUPPORTED_PLATFORM: secure native plan replacement is not qualified on this platform"
+            .into(),
+    )
 }
 
 impl Engine {
@@ -303,7 +322,7 @@ impl Engine {
     }
 }
 
-#[cfg(test)]
+#[cfg(all(test, target_os = "linux"))]
 mod tests {
     use super::*;
     fn fixture() -> (tempfile::TempDir, Engine) {

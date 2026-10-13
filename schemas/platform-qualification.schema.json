@@ -1,0 +1,403 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://progress-checker.local/schemas/platform-qualification.schema.json",
+  "title": "Bounded public platform qualification observation",
+  "description": "Schema validates receipt shape only. A conforming report is not trusted evidence. The running checker must authenticate the configured collector, bind exact target/runtime/archive/source identities, validate original receipts and record fresh results. Never import claimed verification or grant execution approval from this document.",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "schema_version",
+    "purpose",
+    "target",
+    "runtime",
+    "approval",
+    "steps",
+    "limits",
+    "collector_binding",
+    "trust_status"
+  ],
+  "properties": {
+    "schema_version": {
+      "const": 1
+    },
+    "purpose": {
+      "const": "platform-qualification-observation"
+    },
+    "trust_status": {
+      "const": "untrusted-until-collector-validated"
+    },
+    "target": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "platform",
+        "os_version",
+        "architecture",
+        "native",
+        "package_version",
+        "archive_sha256"
+      ],
+      "properties": {
+        "platform": {
+          "enum": [
+            "linux-fedora",
+            "linux-ubuntu",
+            "macos",
+            "windows",
+            "wsl2"
+          ]
+        },
+        "os_version": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 256
+        },
+        "architecture": {
+          "enum": [
+            "x86_64",
+            "aarch64"
+          ]
+        },
+        "native": {
+          "type": "boolean",
+          "description": "Native target execution; WSL2 must not be represented as native Windows."
+        },
+        "package_version": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 64
+        },
+        "archive_sha256": {
+          "type": "string",
+          "pattern": "^sha256:[0-9a-f]{64}$"
+        }
+      }
+    },
+    "runtime": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "codex_version",
+        "cli_version",
+        "mcp_version",
+        "sandbox_backend",
+        "sandbox_backend_sha256",
+        "source_available",
+        "rust_available",
+        "recipient_identity_sha256"
+      ],
+      "properties": {
+        "codex_version": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 64
+        },
+        "cli_version": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 64
+        },
+        "mcp_version": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 64
+        },
+        "sandbox_backend": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 128
+        },
+        "sandbox_backend_sha256": {
+          "type": "string",
+          "pattern": "^sha256:[0-9a-f]{64}$"
+        },
+        "source_available": {
+          "const": false
+        },
+        "rust_available": {
+          "const": false
+        },
+        "recipient_identity_sha256": {
+          "type": "string",
+          "pattern": "^sha256:[0-9a-f]{64}$"
+        }
+      }
+    },
+    "approval": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "method",
+        "actor",
+        "interactive",
+        "agent_confirmed",
+        "exact_argv",
+        "canonical_root_sha256",
+        "config_hash",
+        "executable_sha256",
+        "public_receipt_sha256"
+      ],
+      "properties": {
+        "method": {
+          "const": "packaged-human-cli"
+        },
+        "actor": {
+          "const": "human"
+        },
+        "interactive": {
+          "const": true
+        },
+        "agent_confirmed": {
+          "const": false
+        },
+        "exact_argv": {
+          "type": "array",
+          "minItems": 1,
+          "maxItems": 128,
+          "items": {
+            "type": "string",
+            "minLength": 1,
+            "maxLength": 4096
+          },
+          "description": "Only public secret-free command arguments; redact any secret and mark the resulting binding unverifiable rather than expose it."
+        },
+        "canonical_root_sha256": {
+          "type": "string",
+          "pattern": "^sha256:[0-9a-f]{64}$"
+        },
+        "config_hash": {
+          "type": "string",
+          "pattern": "^sha256:[0-9a-f]{64}$"
+        },
+        "executable_sha256": {
+          "type": "string",
+          "pattern": "^sha256:[0-9a-f]{64}$"
+        },
+        "public_receipt_sha256": {
+          "type": "string",
+          "pattern": "^sha256:[0-9a-f]{64}$"
+        }
+      }
+    },
+    "steps": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "install",
+        "track",
+        "unapproved_refusal",
+        "human_approval",
+        "pass",
+        "source_stale",
+        "fail",
+        "restart",
+        "update",
+        "remove"
+      ],
+      "properties": {
+        "install": {
+          "$ref": "#/$defs/step"
+        },
+        "track": {
+          "$ref": "#/$defs/step"
+        },
+        "unapproved_refusal": {
+          "$ref": "#/$defs/step"
+        },
+        "human_approval": {
+          "$ref": "#/$defs/step"
+        },
+        "pass": {
+          "$ref": "#/$defs/step"
+        },
+        "source_stale": {
+          "$ref": "#/$defs/step"
+        },
+        "fail": {
+          "$ref": "#/$defs/step"
+        },
+        "restart": {
+          "$ref": "#/$defs/step"
+        },
+        "update": {
+          "$ref": "#/$defs/step"
+        },
+        "remove": {
+          "$ref": "#/$defs/step"
+        }
+      }
+    },
+    "limits": {
+      "type": "array",
+      "maxItems": 64,
+      "uniqueItems": true,
+      "items": {
+        "type": "string",
+        "minLength": 1,
+        "maxLength": 2048
+      }
+    },
+    "collector_binding": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "configured_check_id",
+        "job_identity_sha256",
+        "collector_executable_sha256",
+        "original_receipts_sha256"
+      ],
+      "properties": {
+        "configured_check_id": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 128
+        },
+        "job_identity_sha256": {
+          "type": "string",
+          "pattern": "^sha256:[0-9a-f]{64}$"
+        },
+        "collector_executable_sha256": {
+          "type": "string",
+          "pattern": "^sha256:[0-9a-f]{64}$"
+        },
+        "original_receipts_sha256": {
+          "type": "array",
+          "minItems": 1,
+          "maxItems": 64,
+          "uniqueItems": true,
+          "items": {
+            "type": "string",
+            "pattern": "^sha256:[0-9a-f]{64}$"
+          }
+        }
+      }
+    }
+  },
+  "$defs": {
+    "runIdentity": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "run_id",
+        "check_id",
+        "source_fingerprint",
+        "config_hash",
+        "service_instance_id",
+        "observed_at",
+        "receipt_sha256"
+      ],
+      "properties": {
+        "run_id": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 256
+        },
+        "check_id": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 128
+        },
+        "source_fingerprint": {
+          "type": "string",
+          "pattern": "^sha256:[0-9a-f]{64}$"
+        },
+        "config_hash": {
+          "type": "string",
+          "pattern": "^sha256:[0-9a-f]{64}$"
+        },
+        "service_instance_id": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 256
+        },
+        "observed_at": {
+          "type": "string",
+          "format": "date-time"
+        },
+        "receipt_sha256": {
+          "type": "string",
+          "pattern": "^sha256:[0-9a-f]{64}$"
+        }
+      }
+    },
+    "step": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "observation",
+        "expected_outcome",
+        "actual_outcome",
+        "run",
+        "limits"
+      ],
+      "properties": {
+        "observation": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 2048
+        },
+        "expected_outcome": {
+          "enum": [
+            "refused",
+            "passed",
+            "stale",
+            "failed",
+            "retained",
+            "removed"
+          ]
+        },
+        "actual_outcome": {
+          "enum": [
+            "refused",
+            "passed",
+            "stale",
+            "failed",
+            "retained",
+            "removed",
+            "blocked",
+            "not_observed"
+          ]
+        },
+        "run": {
+          "$ref": "#/$defs/runIdentity"
+        },
+        "limits": {
+          "type": "array",
+          "maxItems": 32,
+          "uniqueItems": true,
+          "items": {
+            "type": "string",
+            "minLength": 1,
+            "maxLength": 1024
+          }
+        }
+      }
+    }
+  },
+  "allOf": [
+    {
+      "if": {
+        "properties": {
+          "target": {
+            "properties": {
+              "platform": {
+                "const": "wsl2"
+              }
+            }
+          }
+        }
+      },
+      "then": {
+        "properties": {
+          "target": {
+            "properties": {
+              "native": {
+                "const": false
+              }
+            }
+          }
+        }
+      }
+    }
+  ]
+}

@@ -1,0 +1,75 @@
+{
+  "schema_version": 1,
+  "project_id": "progress-checker-maintenance-pilot",
+  "enabled": true,
+  "panel": {
+    "show_on_start": true
+  },
+  "execution": {
+    "max_parallel": 1,
+    "default_timeout_seconds": 120
+  },
+  "fingerprint": {
+    "extra_inputs": [],
+    "exclude_outputs": [
+      "pilot-output/**"
+    ]
+  },
+  "checks": [
+    {
+      "id": "pinned-source",
+      "argv": [
+        "/usr/bin/python3",
+        "scripts/check-source.py",
+        "upstream-base",
+        "--manifest",
+        "upstream-base/MANIFEST.json"
+      ],
+      "cwd": ".",
+      "kind": "test",
+      "timeout_seconds": 60
+    },
+    {
+      "id": "patch-roundtrip",
+      "argv": [
+        "/usr/bin/python3",
+        "examples/pilot/check-packaging.py"
+      ],
+      "cwd": ".",
+      "kind": "test",
+      "timeout_seconds": 120
+    }
+  ],
+  "milestones": [
+    {
+      "id": "pinned-baseline",
+      "title": "Pinned baseline bytes match the recorded upstream Git blobs",
+      "in_scope": true,
+      "depends_on": [],
+      "criteria": [
+        {
+          "id": "git-blob-integrity",
+          "description": "Every manifest-listed baseline file matches its pinned Git blob identity",
+          "check_id": "pinned-source",
+          "required": true
+        }
+      ]
+    },
+    {
+      "id": "packaging-rollback",
+      "title": "Packaged patch stages reproduce the overlay and reverse to baseline",
+      "in_scope": true,
+      "depends_on": [
+        "pinned-baseline"
+      ],
+      "criteria": [
+        {
+          "id": "exact-roundtrip",
+          "description": "Combined and staged patches reproduce all overlay bytes and reverse exactly; manifests and external lockfile packages remain unchanged",
+          "check_id": "patch-roundtrip",
+          "required": true
+        }
+      ]
+    }
+  ]
+}

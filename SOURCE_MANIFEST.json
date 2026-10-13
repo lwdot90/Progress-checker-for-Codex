@@ -23,6 +23,13 @@
       "origin": "native_plugin_source_or_public_documentation"
     },
     {
+      "path": ".github/workflows/platform-build.yml",
+      "sha256": "6a266f8651d45569139c58f5b30401e2ce962000914404ad34a7121a4036c9a6",
+      "bytes": 8873,
+      "mode": "0o644",
+      "origin": "native_plugin_source_or_public_documentation"
+    },
+    {
       "path": ".gitignore",
       "sha256": "0a1f325f09c666a4dccab87290ee892bda39c0bb737a6e30971d01ae40e29a1d",
       "bytes": 91,
@@ -31,15 +38,15 @@
     },
     {
       "path": "Cargo.lock",
-      "sha256": "d164f7c2ca43fd9930e780fea66838743e5924ac9f4954ed19beb83e9c9cc6df",
-      "bytes": 26604,
+      "sha256": "c5bb9a24a1b93c4ac38400547620019923e18a4a550c12b4ad705de235e101b3",
+      "bytes": 26724,
       "mode": "0o644",
       "origin": "native_plugin_source_or_public_documentation"
     },
     {
       "path": "Cargo.toml",
-      "sha256": "c367226e5ea8135d01544ac3bee3d41d55eec63de54672d844adf7eef9616bcf",
-      "bytes": 932,
+      "sha256": "898482e9f44624d58396c90697e562a28377cd88d28bc548b5964a4f808ce890",
+      "bytes": 950,
       "mode": "0o644",
       "origin": "native_plugin_source_or_public_documentation"
     },
@@ -101,8 +108,15 @@
     },
     {
       "path": "checker-cli/src/main.rs",
-      "sha256": "7f2faa840b818b9cd56f740c1b4270c18595d906ea6b5153aef31f29e7bdb9ba",
-      "bytes": 15838,
+      "sha256": "727cca5cf6998fcbc30aabc309a1904e8d7b4e3681fbe6c0f1445ab887b47d80",
+      "bytes": 16635,
+      "mode": "0o644",
+      "origin": "native_plugin_source_or_public_documentation"
+    },
+    {
+      "path": "checker-cli/src/windows_approval.rs",
+      "sha256": "942248de096da6609c3d0c00f9faf5562d47fc7a65eb2a14e33ab60f5d6ed35b",
+      "bytes": 5894,
       "mode": "0o644",
       "origin": "native_plugin_source_or_public_documentation"
     },
@@ -136,8 +150,8 @@
     },
     {
       "path": "checker-core/src/engine.rs",
-      "sha256": "90377bdf997ced2694e80adb9243e3d5a1d1ca7e508df289336e7a404a143720",
-      "bytes": 33398,
+      "sha256": "7dc4164a49bcd6ee8821007c18d2576fc183617237299bbaeac5648388afa1d5",
+      "bytes": 35823,
       "mode": "0o644",
       "origin": "native_plugin_source_or_public_documentation"
     },
@@ -150,22 +164,22 @@
     },
     {
       "path": "checker-core/src/environment.rs",
-      "sha256": "c0d625e241bb44b85f2b30ccefcb60ecf93e995e0429f73b132dd946d0bfa36e",
-      "bytes": 9288,
+      "sha256": "5eda2b09dfe2940cafa7ded13c06b36d4372e4db8f79309bfb4a4378a80c5705",
+      "bytes": 31961,
       "mode": "0o644",
       "origin": "native_plugin_source_or_public_documentation"
     },
     {
       "path": "checker-core/src/fingerprint.rs",
-      "sha256": "28b7d5aca9eebbfd8dca6f5c62b840451b505b4ac83166d6a74b5cc41bec30a2",
-      "bytes": 34172,
+      "sha256": "e0f87351b07acab240b877a7992f9d038bfbe37576fdbc771f8e9d7c96f03c94",
+      "bytes": 37162,
       "mode": "0o644",
       "origin": "native_plugin_source_or_public_documentation"
     },
     {
       "path": "checker-core/src/lib.rs",
-      "sha256": "1c002e81865f92ccd7c68a1e3588cd542ec78e6251b1e4fd0237f4ccf04f65fe",
-      "bytes": 138,
+      "sha256": "24cef1708fa8e41c821f2b1cbaae113554493f2c50ceeb4d2f381326c57294d8",
+      "bytes": 157,
       "mode": "0o644",
       "origin": "native_plugin_source_or_public_documentation"
     },
@@ -178,22 +192,169 @@
     },
     {
       "path": "checker-core/src/plan.rs",
-      "sha256": "05a196a7ccfa0409230c45657aa0be3a3222853e3edf64e8c7555ddeb5210d98",
-      "bytes": 18836,
+      "sha256": "49b9ba519bf93dc267bc4710cd4e47425a980db3e9d5a78e02fa5bff3cb1a4f5",
+      "bytes": 19392,
+      "mode": "0o644",
+      "origin": "native_plugin_source_or_public_documentation"
+    },
+    {
+      "path": "checker-core/src/platform/approval_identity.rs",
+      "sha256": "aece6e395a87ef1f962100ffcca94a4bed177048cb9d1ae113ed3c50699cc537",
+      "bytes": 14848,
+      "mode": "0o644",
+      "origin": "native_plugin_source_or_public_documentation"
+    },
+    {
+      "path": "checker-core/src/platform/macos_helper.rs",
+      "sha256": "9fe37261c74f61b99b1e6d634c11d56ea00c9a2cc2aaea0260c3a77675e4d5b7",
+      "bytes": 10558,
+      "mode": "0o644",
+      "origin": "native_plugin_source_or_public_documentation"
+    },
+    {
+      "path": "checker-core/src/platform/macos_inventory.rs",
+      "sha256": "ce2fc34372cf951e372e3b35949714176fe1fe9e9caf329d70da3d74f68e02c0",
+      "bytes": 10026,
+      "mode": "0o644",
+      "origin": "native_plugin_source_or_public_documentation"
+    },
+    {
+      "path": "checker-core/src/platform/macos_macho.rs",
+      "sha256": "f3489f89d9a0f02e7eb911cd4ac0575a1aec0d132d97168a485c81b962a663d5",
+      "bytes": 15521,
+      "mode": "0o644",
+      "origin": "native_plugin_source_or_public_documentation"
+    },
+    {
+      "path": "checker-core/src/platform/macos_process.rs",
+      "sha256": "bc46aabf920fd0c71049f9abd8900414faf57e4a2728bf196baf26552144e67d",
+      "bytes": 7227,
+      "mode": "0o644",
+      "origin": "native_plugin_source_or_public_documentation"
+    },
+    {
+      "path": "checker-core/src/platform/macos_sandbox.rs",
+      "sha256": "4653c180e5fe05dc575e6b4dac5ef2c40b14afe6987f9e7c27660f3d7fe279be",
+      "bytes": 6781,
+      "mode": "0o644",
+      "origin": "native_plugin_source_or_public_documentation"
+    },
+    {
+      "path": "checker-core/src/platform/macos_trust.rs",
+      "sha256": "27575c5d4050e81ae7b43c321f4f889f0ae7fc1c92ab41d84419e0558bb8e4ae",
+      "bytes": 17569,
+      "mode": "0o644",
+      "origin": "native_plugin_source_or_public_documentation"
+    },
+    {
+      "path": "checker-core/src/platform/mod.rs",
+      "sha256": "1d4c9ceaf8002ef86873d819111fdb0298a84491a4c7deac143fa082d17c4900",
+      "bytes": 568,
+      "mode": "0o644",
+      "origin": "native_plugin_source_or_public_documentation"
+    },
+    {
+      "path": "checker-core/src/platform/windows_arguments.rs",
+      "sha256": "dc8edfa97539b429248e789b46446df46e63b3c3206b709123367d002178a197",
+      "bytes": 10529,
+      "mode": "0o644",
+      "origin": "native_plugin_source_or_public_documentation"
+    },
+    {
+      "path": "checker-core/src/platform/windows_console.rs",
+      "sha256": "a6fecfebbfb152fa8774042f2b95388c3eba5ad5712a1103f2706aa1fc0c2169",
+      "bytes": 9387,
+      "mode": "0o644",
+      "origin": "native_plugin_source_or_public_documentation"
+    },
+    {
+      "path": "checker-core/src/platform/windows_ffi.rs",
+      "sha256": "121e5b63f8c5044ce3a56fa5f510c3008e94050d1e530a091e4702be40ded73c",
+      "bytes": 4653,
+      "mode": "0o644",
+      "origin": "native_plugin_source_or_public_documentation"
+    },
+    {
+      "path": "checker-core/src/platform/windows_fingerprint.rs",
+      "sha256": "8b16e967c9bbce68a5f1ab0a550d98391af154901731c032c5546ea4fda97e10",
+      "bytes": 30785,
+      "mode": "0o644",
+      "origin": "native_plugin_source_or_public_documentation"
+    },
+    {
+      "path": "checker-core/src/platform/windows_inventory.rs",
+      "sha256": "da0ec0d7e62b7e83bb867907e56cb8097ae982482b3dfcb5a7cbb55029a6b4ea",
+      "bytes": 9609,
+      "mode": "0o644",
+      "origin": "native_plugin_source_or_public_documentation"
+    },
+    {
+      "path": "checker-core/src/platform/windows_ipc.rs",
+      "sha256": "7eebb6dd25346e9a01eccc9f48f5ee8d77a95997da279d3bacc257d675aabfff",
+      "bytes": 36172,
+      "mode": "0o644",
+      "origin": "native_plugin_source_or_public_documentation"
+    },
+    {
+      "path": "checker-core/src/platform/windows_pe.rs",
+      "sha256": "87633f1fedf2ae65bebc49e569d068dc13e1f4585b39f593a5bb71bddbb1d64b",
+      "bytes": 11752,
+      "mode": "0o644",
+      "origin": "native_plugin_source_or_public_documentation"
+    },
+    {
+      "path": "checker-core/src/platform/windows_process.rs",
+      "sha256": "660d4a823aaa9c681c8f60d9f4e072a8108e5bf86def09faaea6c4c479c56586",
+      "bytes": 18820,
+      "mode": "0o644",
+      "origin": "native_plugin_source_or_public_documentation"
+    },
+    {
+      "path": "checker-core/src/platform/windows_project.rs",
+      "sha256": "13ab55b10361d571c5cc6c646f76f517843512fffa5dd7485b7b8ecc4dbc0f1f",
+      "bytes": 16924,
+      "mode": "0o644",
+      "origin": "native_plugin_source_or_public_documentation"
+    },
+    {
+      "path": "checker-core/src/platform/windows_sandbox.rs",
+      "sha256": "80679eb9f53fe1ef2899fdff7a2ee9765bc0480c64e90cf48f86fff3ca82bd76",
+      "bytes": 3027,
+      "mode": "0o644",
+      "origin": "native_plugin_source_or_public_documentation"
+    },
+    {
+      "path": "checker-core/src/platform/windows_state.rs",
+      "sha256": "410b9e8237c2ba37bafac6b011a87317ce78348803e7b07b141b063058123068",
+      "bytes": 22135,
+      "mode": "0o644",
+      "origin": "native_plugin_source_or_public_documentation"
+    },
+    {
+      "path": "checker-core/src/platform/windows_token.rs",
+      "sha256": "e8dd90dbbb6f36aa2d50671bb5846544ac79d4f5cb42f78a6488fb6b6bcf5875",
+      "bytes": 11346,
+      "mode": "0o644",
+      "origin": "native_plugin_source_or_public_documentation"
+    },
+    {
+      "path": "checker-core/src/platform/windows_trust.rs",
+      "sha256": "4e99ac3943072919eb0ea23b0d87f10f569ab72893d749460d74e11bfdce8166",
+      "bytes": 9131,
       "mode": "0o644",
       "origin": "native_plugin_source_or_public_documentation"
     },
     {
       "path": "checker-core/src/runner.rs",
-      "sha256": "2ec8c749df31167765fb718dcf1e93b622e56c6a9bc79ae33f0a5c8e9e93cf81",
-      "bytes": 21505,
+      "sha256": "519344e872bdb07c56d9e0f11d28a5c099154032d6a01c5fe5b654abc0c0eee7",
+      "bytes": 27808,
       "mode": "0o644",
       "origin": "native_plugin_source_or_public_documentation"
     },
     {
       "path": "checker-core/src/security.rs",
-      "sha256": "935c1e07fa01f6a83403b390d740bdf266badc64c000e3f9ea722615a646a7ee",
-      "bytes": 16580,
+      "sha256": "8db22ddb928b18bbdfeb4eb7fb3de3834f25ce7a2fd7be9cf4b842d7a837da18",
+      "bytes": 20621,
       "mode": "0o644",
       "origin": "native_plugin_source_or_public_documentation"
     },
@@ -206,8 +367,36 @@
     },
     {
       "path": "checker-core/src/store.rs",
-      "sha256": "1e15c778b1b1801be6988d5c85cb83379259b7e6e6f96e8415f791fc61b4aa82",
-      "bytes": 26973,
+      "sha256": "660b2208ee7c0bad2f2324730896e860c061f80829dccf765e63059e51b58432",
+      "bytes": 28366,
+      "mode": "0o644",
+      "origin": "native_plugin_source_or_public_documentation"
+    },
+    {
+      "path": "checker-global/Cargo.toml",
+      "sha256": "b1b67809218ef4bc1f0f8ec121f7d40ef6081b87166e3b7aebf7701d05a91755",
+      "bytes": 249,
+      "mode": "0o644",
+      "origin": "native_plugin_source_or_public_documentation"
+    },
+    {
+      "path": "checker-global/README.md",
+      "sha256": "12617185f8a3cd14532be2fbe4de35e02a7f70f0bc2165a1478bfd1c0df09387",
+      "bytes": 2678,
+      "mode": "0o644",
+      "origin": "native_plugin_source_or_public_documentation"
+    },
+    {
+      "path": "checker-global/src/main.rs",
+      "sha256": "5df325e39e1d0cbcd6c223640b60833ea961aa11ba6feb3d76917696da5fbe71",
+      "bytes": 23956,
+      "mode": "0o644",
+      "origin": "native_plugin_source_or_public_documentation"
+    },
+    {
+      "path": "checker-global/src/native_bridge.rs",
+      "sha256": "7f703612024c786d77c958137f404645d7458e690001794ceed09589b21c1a88",
+      "bytes": 4888,
       "mode": "0o644",
       "origin": "native_plugin_source_or_public_documentation"
     },
@@ -220,8 +409,8 @@
     },
     {
       "path": "checker-mcp/src/main.rs",
-      "sha256": "3d2563083c6101bddc9c438b3668b027fd3c2ee20bd53a817b6c2455193c77c5",
-      "bytes": 37155,
+      "sha256": "67707fbf2e267385ed057ffa427c08be8720f106352ace5d50a78d3d00161c58",
+      "bytes": 37332,
       "mode": "0o644",
       "origin": "native_plugin_source_or_public_documentation"
     },
@@ -234,22 +423,22 @@
     },
     {
       "path": "checker-service/src/client.rs",
-      "sha256": "3868e6762d8e77959bc1ba8a7e819a286622e46bd57d8778865181b221129173",
-      "bytes": 11413,
+      "sha256": "14cc9f641e212c7e1cd0a33b6b06c2b8c93d09dd492e4cd6d6a57d12c0bbf4f1",
+      "bytes": 13173,
       "mode": "0o644",
       "origin": "native_plugin_source_or_public_documentation"
     },
     {
       "path": "checker-service/src/lib.rs",
-      "sha256": "9221788ffbbd1456c410ded02c807af8468bdd977d08d253e72b7ea7e5662e58",
-      "bytes": 74,
+      "sha256": "aeb1a9b26a94544145f7574776d5fb0afb0444823c0f2055b37edcd59138e08f",
+      "bytes": 492,
       "mode": "0o644",
       "origin": "native_plugin_source_or_public_documentation"
     },
     {
       "path": "checker-service/src/main.rs",
-      "sha256": "67731b66e78625b1fd06ded38613b937c85035acf624f3737fc54ba05a73dcfa",
-      "bytes": 1364,
+      "sha256": "0fdf4a17d4478718d2c70fda7114f6d03f05251fc98ccd787cd484198637bea5",
+      "bytes": 1479,
       "mode": "0o644",
       "origin": "native_plugin_source_or_public_documentation"
     },
@@ -262,8 +451,8 @@
     },
     {
       "path": "checker-service/src/server.rs",
-      "sha256": "7ffde0489cbbf652bdf5af6df0f297626991c973e66cc964bb6edc99c8307082",
-      "bytes": 53089,
+      "sha256": "1cf172155e0730dc3df0e3d9d1b4bd82e63988dab62a77d573ca770d3081f33b",
+      "bytes": 54634,
       "mode": "0o644",
       "origin": "native_plugin_source_or_public_documentation"
     },
@@ -317,6 +506,13 @@
       "origin": "native_plugin_source_or_public_documentation"
     },
     {
+      "path": "docs/ENGINEERING_VERIFICATION.md",
+      "sha256": "feff75e2e2d9f43af62383a4a08892e2549522b53339ce98c76c13af5020481c",
+      "bytes": 3167,
+      "mode": "0o644",
+      "origin": "native_plugin_source_or_public_documentation"
+    },
+    {
       "path": "docs/FINGERPRINT_PERFORMANCE.md",
       "sha256": "aa6d4fbb3708f4d80e1393a8083fc4e7498b6c1291a5bc2caeac1218485485e5",
       "bytes": 1370,
@@ -324,9 +520,58 @@
       "origin": "native_plugin_source_or_public_documentation"
     },
     {
+      "path": "docs/FIRST_USER_TRIAL.md",
+      "sha256": "746515b13d53832ae0ec3f658357ba96f5df2127989f81f7253a291271d86aba",
+      "bytes": 10879,
+      "mode": "0o644",
+      "origin": "native_plugin_source_or_public_documentation"
+    },
+    {
+      "path": "docs/MACOS.md",
+      "sha256": "9d0248e090836bb2aad331364a2eba241a33d3547b480ee2a59d1c831218790c",
+      "bytes": 8633,
+      "mode": "0o644",
+      "origin": "native_plugin_source_or_public_documentation"
+    },
+    {
+      "path": "docs/NATIVE_PLATFORM_CHECKPOINT.md",
+      "sha256": "e8b177184df4d60ad2485a6b4ca7048208f8186bd4c859ed0b7aff68adbffd9c",
+      "bytes": 1435,
+      "mode": "0o644",
+      "origin": "native_plugin_source_or_public_documentation"
+    },
+    {
+      "path": "docs/PLATFORM_CI.md",
+      "sha256": "8931f29a651185ac489d33e13b5948665e3d41fa0371f360c845f3c893602940",
+      "bytes": 8532,
+      "mode": "0o644",
+      "origin": "native_plugin_source_or_public_documentation"
+    },
+    {
+      "path": "docs/PLATFORM_DEVELOPMENT_CHECKS.md",
+      "sha256": "c09e357aa76dcb490daf3410fd3ecb9a1054b7c940fd10fc61d22a246fb645c5",
+      "bytes": 4722,
+      "mode": "0o644",
+      "origin": "native_plugin_source_or_public_documentation"
+    },
+    {
+      "path": "docs/PLATFORM_SUPPORT.md",
+      "sha256": "170eae55cb7f417b836db1c37ae243f5e1fc4a66074530b2437e904cf0e25d0f",
+      "bytes": 4922,
+      "mode": "0o644",
+      "origin": "native_plugin_source_or_public_documentation"
+    },
+    {
       "path": "docs/PORTABILITY.md",
       "sha256": "faaf12621ace95f870e2987eb3099e51624d65d515cd6657d6482367e402eba0",
       "bytes": 5276,
+      "mode": "0o644",
+      "origin": "native_plugin_source_or_public_documentation"
+    },
+    {
+      "path": "docs/RELEASE_05_CHECKLIST.md",
+      "sha256": "b8b2dbb1be8efb7f0a2cf4ad27018a13edef011b434c7cb835e3cbf26ecd886c",
+      "bytes": 7479,
       "mode": "0o644",
       "origin": "native_plugin_source_or_public_documentation"
     },
@@ -352,9 +597,37 @@
       "origin": "native_plugin_source_or_public_documentation"
     },
     {
+      "path": "docs/UBUNTU.md",
+      "sha256": "552d633c292cbe468493358869b33f2ffb19509e526f96727192da14ecb7a341",
+      "bytes": 12192,
+      "mode": "0o644",
+      "origin": "native_plugin_source_or_public_documentation"
+    },
+    {
       "path": "docs/USER_GUIDE.md",
       "sha256": "f7a4e8c52b9bd8a7510786ff4efd72f5364008f909e1e73bea9a79993285c141",
       "bytes": 4457,
+      "mode": "0o644",
+      "origin": "native_plugin_source_or_public_documentation"
+    },
+    {
+      "path": "docs/WINDOWS.md",
+      "sha256": "0045015336f4b34ac1d113631fa64b8f2796c3bbad6c777d0cd2d9fa47ca77e3",
+      "bytes": 4603,
+      "mode": "0o644",
+      "origin": "native_plugin_source_or_public_documentation"
+    },
+    {
+      "path": "docs/WINDOWS_FRIEND_TRIAL.md",
+      "sha256": "6560cae85c8c5b42f8911813fb71048b2ccf246f93fc585e4da1cbf14eee30d6",
+      "bytes": 2387,
+      "mode": "0o644",
+      "origin": "native_plugin_source_or_public_documentation"
+    },
+    {
+      "path": "docs/WSL2.md",
+      "sha256": "dd1de15bcbd31e973c8184d3f8735c46dd0fbb0c71c0b0cdad2706c8a420f060",
+      "bytes": 3937,
       "mode": "0o644",
       "origin": "native_plugin_source_or_public_documentation"
     },
@@ -367,8 +640,8 @@
     },
     {
       "path": "docs/development-history.md",
-      "sha256": "0c138c8ea57f2ed7f6879a789364d48d0139c8a94d478302b972a0954111eb8d",
-      "bytes": 4710,
+      "sha256": "7a78dbd01dd4c47e2256168020daf98328b12a17fd9a90d80498edc33f9c8d42",
+      "bytes": 30946,
       "mode": "0o644",
       "origin": "native_plugin_source_or_public_documentation"
     },
@@ -415,6 +688,13 @@
       "origin": "native_plugin_source_or_public_documentation"
     },
     {
+      "path": "docs/receipts/ubuntu-runtime-prerequisites.json",
+      "sha256": "70632a734db9c3d8c1778066dae7c6f0c7220a6436ece233cd012a849b78f473",
+      "bytes": 3523,
+      "mode": "0o644",
+      "origin": "native_plugin_source_or_public_documentation"
+    },
+    {
       "path": "docs/release-status.md",
       "sha256": "756b71e98bd7a014b7c2f7f08881651cc6247bc350d797442bb3bc5a5bcf290c",
       "bytes": 2074,
@@ -430,8 +710,8 @@
     },
     {
       "path": "examples/first-check/README.md",
-      "sha256": "3526be872ba83c4ec241e485158cae190155e34e69e692dee204ffdf42d802fa",
-      "bytes": 1602,
+      "sha256": "42e4f22e570f2cfa2fd8996d2232e4e7f03bcb399de24d2952541af80866ad2d",
+      "bytes": 2402,
       "mode": "0o644",
       "origin": "native_plugin_source_or_public_documentation"
     },
@@ -446,6 +726,76 @@
       "path": "examples/first-check/test_greeting.py",
       "sha256": "f73cce39b106747294b124a62719d35a429587be97c52c36429970f0300c6482",
       "bytes": 242,
+      "mode": "0o644",
+      "origin": "native_plugin_source_or_public_documentation"
+    },
+    {
+      "path": "examples/phase1/README.md",
+      "sha256": "47fd606643c2fdf7ebe617e7d3f45e5e12015b12fe12bda044731cfd7dc11ec5",
+      "bytes": 777,
+      "mode": "0o644",
+      "origin": "native_plugin_source_or_public_documentation"
+    },
+    {
+      "path": "examples/phase1/approval.example.json",
+      "sha256": "b66cfa9a4eb3e1ced0670b7818be11f564f50fd8a8aca9028736d0164b952df0",
+      "bytes": 820,
+      "mode": "0o644",
+      "origin": "native_plugin_source_or_public_documentation"
+    },
+    {
+      "path": "examples/phase1/result.example.json",
+      "sha256": "9c16ef690e1f385857d5138b742206142f44098358b6141a3f34de1f3354b560",
+      "bytes": 2033,
+      "mode": "0o644",
+      "origin": "native_plugin_source_or_public_documentation"
+    },
+    {
+      "path": "examples/phase1/status.example.json",
+      "sha256": "2c2c9f8d6ff9be10c8a3d388b5108ac6525212c4c7a2d2947c015eb130e39a31",
+      "bytes": 1670,
+      "mode": "0o644",
+      "origin": "native_plugin_source_or_public_documentation"
+    },
+    {
+      "path": "examples/pilot/README.md",
+      "sha256": "148464cc14a1a9e15890d0f43e459ed3cf865f2aca5cdd01821249831a0c73d1",
+      "bytes": 4735,
+      "mode": "0o644",
+      "origin": "native_plugin_source_or_public_documentation"
+    },
+    {
+      "path": "examples/pilot/check-packaging.py",
+      "sha256": "6349badb996ea6efa66fe11c6a66d1aeed2efdef191fec1e162f1fe02debb7b4",
+      "bytes": 549,
+      "mode": "0o644",
+      "origin": "native_plugin_source_or_public_documentation"
+    },
+    {
+      "path": "examples/pilot/config.json",
+      "sha256": "0f53bdd3f87100bdbde52994c30f9a0e0627bffef040fbc0a740620a1a0d8e3a",
+      "bytes": 1810,
+      "mode": "0o644",
+      "origin": "native_plugin_source_or_public_documentation"
+    },
+    {
+      "path": "examples/prototype/.progress-checker/config.json",
+      "sha256": "464dda95f83e481804c57f48eb5f5f341130ea9ababd1d9609089d1681545c5a",
+      "bytes": 2497,
+      "mode": "0o644",
+      "origin": "native_plugin_source_or_public_documentation"
+    },
+    {
+      "path": "examples/prototype/.progress-checker/state.json",
+      "sha256": "e8cb1a92533aa497e30b4768b0ac97c2d046a99dff9865cb93e87a9340165058",
+      "bytes": 374,
+      "mode": "0o644",
+      "origin": "native_plugin_source_or_public_documentation"
+    },
+    {
+      "path": "examples/prototype/README.md",
+      "sha256": "ed597c05514aae07b1d342e4f8a9575a79b67bdd94e2c6a499f46bb0b8543fc7",
+      "bytes": 2497,
       "mode": "0o644",
       "origin": "native_plugin_source_or_public_documentation"
     },
@@ -472,8 +822,8 @@
     },
     {
       "path": "plugins/progress-checker/bin/checker-global",
-      "sha256": "08e052e5a7c6a810c084194f78e5734071df4b599b4e6d3f225690d8ea0fa80d",
-      "bytes": 14359,
+      "sha256": "c7a4ad3cfda8fc737b5b8d8ea88772659089084d109a07b610df755f658b54eb",
+      "bytes": 21430,
       "mode": "0o755",
       "origin": "native_plugin_source_or_public_documentation"
     },
@@ -2159,8 +2509,15 @@
     },
     {
       "path": "schemas/README.md",
-      "sha256": "ea233783787333afc912e3575da95704fda9f669c9ff396bc5e2b8651e3a5480",
-      "bytes": 2104,
+      "sha256": "c920f557c12f17ea21c723f46f59082fad1b5aaf4641b511b33ce04922329065",
+      "bytes": 6798,
+      "mode": "0o644",
+      "origin": "native_plugin_source_or_public_documentation"
+    },
+    {
+      "path": "schemas/platform-qualification.schema.json",
+      "sha256": "7b7fd099a79e97662bb9f708ba711ded4a2c247b16dfd2380985d9f239d9b33e",
+      "bytes": 9613,
       "mode": "0o644",
       "origin": "native_plugin_source_or_public_documentation"
     },
@@ -2186,10 +2543,45 @@
       "origin": "native_plugin_source_or_public_documentation"
     },
     {
+      "path": "schemas/progress-panel-cached-claims.schema.json",
+      "sha256": "764b6f568da2c466b6ed57989ff9c7ae5bc75db7f10e06b6d4710b46cc835f14",
+      "bytes": 1633,
+      "mode": "0o644",
+      "origin": "native_plugin_source_or_public_documentation"
+    },
+    {
       "path": "schemas/progress-panel-config.schema.json",
       "sha256": "3ef9f7092e8f7025ed23e4aa193fb444c6eeb4bf9dbe9c31ced20bf7e792e2b6",
       "bytes": 6000,
       "mode": "0o644",
+      "origin": "native_plugin_source_or_public_documentation"
+    },
+    {
+      "path": "scripts/approve-live-onboarding-demo.sh",
+      "sha256": "1705d369cdf94e599c23dc286a40257940ec48a4f300877a939f7600ce25de78",
+      "bytes": 3766,
+      "mode": "0o755",
+      "origin": "native_plugin_source_or_public_documentation"
+    },
+    {
+      "path": "scripts/approve-plugin-delivery.sh",
+      "sha256": "f18daeb96b8c728b41f86e0c4b3a7832db64b4c23a3a00cb5917ff2de8e2cad7",
+      "bytes": 12795,
+      "mode": "0o644",
+      "origin": "native_plugin_source_or_public_documentation"
+    },
+    {
+      "path": "scripts/approve-plugin-plan-demo.sh",
+      "sha256": "1dce8d05d1bb3fc398207d59e7c1d11779b27e32b6a584031a4f261909c31bef",
+      "bytes": 4325,
+      "mode": "0o644",
+      "origin": "native_plugin_source_or_public_documentation"
+    },
+    {
+      "path": "scripts/bazel-lock-prototype.sh",
+      "sha256": "3108c2af9a0cdd806f0fd14c9eab4e207f4fbe73d970b0069d189263677b4fe1",
+      "bytes": 3138,
+      "mode": "0o744",
       "origin": "native_plugin_source_or_public_documentation"
     },
     {
@@ -2200,9 +2592,30 @@
       "origin": "native_plugin_source_or_public_documentation"
     },
     {
+      "path": "scripts/bind-original-demo-acceptance.py",
+      "sha256": "09eb70f909b28335124f1a209456c855983f758f818b188f231c106f077dcfd0",
+      "bytes": 19482,
+      "mode": "0o644",
+      "origin": "native_plugin_source_or_public_documentation"
+    },
+    {
+      "path": "scripts/bind-plugin-acceptance.py",
+      "sha256": "7456c293d9ce11175ca655223b62841d860b2b2ea705341d3d7eed35819f8ff0",
+      "bytes": 33715,
+      "mode": "0o644",
+      "origin": "native_plugin_source_or_public_documentation"
+    },
+    {
       "path": "scripts/build-checker.sh",
       "sha256": "e0dec6acbc3e29a8dc648153e5cd2b4e748591a530414f3af122a9535da31ccc",
       "bytes": 255,
+      "mode": "0o755",
+      "origin": "native_plugin_source_or_public_documentation"
+    },
+    {
+      "path": "scripts/build-prototype.sh",
+      "sha256": "61820d8a3cdae18934b93f0958dda263af3e4600a4755516a3135ee41cc0c4bb",
+      "bytes": 207,
       "mode": "0o755",
       "origin": "native_plugin_source_or_public_documentation"
     },
@@ -2222,8 +2635,8 @@
     },
     {
       "path": "scripts/check-engineering.sh",
-      "sha256": "0b1c2a271363e2fc8565f4729ea84e04efe5c581d8137fac28df9abe1800e44c",
-      "bytes": 817,
+      "sha256": "58bf1b8dfa2cd07089911dbb71fcb25e0f4bde7e9c7ce9504fb6c7f276b8121c",
+      "bytes": 956,
       "mode": "0o644",
       "origin": "native_plugin_source_or_public_documentation"
     },
@@ -2235,9 +2648,121 @@
       "origin": "native_plugin_source_or_public_documentation"
     },
     {
+      "path": "scripts/check-native-source-artifacts.py",
+      "sha256": "bf1e16f26bc25b8cc44c8c22fe5418edee49a917aa29f9e4fa8506c0abe8daae",
+      "bytes": 3815,
+      "mode": "0o644",
+      "origin": "native_plugin_source_or_public_documentation"
+    },
+    {
+      "path": "scripts/check-platform-development.sh",
+      "sha256": "75169d86fc73de8393c2b101d69394c72dcd4db3412bf7b49ab62fa57405c7b4",
+      "bytes": 2291,
+      "mode": "0o644",
+      "origin": "native_plugin_source_or_public_documentation"
+    },
+    {
+      "path": "scripts/check-platform-support.py",
+      "sha256": "932bbee2ea0939d5810e694a84b8a3e00b6a71e6b19e4fd0c4cede9d30ad0e79",
+      "bytes": 3294,
+      "mode": "0o644",
+      "origin": "native_plugin_source_or_public_documentation"
+    },
+    {
+      "path": "scripts/check-plugin-plan.py",
+      "sha256": "deb670d57874f25b5354f45b45ee3792c8eecf32f728b1788ea5d3c3e9479807",
+      "bytes": 22725,
+      "mode": "0o644",
+      "origin": "native_plugin_source_or_public_documentation"
+    },
+    {
+      "path": "scripts/check-release-candidate.py",
+      "sha256": "f6a7724cd7690f0374a7a6ef31befca090e6b15c7969b670aa112bb13873ec0d",
+      "bytes": 6279,
+      "mode": "0o644",
+      "origin": "native_plugin_source_or_public_documentation"
+    },
+    {
       "path": "scripts/check-source-version.py",
       "sha256": "cf2e29634cbcadec2330f4148398200bd87955e0d862589bf3dafed6e6c11c3b",
       "bytes": 2561,
+      "mode": "0o644",
+      "origin": "native_plugin_source_or_public_documentation"
+    },
+    {
+      "path": "scripts/check-source.py",
+      "sha256": "be1f38fdb5d86a329179dc6a7a5281a129ad933ebc93fffcfe937e3ad5f6ff47",
+      "bytes": 2521,
+      "mode": "0o744",
+      "origin": "native_plugin_source_or_public_documentation"
+    },
+    {
+      "path": "scripts/check-user-readiness.py",
+      "sha256": "0489aa1d9173656364e6e5bf97d0efb7ca22fbb4275c1811feee3d5fda3b9354",
+      "bytes": 5022,
+      "mode": "0o644",
+      "origin": "native_plugin_source_or_public_documentation"
+    },
+    {
+      "path": "scripts/collect-windows-prebuilt.ps1",
+      "sha256": "96657ec0c5d1730cc4ea203ebc1757483e912f36e43d706e566662833b1bfcd9",
+      "bytes": 16711,
+      "mode": "0o644",
+      "origin": "native_plugin_source_or_public_documentation"
+    },
+    {
+      "path": "scripts/collect-windows-trial.py",
+      "sha256": "be5cadb4e833d7a61a550094601064d1dc7aca149fb87929b5e341c938120858",
+      "bytes": 2528,
+      "mode": "0o644",
+      "origin": "native_plugin_source_or_public_documentation"
+    },
+    {
+      "path": "scripts/demo-checker.py",
+      "sha256": "82ad9fc6e93088230585fb3eee500d35b6f6e745292a6d3384ab9ec5da77c55f",
+      "bytes": 6108,
+      "mode": "0o755",
+      "origin": "native_plugin_source_or_public_documentation"
+    },
+    {
+      "path": "scripts/demo-phase2.py",
+      "sha256": "c98ea2adcd1684b4aa62e72ae722dfb35f43a16b209d89c50233296bca142157",
+      "bytes": 6896,
+      "mode": "0o755",
+      "origin": "native_plugin_source_or_public_documentation"
+    },
+    {
+      "path": "scripts/demo-prototype.py",
+      "sha256": "4746b43759eb628e5c03e39a45a74ff8ab97b79b2c2e966d6f00a6ecd863eca0",
+      "bytes": 3339,
+      "mode": "0o644",
+      "origin": "native_plugin_source_or_public_documentation"
+    },
+    {
+      "path": "scripts/engineering-recipient-adapter.py",
+      "sha256": "e3dec83705e8ab71d428a07c87d5e453203ce9909a0e80af294627abaa80a195",
+      "bytes": 7719,
+      "mode": "0o644",
+      "origin": "native_plugin_source_or_public_documentation"
+    },
+    {
+      "path": "scripts/engineering-recipient-observer.py",
+      "sha256": "34b705b3fa1659848c42b46b02c204b61123c9b2edfdc86bad3dcb5f41699402",
+      "bytes": 5180,
+      "mode": "0o644",
+      "origin": "native_plugin_source_or_public_documentation"
+    },
+    {
+      "path": "scripts/engineering-recipient-producer.py",
+      "sha256": "e9c23bf0a34f21d472fb17fc6981def5b3402048ac3e6cb975320c180c4a9550",
+      "bytes": 5381,
+      "mode": "0o644",
+      "origin": "native_plugin_source_or_public_documentation"
+    },
+    {
+      "path": "scripts/generate-patch.py",
+      "sha256": "d7f0221d8d621381754b58d2d4500bb01642b68c60ff896a6e09e7c3b27b7540",
+      "bytes": 14999,
       "mode": "0o644",
       "origin": "native_plugin_source_or_public_documentation"
     },
@@ -2249,9 +2774,30 @@
       "origin": "native_plugin_source_or_public_documentation"
     },
     {
+      "path": "scripts/install-windows.ps1",
+      "sha256": "f2bb0be70367e6e2a4733bfc624c1c42710d5736fe2d64b03811fcffe01046c7",
+      "bytes": 8736,
+      "mode": "0o644",
+      "origin": "native_plugin_source_or_public_documentation"
+    },
+    {
+      "path": "scripts/package-macos.py",
+      "sha256": "0306c6b03b8c7b73b3d6bd4b90895b86b2a8891327341f7cb89e64cac2766127",
+      "bytes": 9294,
+      "mode": "0o644",
+      "origin": "native_plugin_source_or_public_documentation"
+    },
+    {
       "path": "scripts/package-plugin.py",
       "sha256": "c1969b3e8ae6b7b71674f6b4368024da6e5101a40f5a5de5b7120ffb34b5c971",
       "bytes": 3430,
+      "mode": "0o644",
+      "origin": "native_plugin_source_or_public_documentation"
+    },
+    {
+      "path": "scripts/package-windows.py",
+      "sha256": "8c0533603a3e852d6b40e3382cef707e3c974c603fcc25e6a275b5936b862a13",
+      "bytes": 7863,
       "mode": "0o644",
       "origin": "native_plugin_source_or_public_documentation"
     },
@@ -2263,6 +2809,300 @@
       "origin": "native_plugin_source_or_public_documentation"
     },
     {
+      "path": "scripts/pilot-project.py",
+      "sha256": "0b84755994d7dcca48c2b28215fe33be78b50e879aa891247f6a24b1d6db58d9",
+      "bytes": 10757,
+      "mode": "0o644",
+      "origin": "native_plugin_source_or_public_documentation"
+    },
+    {
+      "path": "scripts/plugin-acceptance-runtime.py",
+      "sha256": "a001a978a55d305993b9d55375fe7f65c2c6b2509973e20135ac86e2bd3d4f51",
+      "bytes": 8528,
+      "mode": "0o644",
+      "origin": "native_plugin_source_or_public_documentation"
+    },
+    {
+      "path": "scripts/plugin-acceptance.py",
+      "sha256": "ad1fc66caa841211d6f485832be4a602ac5c1a00743b5c42aefdbdd6f6ff1d99",
+      "bytes": 94068,
+      "mode": "0o644",
+      "origin": "native_plugin_source_or_public_documentation"
+    },
+    {
+      "path": "scripts/plugin-dedicated-plan-acceptance.py",
+      "sha256": "f10105383bb7eb7eecc1c68e0e86574c92d91d9731ebe5d91f3661fa2ed34713",
+      "bytes": 15232,
+      "mode": "0o644",
+      "origin": "native_plugin_source_or_public_documentation"
+    },
+    {
+      "path": "scripts/plugin-dedicated-plan-activate.py",
+      "sha256": "886179200c67183f95e3ccfd2bed74c6b662929d74d266f4ecd17b6d2af65fe7",
+      "bytes": 11816,
+      "mode": "0o644",
+      "origin": "native_plugin_source_or_public_documentation"
+    },
+    {
+      "path": "scripts/plugin-dedicated-plan-adapter.py",
+      "sha256": "d8b02f2b3cb6ac45d0daf0d9753479ed7001a9dea1433f8b3a428b5a791fd646",
+      "bytes": 41019,
+      "mode": "0o644",
+      "origin": "native_plugin_source_or_public_documentation"
+    },
+    {
+      "path": "scripts/plugin-dedicated-plan-capture.py",
+      "sha256": "a19413a48ca9f6fcd6b91344d21e66f0f6679aacad01cfc5d7359dcffc5d122c",
+      "bytes": 22273,
+      "mode": "0o644",
+      "origin": "native_plugin_source_or_public_documentation"
+    },
+    {
+      "path": "scripts/plugin-dedicated-plan-host.py",
+      "sha256": "c1440e86162097cd3a7d7f65c478a57c42b5817f627f0d91e4802e05ed0a0b38",
+      "bytes": 24917,
+      "mode": "0o644",
+      "origin": "native_plugin_source_or_public_documentation"
+    },
+    {
+      "path": "scripts/plugin-dedicated-plan-lifecycle.py",
+      "sha256": "1a52ba75e8b230dff8bf548b302084c759899de90a0a2bc8fc599ec90028d30e",
+      "bytes": 15070,
+      "mode": "0o644",
+      "origin": "native_plugin_source_or_public_documentation"
+    },
+    {
+      "path": "scripts/plugin-dedicated-plan-observer.py",
+      "sha256": "0cb36f2da32d151729d5eb92663d19df1696bcfff6fc522dd34eebdfdb2613b8",
+      "bytes": 22551,
+      "mode": "0o644",
+      "origin": "native_plugin_source_or_public_documentation"
+    },
+    {
+      "path": "scripts/plugin-dedicated-plan-public.py",
+      "sha256": "977ce1b54f9b73386d0db90e59b7ae0a3b9189ff7ee95967ca884d32c98531b2",
+      "bytes": 14695,
+      "mode": "0o644",
+      "origin": "native_plugin_source_or_public_documentation"
+    },
+    {
+      "path": "scripts/plugin-evidence-acceptance.py",
+      "sha256": "bb4b6e9e761836bc33f4c42e70c5a7c7b204558783e5ebdd9b2a56d5077d6aeb",
+      "bytes": 21463,
+      "mode": "0o644",
+      "origin": "native_plugin_source_or_public_documentation"
+    },
+    {
+      "path": "scripts/plugin-legacy-alias-probe.py",
+      "sha256": "9189dbe855648e5e7bd0888b04fc7a12c106e260323527a7747e6b41fd3b8bf3",
+      "bytes": 12020,
+      "mode": "0o644",
+      "origin": "native_plugin_source_or_public_documentation"
+    },
+    {
+      "path": "scripts/plugin-live-acceptance.py",
+      "sha256": "231788e3d170fbddda1cf1be496e45811a06f19922044f93886be4f711e4ce60",
+      "bytes": 9823,
+      "mode": "0o644",
+      "origin": "native_plugin_source_or_public_documentation"
+    },
+    {
+      "path": "scripts/plugin-original-demo-acceptance-adapter.py",
+      "sha256": "2b1f2d97dc450d9b173c4f84206dd0359f8c87ba7e5bde2215f69128493085ea",
+      "bytes": 13619,
+      "mode": "0o644",
+      "origin": "native_plugin_source_or_public_documentation"
+    },
+    {
+      "path": "scripts/plugin-original-demo-activate.py",
+      "sha256": "b87d9ea01917745b15dad663afa67e126f70a574764d648b1e8ab856b45f2bac",
+      "bytes": 7409,
+      "mode": "0o644",
+      "origin": "native_plugin_source_or_public_documentation"
+    },
+    {
+      "path": "scripts/plugin-original-demo-collector.py",
+      "sha256": "54847b3acd43a8a87199d5e1f0793f1c6b8a731e2464d14e42f11352439cdb82",
+      "bytes": 59886,
+      "mode": "0o644",
+      "origin": "native_plugin_source_or_public_documentation"
+    },
+    {
+      "path": "scripts/plugin-original-demo-lifecycle.py",
+      "sha256": "1aa5036b06bb3c2cf54afccbc3065c67b51ca830b1d3e45ccc83e3129da3631d",
+      "bytes": 12569,
+      "mode": "0o644",
+      "origin": "native_plugin_source_or_public_documentation"
+    },
+    {
+      "path": "scripts/plugin-original-demo-observer.py",
+      "sha256": "304ac026a10d2290cbc12fed922456a3ac61de3449a3d03d9b948d151d44793d",
+      "bytes": 23641,
+      "mode": "0o644",
+      "origin": "native_plugin_source_or_public_documentation"
+    },
+    {
+      "path": "scripts/plugin-original-demo-raw.py",
+      "sha256": "e61a08643d6c3cb37941c3a328f6d460277d2df23e8ab682d2ca4188dad9dac8",
+      "bytes": 30502,
+      "mode": "0o644",
+      "origin": "native_plugin_source_or_public_documentation"
+    },
+    {
+      "path": "scripts/plugin-pilot-acceptance.py",
+      "sha256": "7889eda11d16b2c84279dce5c5bcf365d3b336113e289a6503a22ad495f2650f",
+      "bytes": 36157,
+      "mode": "0o644",
+      "origin": "native_plugin_source_or_public_documentation"
+    },
+    {
+      "path": "scripts/plugin-plan-observer.py",
+      "sha256": "07daafabfecc21d334e6cc98d9c0734e0212286d57cd32e10655e0e5cfa8ed67",
+      "bytes": 14240,
+      "mode": "0o644",
+      "origin": "native_plugin_source_or_public_documentation"
+    },
+    {
+      "path": "scripts/plugin-primary-acceptance.py",
+      "sha256": "0d47153af30a723fc0d58acf8ac029af4b27f2e7ec3d65a32b0380a3d383d9f4",
+      "bytes": 13079,
+      "mode": "0o644",
+      "origin": "native_plugin_source_or_public_documentation"
+    },
+    {
+      "path": "scripts/plugin-primary-observer.py",
+      "sha256": "e713d2b2b5c0c0dcb766a9429863b95fa098271170221bcc5f20ee69061a59de",
+      "bytes": 45737,
+      "mode": "0o644",
+      "origin": "native_plugin_source_or_public_documentation"
+    },
+    {
+      "path": "scripts/plugin-primary-pilot-activate.py",
+      "sha256": "a33aef7d93463020828a681e396e93099bd196af06f88f9403bfc0814e687b7a",
+      "bytes": 11762,
+      "mode": "0o644",
+      "origin": "native_plugin_source_or_public_documentation"
+    },
+    {
+      "path": "scripts/plugin-primary-pilot-producer.py",
+      "sha256": "a3bf636ca75cd8b36e3a7faf3776e62268a3c6b7bfb28b31497c7246d2f497f3",
+      "bytes": 55933,
+      "mode": "0o644",
+      "origin": "native_plugin_source_or_public_documentation"
+    },
+    {
+      "path": "scripts/plugin-primary-planning.py",
+      "sha256": "075de6f03f186149e52691850792563e69d6f982cc47e272d9891fddc9b07306",
+      "bytes": 18473,
+      "mode": "0o644",
+      "origin": "native_plugin_source_or_public_documentation"
+    },
+    {
+      "path": "scripts/plugin-primary-readonly.py",
+      "sha256": "c9b6cbf39b17dded7bbfd1e06bcd546ed2273abf3e1b6ebf390f93c1e6676db5",
+      "bytes": 15644,
+      "mode": "0o644",
+      "origin": "native_plugin_source_or_public_documentation"
+    },
+    {
+      "path": "scripts/plugin-primary-upgrade.py",
+      "sha256": "7e8211c708e1723a0f4394a5eb050a3ea960595e3458ddb67cadea5fb5339896",
+      "bytes": 23552,
+      "mode": "0o644",
+      "origin": "native_plugin_source_or_public_documentation"
+    },
+    {
+      "path": "scripts/plugin-recipient-qualify.py",
+      "sha256": "811b31cf65603e836cc1387e2ca23725ab05e4edbe1fcc39a94935be2bf199d6",
+      "bytes": 35501,
+      "mode": "0o644",
+      "origin": "native_plugin_source_or_public_documentation"
+    },
+    {
+      "path": "scripts/plugin-release-acceptance.py",
+      "sha256": "24a49aadf956023c9b82360d343e83cfef16962f42e4c24f13c8b730528a1b9a",
+      "bytes": 60469,
+      "mode": "0o644",
+      "origin": "native_plugin_source_or_public_documentation"
+    },
+    {
+      "path": "scripts/plugin-release-preservation-collector.py",
+      "sha256": "f4b91ee810244d28221c1f833e7ea3af7f6b824fe347bb0aa8aed988dd885559",
+      "bytes": 36255,
+      "mode": "0o644",
+      "origin": "native_plugin_source_or_public_documentation"
+    },
+    {
+      "path": "scripts/plugin-release-preservation-installer.py",
+      "sha256": "6385f661784e2ecd231920a2cf82738ac9de1fbe7ace9d4a499056a5280a090e",
+      "bytes": 17502,
+      "mode": "0o644",
+      "origin": "native_plugin_source_or_public_documentation"
+    },
+    {
+      "path": "scripts/plugin-release-preservation-raw.py",
+      "sha256": "b087f4bee37478f4132f0b0274d25c7623270b6b157df96e53cf7660c77e49b0",
+      "bytes": 18088,
+      "mode": "0o644",
+      "origin": "native_plugin_source_or_public_documentation"
+    },
+    {
+      "path": "scripts/plugin-reservation-coordinator.py",
+      "sha256": "e988921bf13c66856b128a937f78fdd703675ebcd3754936f3155d8e26f8ea72",
+      "bytes": 24359,
+      "mode": "0o644",
+      "origin": "native_plugin_source_or_public_documentation"
+    },
+    {
+      "path": "scripts/plugin-sandbox-recipient.py",
+      "sha256": "7408c56f0b9aa39d8ed97bb238be960bec7a2ee07053ba372f574b744aef1a96",
+      "bytes": 24846,
+      "mode": "0o644",
+      "origin": "native_plugin_source_or_public_documentation"
+    },
+    {
+      "path": "scripts/plugin-selected-reservation-plan.py",
+      "sha256": "cefc28b58807a26d09691747167c210ce280b829e4372354c403fa04ad9173c8",
+      "bytes": 15323,
+      "mode": "0o644",
+      "origin": "native_plugin_source_or_public_documentation"
+    },
+    {
+      "path": "scripts/plugin-shared-inode-probe.py",
+      "sha256": "e6695d8825ba1676d548fb4c20507952d326e107dc60e3bafb587aef092b7838",
+      "bytes": 13601,
+      "mode": "0o644",
+      "origin": "native_plugin_source_or_public_documentation"
+    },
+    {
+      "path": "scripts/prepare-engineering-recipient.py",
+      "sha256": "e667cb175fe249dc6fcb3a587a1ff26e2173d4dac56a6c53036ffb11de060b6d",
+      "bytes": 5513,
+      "mode": "0o644",
+      "origin": "native_plugin_source_or_public_documentation"
+    },
+    {
+      "path": "scripts/prepare-live-onboarding-demo.py",
+      "sha256": "bc19b20142bd117dfb40b81be1d94aa3d660e5e57198ef962f685769e6611281",
+      "bytes": 9798,
+      "mode": "0o755",
+      "origin": "native_plugin_source_or_public_documentation"
+    },
+    {
+      "path": "scripts/prepare-macos-helper.py",
+      "sha256": "7560391cbafe7b965cd80167e01d0e092058a7a0543364cbcde137442981aafb",
+      "bytes": 5633,
+      "mode": "0o644",
+      "origin": "native_plugin_source_or_public_documentation"
+    },
+    {
+      "path": "scripts/prepare-macos-marketplace.py",
+      "sha256": "2c0c9b1cbb683006ad3fbbba1c4bdda811fe96f7db9a34a75874a8f2ac352124",
+      "bytes": 5414,
+      "mode": "0o644",
+      "origin": "native_plugin_source_or_public_documentation"
+    },
+    {
       "path": "scripts/prepare-native-marketplace.py",
       "sha256": "67f6e3e86204489493c8530b5663f674b38df860e1490b2b3cb8fce5478d9084",
       "bytes": 9895,
@@ -2270,9 +3110,51 @@
       "origin": "native_plugin_source_or_public_documentation"
     },
     {
+      "path": "scripts/prepare-prototype.sh",
+      "sha256": "2d65d4772ca35f2953ab5fd4f8c4162c59a0c3c62f6125deb83ffe99b1e9da6a",
+      "bytes": 8262,
+      "mode": "0o744",
+      "origin": "native_plugin_source_or_public_documentation"
+    },
+    {
+      "path": "scripts/prepare-windows-trial.py",
+      "sha256": "ede6e66d2c07a84107d7125bc8402fefcb51db93122cc4d273e5460e72f97aa4",
+      "bytes": 6887,
+      "mode": "0o644",
+      "origin": "native_plugin_source_or_public_documentation"
+    },
+    {
       "path": "scripts/prototype-env.sh",
       "sha256": "f39b871e33794f63236df059088056238b3924271409c27034259620a929272c",
       "bytes": 705,
+      "mode": "0o644",
+      "origin": "native_plugin_source_or_public_documentation"
+    },
+    {
+      "path": "scripts/qualify-macos.py",
+      "sha256": "1e83790edb4e215f7d11166181cfaa6f929904ed99a67a3230fb993e89198fb8",
+      "bytes": 6649,
+      "mode": "0o644",
+      "origin": "native_plugin_source_or_public_documentation"
+    },
+    {
+      "path": "scripts/qualify-ubuntu.py",
+      "sha256": "e32a8019763047f64969849c72775514f92ad00fba827d1b4b7f557d66f79be0",
+      "bytes": 11301,
+      "mode": "0o644",
+      "origin": "native_plugin_source_or_public_documentation"
+    },
+    {
+      "path": "scripts/qualify-windows.py",
+      "sha256": "789d9140c139b01c2afcc1e4da1f63e002699b5ffdbb0fc9f8f03f0c90a5aee8",
+      "bytes": 4675,
+      "mode": "0o644",
+      "origin": "native_plugin_source_or_public_documentation"
+    },
+    {
+      "path": "scripts/qualify-wsl.py",
+      "sha256": "cf82e893f8af880d07dfda2d7090e6a4c1a9984c7baa40a7caa2663a3691d410",
+      "bytes": 3189,
       "mode": "0o644",
       "origin": "native_plugin_source_or_public_documentation"
     },
@@ -2298,6 +3180,20 @@
       "origin": "native_plugin_source_or_public_documentation"
     },
     {
+      "path": "scripts/run-project-codex.sh",
+      "sha256": "96059dcffc3f4b1bbc3485bf12aac3ed6791592c56901cd31958913ffd088d6b",
+      "bytes": 1220,
+      "mode": "0o755",
+      "origin": "native_plugin_source_or_public_documentation"
+    },
+    {
+      "path": "scripts/run-prototype.sh",
+      "sha256": "4c46663457df7cc7605f4965417756f5a37c02d8410edddda86b236bca1a340c",
+      "bytes": 528,
+      "mode": "0o755",
+      "origin": "native_plugin_source_or_public_documentation"
+    },
+    {
       "path": "scripts/run-service.sh",
       "sha256": "6dd76bfcea93e65b9da15658ca6f972c4055f3c795ace2b9e4cc6e9e505780b5",
       "bytes": 186,
@@ -2305,10 +3201,150 @@
       "origin": "native_plugin_source_or_public_documentation"
     },
     {
+      "path": "scripts/smoke-batch.py",
+      "sha256": "528735237a880d67b2c873179dac86f321985407af148875e8fa913d5fcd7937",
+      "bytes": 7340,
+      "mode": "0o644",
+      "origin": "native_plugin_source_or_public_documentation"
+    },
+    {
+      "path": "scripts/smoke-checker.py",
+      "sha256": "ec3f7897e2ef48de5a86a4ef9d04bed633e23d8bdf9064ebce95b789a12d306c",
+      "bytes": 15846,
+      "mode": "0o644",
+      "origin": "native_plugin_source_or_public_documentation"
+    },
+    {
+      "path": "scripts/smoke-ipc-security.py",
+      "sha256": "a21ae8728a5cfaa389dcb2d9f4ac78bda553cd0a99871e49a8760573aa8f08d3",
+      "bytes": 9144,
+      "mode": "0o644",
+      "origin": "native_plugin_source_or_public_documentation"
+    },
+    {
+      "path": "scripts/smoke-mcp-boundaries.py",
+      "sha256": "b678ff167211258565d4118d3c3bacee9154ff87eaa6ede8e972d7a727177650",
+      "bytes": 9278,
+      "mode": "0o644",
+      "origin": "native_plugin_source_or_public_documentation"
+    },
+    {
+      "path": "scripts/smoke-phase2-panel.py",
+      "sha256": "7485fc70e82ce79349950ac717f8a76d6795be78c4b160014d7d44fcbf6c9599",
+      "bytes": 16615,
+      "mode": "0o644",
+      "origin": "native_plugin_source_or_public_documentation"
+    },
+    {
+      "path": "scripts/smoke-plan.py",
+      "sha256": "88645221218d05fd260ce2ae2803f6f1c9e5721dcbd4d80b40a6799cd33273bb",
+      "bytes": 7236,
+      "mode": "0o644",
+      "origin": "native_plugin_source_or_public_documentation"
+    },
+    {
+      "path": "scripts/smoke-plugin-lifecycle.py",
+      "sha256": "3a32c735971ad5193743f0bbfbffad0d927a32ee40622428eec822868ab405a0",
+      "bytes": 3824,
+      "mode": "0o644",
+      "origin": "native_plugin_source_or_public_documentation"
+    },
+    {
+      "path": "scripts/smoke-prototype.py",
+      "sha256": "c89638ac9f5ea821c7118598f41334d8c938a629a53248c90c36d5452350b316",
+      "bytes": 25358,
+      "mode": "0o644",
+      "origin": "native_plugin_source_or_public_documentation"
+    },
+    {
+      "path": "scripts/smoke-service-freshness.py",
+      "sha256": "68723701a260a25e8f1e169c820cd73b0f2cf5fc3fda74724391987fe42b6ab4",
+      "bytes": 6633,
+      "mode": "0o644",
+      "origin": "native_plugin_source_or_public_documentation"
+    },
+    {
+      "path": "scripts/smoke-service.py",
+      "sha256": "92d09261d330a78b6677811a5ce62ad9ee7c9e1eb9028923773393d686578ac6",
+      "bytes": 21975,
+      "mode": "0o644",
+      "origin": "native_plugin_source_or_public_documentation"
+    },
+    {
       "path": "scripts/test-checker.sh",
       "sha256": "93cbbe8683b9012fdf78b549fea7682789bbd70e89cf3e89161aada418b22e51",
       "bytes": 228,
       "mode": "0o755",
+      "origin": "native_plugin_source_or_public_documentation"
+    },
+    {
+      "path": "scripts/test-dedicated-plan-acceptance.py",
+      "sha256": "09d91d5083c7e2a6f69db716870e3018fb9198db3c36463238e30e79c9173ce0",
+      "bytes": 8470,
+      "mode": "0o644",
+      "origin": "native_plugin_source_or_public_documentation"
+    },
+    {
+      "path": "scripts/test-dedicated-plan-activate.py",
+      "sha256": "19e2ac7b8294060d377d986a7fe58bac64d9d08aad509b1991251490500b6824",
+      "bytes": 10018,
+      "mode": "0o644",
+      "origin": "native_plugin_source_or_public_documentation"
+    },
+    {
+      "path": "scripts/test-dedicated-plan-adapter.py",
+      "sha256": "6a339c7075f7b704c298c411cf4cd35cf0a79562800de8dc78ffd82e8548a455",
+      "bytes": 20098,
+      "mode": "0o644",
+      "origin": "native_plugin_source_or_public_documentation"
+    },
+    {
+      "path": "scripts/test-dedicated-plan-capture.py",
+      "sha256": "dfc2ce354ca3b356c42312a15ddb6948ed476a681fd4bc33cf6cd42f6fcba894",
+      "bytes": 12876,
+      "mode": "0o644",
+      "origin": "native_plugin_source_or_public_documentation"
+    },
+    {
+      "path": "scripts/test-dedicated-plan-host.py",
+      "sha256": "06882f6c26c157d50c8b6dd3c3d07a8635ef5921a5ca082ddbe3d2fd97c970e8",
+      "bytes": 11998,
+      "mode": "0o644",
+      "origin": "native_plugin_source_or_public_documentation"
+    },
+    {
+      "path": "scripts/test-dedicated-plan-lifecycle.py",
+      "sha256": "1b8cfe22772e42d05717769b6d22450984e5c7f8f66ca5eaada970498f50f80a",
+      "bytes": 10823,
+      "mode": "0o644",
+      "origin": "native_plugin_source_or_public_documentation"
+    },
+    {
+      "path": "scripts/test-dedicated-plan-observer.py",
+      "sha256": "6ea0486c808ef22cddf5f0752476242e5097cc8927848e6b9316e443c42ba8e0",
+      "bytes": 13670,
+      "mode": "0o644",
+      "origin": "native_plugin_source_or_public_documentation"
+    },
+    {
+      "path": "scripts/test-dedicated-plan-public.py",
+      "sha256": "c86b34e5b17aa936ac325d208ed9a4d4263ca9dc590c23c0287e109200eb796e",
+      "bytes": 9526,
+      "mode": "0o644",
+      "origin": "native_plugin_source_or_public_documentation"
+    },
+    {
+      "path": "scripts/test-engineering-recipient.py",
+      "sha256": "6a305916f6d2893125572429f7892f6ad3a00e6722c945bcb5005c89e26bb1ef",
+      "bytes": 7441,
+      "mode": "0o644",
+      "origin": "native_plugin_source_or_public_documentation"
+    },
+    {
+      "path": "scripts/test-gateway-stdio.py",
+      "sha256": "ddcf5bc90a5399dd1d7d6da16bf371a1cf2888407b89c70568fb0a6c3e2c0e28",
+      "bytes": 12130,
+      "mode": "0o644",
       "origin": "native_plugin_source_or_public_documentation"
     },
     {
@@ -2340,16 +3376,72 @@
       "origin": "native_plugin_source_or_public_documentation"
     },
     {
+      "path": "scripts/test-native-packaging.py",
+      "sha256": "61e6b2f4843c9dbf9037348b76fbab3af43c4e343d3e7980ae20d8adddbe95aa",
+      "bytes": 11464,
+      "mode": "0o644",
+      "origin": "native_plugin_source_or_public_documentation"
+    },
+    {
+      "path": "scripts/test-platform-support.py",
+      "sha256": "6f46bd2a705e3dd66ed8c3f1eb8cca2a8487ffcd9f7d70864b7eea10abde88ca",
+      "bytes": 4996,
+      "mode": "0o644",
+      "origin": "native_plugin_source_or_public_documentation"
+    },
+    {
       "path": "scripts/test-prepare-native-marketplace.py",
       "sha256": "2567fbd6b24b334b6839406bb91ebbf15ab597bf2463262424576c09c69ca18c",
       "bytes": 7934,
+      "mode": "0o644",
+      "origin": "native_plugin_source_or_public_documentation"
+    },
+    {
+      "path": "scripts/test-prototype.sh",
+      "sha256": "a631bc39ef7e3f92317b67b8687019fa1142b73629a7648f56b26dd50bcb06eb",
+      "bytes": 333,
+      "mode": "0o755",
+      "origin": "native_plugin_source_or_public_documentation"
+    },
+    {
+      "path": "scripts/test-ubuntu-qualification.py",
+      "sha256": "99d027188b29a6cd9f7c3a66d6dc18d6c692904f66a3e72c55bea5ab7c3030fb",
+      "bytes": 7915,
+      "mode": "0o644",
+      "origin": "native_plugin_source_or_public_documentation"
+    },
+    {
+      "path": "scripts/test-windows-qualification.py",
+      "sha256": "e567069830f2e2bee11d4b6f529f0afdcbe5aaf4e2a7d7c30630282d4ab7f922",
+      "bytes": 3272,
+      "mode": "0o644",
+      "origin": "native_plugin_source_or_public_documentation"
+    },
+    {
+      "path": "scripts/validate-schemas.py",
+      "sha256": "742d765701a2cc83a56238e0cf564292eee783133f3214bccd7b96d31c2766e4",
+      "bytes": 18474,
+      "mode": "0o644",
+      "origin": "native_plugin_source_or_public_documentation"
+    },
+    {
+      "path": "scripts/verify-patches.py",
+      "sha256": "3e40a8b27e270a0752a02a8fd3bf0c7b8b1a25288c98d2f7ddfaeadd7109b068",
+      "bytes": 6596,
+      "mode": "0o644",
+      "origin": "native_plugin_source_or_public_documentation"
+    },
+    {
+      "path": "scripts/windows_artifact_process.py",
+      "sha256": "7bf52a85d2e56c59f3e2face0cc95447ad44807dfa49bbaebab65e621a9e2a14",
+      "bytes": 8224,
       "mode": "0o644",
       "origin": "native_plugin_source_or_public_documentation"
     }
   ],
   "source_candidate": {
     "version": "0.5.0-dev",
-    "status": "unreleased; host regression completion human-reported; checker regression environment unresolved",
-    "published_payload_unchanged": true
+    "status": "unreleased_native_platform_checkpoint",
+    "runtime_qualified": false
   }
 }

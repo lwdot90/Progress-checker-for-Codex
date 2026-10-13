@@ -9,9 +9,11 @@ use checker_core::{
     fingerprint::{FingerprintOptions, SourceWatch},
 };
 use serde_json::{Value, json};
+#[cfg(target_os = "linux")]
 use sha2::{Digest, Sha256};
 use std::io::Read;
 use std::os::fd::AsRawFd;
+#[cfg(target_os = "linux")]
 use std::os::unix::fs::OpenOptionsExt;
 use std::os::unix::fs::{MetadataExt, PermissionsExt};
 use std::{
@@ -108,6 +110,7 @@ impl ApprovalChallenges {
         Ok(challenge)
     }
 }
+#[cfg(target_os = "linux")]
 fn approval_starttime(pid: u32) -> Result<String, String> {
     let proc = std::path::PathBuf::from(format!("/proc/{pid}"));
     let metadata = std::fs::metadata(&proc).map_err(|_| "APPROVAL_PEER_REQUIRED: peer absent")?;
@@ -131,6 +134,7 @@ fn approval_starttime(pid: u32) -> Result<String, String> {
     }
     Ok(fields[19].into())
 }
+#[cfg(target_os = "linux")]
 fn approval_executable_hash(path: &Path) -> Result<String, String> {
     let mut file =
         std::fs::File::open(path).map_err(|_| "APPROVAL_PEER_REQUIRED: executable unavailable")?;
@@ -161,6 +165,7 @@ fn approval_executable_hash(path: &Path) -> Result<String, String> {
     }
     Ok(format!("{:x}", Sha256::digest(bytes)))
 }
+#[cfg(target_os = "linux")]
 fn approval_terminal(pid: u32, descriptor: u32) -> bool {
     // Reopen the actual peer descriptor solely for tcgetattr; never read input.
     let Ok(file) = std::fs::OpenOptions::new()
@@ -184,6 +189,7 @@ fn approval_peer_requirements(
     }
     Ok(())
 }
+#[cfg(target_os = "linux")]
 fn authorize_approval_peer(pid: u32) -> Result<ApprovalPeer, String> {
     let starttime = approval_starttime(pid)?;
     let server = std::env::current_exe().map_err(|e| e.to_string())?;
@@ -214,6 +220,47 @@ fn authorize_approval_peer(pid: u32) -> Result<ApprovalPeer, String> {
         starttime,
         executable_hash,
     })
+}
+#[cfg(not(target_os = "linux"))]
+fn authorize_approval_peer(_pid: u32) -> Result<ApprovalPeer, String> {
+    Err(
+        "APPROVAL_PEER_REQUIRED: native approval peer identity is not qualified on this platform"
+            .into(),
+    )
+}
+
+/// Same-user transport authentication never substitutes for approval identity.
+#[cfg(target_os = "linux")]
+fn authenticated_peer_pid(stream: &UnixStream) -> Result<Option<u32>, String> {
+    let credentials = stream.peer_cred().map_err(|error| error.to_string())?;
+    if credentials.uid() != unsafe { libc::geteuid() } {
+        return Err("wrong IPC peer".into());
+    }
+    Ok(credentials.pid().and_then(|pid| u32::try_from(pid).ok()))
+}
+
+#[cfg(target_os = "macos")]
+fn authenticated_peer_pid(stream: &UnixStream) -> Result<Option<u32>, String> {
+    let mut uid: libc::uid_t = 0;
+    let mut gid: libc::gid_t = 0;
+    let result = unsafe { libc::getpeereid(stream.as_raw_fd(), &mut uid, &mut gid) };
+    if result != 0 {
+        return Err(format!(
+            "IPC peer authentication failed: {}",
+            std::io::Error::last_os_error()
+        ));
+    }
+    if uid != unsafe { libc::geteuid() } {
+        return Err("wrong IPC peer".into());
+    }
+    // getpeereid supplies a UID, not verified CLI executable/lifetime/terminal
+    // identity. Ordinary messages are allowed; approval requests remain denied.
+    Ok(None)
+}
+
+#[cfg(not(any(target_os = "linux", target_os = "macos")))]
+fn authenticated_peer_pid(_stream: &UnixStream) -> Result<Option<u32>, String> {
+    Err("IPC authentication is unsupported on this platform".into())
 }
 impl ApprovalPeer {
     fn recheck(&self) -> Result<(), String> {
@@ -813,10 +860,7 @@ async fn handle(
     shared: Shared,
     sender: mpsc::Sender<Message>,
 ) -> Result<(), String> {
-    let credentials = stream.peer_cred().map_err(|e| e.to_string())?;
-    if credentials.uid() != unsafe { libc::geteuid() } {
-        return Err("wrong IPC peer".into());
-    }
+    let peer_pid = authenticated_peer_pid(&stream)?;
     let length = tokio::time::timeout(Duration::from_secs(5), stream.read_u32())
         .await
         .map_err(|_| "request timeout")?
@@ -853,10 +897,7 @@ async fn handle(
         &operation,
         Operation::ApprovalChallenge { .. } | Operation::ApprovalCommit { .. }
     ) {
-        credentials
-            .pid()
-            .and_then(|pid| u32::try_from(pid).ok())
-            .and_then(|pid| authorize_approval_peer(pid).ok())
+        peer_pid.and_then(|pid| authorize_approval_peer(pid).ok())
     } else {
         None
     };

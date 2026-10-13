@@ -1,12 +1,17 @@
 //! The same bounded Unix-socket client is used by human CLI and MCP callers.
 use crate::protocol::{MAX_FRAME_BYTES, Operation, Request, Response, SCHEMA_VERSION};
+#[cfg(unix)]
 use sha2::{Digest, Sha256};
 use std::io::{Read, Write};
+#[cfg(unix)]
 use std::os::unix::fs::{FileTypeExt, MetadataExt};
+#[cfg(unix)]
 use std::os::unix::net::UnixStream;
 use std::path::{Path, PathBuf};
+#[cfg(unix)]
 use std::sync::atomic::{AtomicU64, Ordering};
 use std::time::Duration;
+#[cfg(unix)]
 static REQUEST_SEQUENCE: AtomicU64 = AtomicU64::new(1);
 
 #[derive(Clone, Debug)]
@@ -15,6 +20,7 @@ pub struct Endpoint {
     pub socket_path: PathBuf,
 }
 impl Endpoint {
+    #[cfg(unix)]
     pub fn for_root(root: &Path, state_dir: &Path) -> Result<Self, String> {
         let canonical_root = root.canonicalize().map_err(|e| e.to_string())?;
         let state_dir = state_dir.canonicalize().map_err(|e| e.to_string())?;
@@ -40,6 +46,7 @@ impl Endpoint {
             socket_path,
         })
     }
+    #[cfg(unix)]
     pub fn validate(&self) -> Result<(), String> {
         let parent = self
             .socket_path
@@ -56,6 +63,24 @@ impl Endpoint {
         Ok(())
     }
 }
+#[cfg(not(unix))]
+impl Endpoint {
+    pub fn for_root(_root: &Path, _state_dir: &Path) -> Result<Self, String> {
+        Err(unsupported_transport())
+    }
+    pub fn validate(&self) -> Result<(), String> {
+        Err(unsupported_transport())
+    }
+}
+#[cfg(not(unix))]
+fn unsupported_transport() -> String {
+    "Native Windows transport is not qualified; protected named-pipe identity and human approval integration are required".into()
+}
+#[cfg(not(unix))]
+pub fn validate_private_directory(_path: &Path) -> Result<(), String> {
+    Err(unsupported_transport())
+}
+#[cfg(unix)]
 fn short_socket_directory(root: &Path) -> Result<PathBuf, String> {
     use std::os::unix::fs::DirBuilderExt;
     let parent = Path::new("/tmp");
@@ -86,6 +111,7 @@ fn short_socket_directory(root: &Path) -> Result<PathBuf, String> {
     checker_core::security::validate_state_separation(root, &directory)?;
     Ok(directory)
 }
+#[cfg(unix)]
 pub fn validate_private_directory(path: &Path) -> Result<(), String> {
     let metadata = std::fs::symlink_metadata(path).map_err(|e| e.to_string())?;
     if !metadata.is_dir()
@@ -109,6 +135,7 @@ impl Client {
             timeout: Duration::from_secs(30),
         }
     }
+    #[cfg(unix)]
     pub fn call(&self, operation: Operation) -> Result<Response, String> {
         self.endpoint.validate()?;
         let request_id = format!(
@@ -140,6 +167,10 @@ impl Client {
         response.validate(&request_id)?;
         Ok(response)
     }
+    #[cfg(not(unix))]
+    pub fn call(&self, _operation: Operation) -> Result<Response, String> {
+        Err(unsupported_transport())
+    }
     pub async fn async_call(&self, operation: Operation) -> Result<Response, String> {
         let client = self.clone();
         tokio::task::spawn_blocking(move || client.call(operation))
@@ -148,6 +179,7 @@ impl Client {
     }
 }
 /// Same-user credentials are checked after connect, closing metadata/connect races.
+#[cfg(target_os = "linux")]
 pub fn validate_peer(stream: &UnixStream) -> Result<(), String> {
     use std::os::fd::AsRawFd;
     let mut credentials: libc::ucred = unsafe { std::mem::zeroed() };
@@ -168,6 +200,24 @@ pub fn validate_peer(stream: &UnixStream) -> Result<(), String> {
         return Err("IPC peer is not the current user".into());
     }
     Ok(())
+}
+/// macOS supplies connection-scoped effective peer user/group identity.
+/// This does not establish a peer PID, process lifetime, executable identity,
+/// or interactive-terminal authority and must not confer approval privilege.
+#[cfg(target_os = "macos")]
+pub fn validate_peer(stream: &UnixStream) -> Result<(), String> {
+    use std::os::fd::AsRawFd;
+    let mut uid: libc::uid_t = 0;
+    let mut gid: libc::gid_t = 0;
+    let result = unsafe { libc::getpeereid(stream.as_raw_fd(), &mut uid, &mut gid) };
+    if result != 0 || uid != unsafe { libc::geteuid() } {
+        return Err("IPC peer is not the current user".into());
+    }
+    Ok(())
+}
+#[cfg(all(unix, not(any(target_os = "linux", target_os = "macos"))))]
+pub fn validate_peer(_stream: &UnixStream) -> Result<(), String> {
+    Err("Native peer credential transport is not qualified on this platform".into())
 }
 pub fn read_frame(reader: &mut impl Read) -> Result<Vec<u8>, String> {
     let mut prefix = [0; 4];
@@ -190,7 +240,7 @@ pub fn write_frame(writer: &mut impl Write, bytes: &[u8]) -> Result<(), String> 
     writer.write_all(bytes).map_err(|e| e.to_string())?;
     writer.flush().map_err(|e| e.to_string())
 }
-#[cfg(test)]
+#[cfg(all(test, unix))]
 mod tests {
     use super::*;
     #[test]

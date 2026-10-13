@@ -550,6 +550,9 @@ mod tests {
             "Request id exceeds the bounded response size"
         );
     }
+    // This integration fixture exercises Unix socket transport and permissions.
+    // Pure MCP framing/session regressions remain compiled on native Windows.
+    #[cfg(unix)]
     #[tokio::test]
     async fn oversized_tool_response_preserves_id_and_session_for_ping() {
         use checker_service::{

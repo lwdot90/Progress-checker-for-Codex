@@ -345,9 +345,14 @@ fn sanitize(bytes: &[u8], secrets: &[&str]) -> String {
             _ => clean.push(ch),
         }
     }
-    // Approved environment values are treated conservatively as known secrets.
+    // Explicit credential argument values are known secrets. Project files and
+    // arbitrary printed values are not scanned or claimed to be secret-free.
     for secret in secrets.iter().filter(|secret| !secret.is_empty()) {
-        clean = clean.replace(secret, "[REDACTED]");
+        let secret = sanitize(secret.as_bytes(), &[]);
+        if secret.is_empty() {
+            continue;
+        }
+        clean = clean.replace(&secret, "[REDACTED]");
         // A bounded capture can end in the middle of a secret. Hide that suffix.
         for (boundary, _) in secret.char_indices().rev() {
             if boundary == 0 {
@@ -400,6 +405,33 @@ mod tests {
             "partial [REDACTED]"
         );
         assert_eq!(sanitize("a\u{202e}b".as_bytes(), &[]), "ab");
+        assert_eq!(sanitize(b"value a\x1b[31mbc", &["abc"]), "value [REDACTED]");
+        assert_eq!(sanitize(b"value abc", &["a\x1b[31mbc"]), "value [REDACTED]");
+    }
+
+    #[cfg(target_os = "linux")]
+    #[tokio::test]
+    async fn credential_arguments_are_redacted_in_real_stdout_and_stderr() {
+        let root = tempfile::tempdir().unwrap();
+        let execution = authorized(
+            root.path(),
+            "/usr/bin/python3",
+            &[
+                "-c",
+                "import sys;print(sys.argv[-1]);print(sys.argv[-1],file=sys.stderr)",
+                "--api-key",
+                "test-credential-12345",
+            ],
+        );
+        let result = run_command(
+            &execution,
+            Duration::from_secs(10),
+            CancellationToken::new(),
+        )
+        .await;
+        assert_eq!(result.outcome, Outcome::Passed);
+        assert_eq!(result.stdout.text, "[REDACTED]\n");
+        assert_eq!(result.stderr.text, "[REDACTED]\n");
     }
 
     #[cfg(target_os = "linux")]

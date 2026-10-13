@@ -1,9 +1,9 @@
 {
   "schema_version": 1,
   "scope": "complete_backend_cargo_lock_not_linked_binary_sbom",
-  "workspace_version": "0.2.1",
+  "workspace_version": "0.5.0-dev",
   "workspace_license": "Apache-2.0",
-  "cargo_lock_sha256": "50e1b6499024b70915f9d34e39698b0852feda5d72c3cfe1d8011ae99b11c4d1",
+  "cargo_lock_sha256": "d164f7c2ca43fd9930e780fea66838743e5924ac9f4954ed19beb83e9c9cc6df",
   "external_package_count": 110,
   "packages": [
     {

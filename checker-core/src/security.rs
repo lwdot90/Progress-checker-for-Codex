@@ -34,11 +34,7 @@ fn binary_hash(path: &Path) -> Result<String, String> {
             path.display()
         ));
     }
-    if !metadata.is_file()
-        || metadata.len() > 64 * 1024 * 1024
-        || metadata.uid() != 0
-        || metadata.mode() & 0o022 != 0
-    {
+    if metadata.len() > 64 * 1024 * 1024 || metadata.uid() != 0 || metadata.mode() & 0o022 != 0 {
         return Err("sandbox and executable must be bounded root-owned non-writable files".into());
     }
     let bytes = std::fs::read(path).map_err(|e| format!("{}: {e}", path.display()))?;
@@ -137,7 +133,7 @@ impl ApprovalBinding {
             .canonicalize()
             .map_err(|e| format!("UNKNOWN_EXECUTABLE: {}: {e}", executable.display()))?;
         if !executable.is_absolute() || resolved != executable || !resolved.starts_with("/usr") {
-            return Err("Phase 1 executable must resolve under /usr".into());
+            return Err("supported check executables must resolve under /usr; use a system interpreter for project scripts (user-managed venv/nvm/pyenv executables are unsupported)".into());
         }
         if binary_hash(executable)? != self.executable_hash
             || binary_hash(Path::new("/usr/bin/bwrap"))? != self.sandbox_binary_hash
@@ -150,7 +146,7 @@ impl ApprovalBinding {
             ("LANG".into(), "C.UTF-8".into()),
         ]);
         if self.environment != fixed {
-            return Err("Phase 1 permits only the fixed secret-free environment".into());
+            return Err("checks permit only the fixed secret-free environment".into());
         }
         // A root containing system mounts cannot safely become a writable bind.
         if self.canonical_root == Path::new("/")
@@ -203,7 +199,31 @@ impl AuthorizedExecution {
         &self.binding.environment
     }
     pub fn redactions(&self) -> Vec<String> {
-        Vec::new()
+        // Only explicit credential arguments are known here. Never inspect the
+        // host environment or private state to guess secrets, and do not claim
+        // that this discovers credentials printed from arbitrary project files.
+        let mut values = Vec::new();
+        let mut next_is_secret = false;
+        for argument in self.binding.argv.iter().skip(1) {
+            if next_is_secret {
+                if !argument.is_empty() {
+                    values.push(argument.clone());
+                }
+                next_is_secret = false;
+                continue;
+            }
+            if let Some((key, value)) = argument.split_once('=') {
+                if credential_argument(key) && !value.is_empty() {
+                    values.push(value.to_owned());
+                }
+            } else if credential_argument(argument) {
+                next_is_secret = true;
+            }
+        }
+        // Prefer longest matches when credentials overlap.
+        values.sort_by(|left, right| right.len().cmp(&left.len()).then_with(|| left.cmp(right)));
+        values.dedup();
+        values
     }
 
     /// No unsandboxed fallback. Spawn errors and namespace denial remain errors.
@@ -265,6 +285,24 @@ impl AuthorizedExecution {
             .args(&self.binding.argv);
         Ok(command)
     }
+}
+
+fn credential_argument(value: &str) -> bool {
+    let normalized = value
+        .trim_start_matches('-')
+        .to_ascii_lowercase()
+        .replace('_', "-");
+    matches!(
+        normalized.as_str(),
+        "password"
+            | "passwd"
+            | "token"
+            | "access-token"
+            | "api-key"
+            | "client-secret"
+            | "secret"
+            | "authorization"
+    )
 }
 
 #[cfg(test)]
@@ -371,6 +409,48 @@ mod tests {
             binary_hash(Path::new("/usr/bin/progress-checker-missing-test-fixture"))
                 .unwrap_err()
                 .starts_with("UNKNOWN_EXECUTABLE:")
+        );
+    }
+
+    #[test]
+    fn credential_options_supply_only_known_values_without_collecting_environment() {
+        let root = tempfile::tempdir().unwrap();
+        let mut binding = fixture(root.path());
+        binding.argv.extend([
+            "--api-key=key-123456".into(),
+            "--password".into(),
+            "password-123456".into(),
+            "TOKEN=token-123456".into(),
+            "--token-count=12".into(),
+            "normal-text".into(),
+            "--client-secret=key-123456".into(),
+        ]);
+        let approval = LocalApproval {
+            schema_version: 1,
+            binding_digest: binding.approval_digest().unwrap(),
+            binding: binding.clone(),
+        };
+        let execution = authorize(binding, &approval).unwrap();
+        let redactions = execution.redactions();
+        assert_eq!(redactions.len(), 3);
+        for value in ["key-123456", "password-123456", "token-123456"] {
+            assert!(redactions.contains(&value.to_owned()));
+        }
+        assert_eq!(execution.environment().len(), 3);
+        assert!(!redactions.contains(&"12".into()));
+        assert!(!redactions.contains(&"normal-text".into()));
+    }
+
+    #[test]
+    fn non_system_interpreters_are_refused_with_supported_command_guidance() {
+        let root = tempfile::tempdir().unwrap();
+        let mut binding = fixture(root.path());
+        binding.argv[0] = "/proc/self/exe".into();
+        assert!(
+            binding
+                .validate()
+                .unwrap_err()
+                .contains("system interpreter")
         );
     }
 }

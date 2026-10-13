@@ -1,0 +1,14 @@
+{
+  "schema_version": 1,
+  "recorded_at": "2026-10-13T00:43:44.231359+00:00",
+  "source_candidate": "0.5.0-dev",
+  "command": "bash scripts/check-engineering.sh tests",
+  "execution": "human terminal outside checker sandbox",
+  "evidence_kind": "human-reported diagnostic; not authenticated checker verification",
+  "reported_output": "Ran 4 tests in 0.378s\n\nOK\nPASS: real example passes correct code and fails broken code\nPASS: explicit command/log limitations and dated architecture resource observation",
+  "limitations": [
+    "Full Cargo output was not supplied. The set -e entrypoint reaches these final checks only after Cargo exits successfully.",
+    "The configured engineering-unit-tests checker run failed in its sandbox due to missing host account and trusted executable ownership.",
+    "No checker evidence was imported or changed. No 0.5 installable package is released."
+  ]
+}

@@ -1,0 +1,16 @@
+{
+  "schema_version": 1,
+  "project_id": "first-check-example",
+  "enabled": true,
+  "panel": {"show_on_start": true},
+  "execution": {"max_parallel": 1, "default_timeout_seconds": 10},
+  "fingerprint": {"extra_inputs": [], "exclude_outputs": ["__pycache__/**"]},
+  "checks": [
+    {"id": "greeting-tests", "argv": ["/usr/bin/python3", "-m", "unittest", "-v", "test_greeting"], "cwd": ".", "kind": "test", "timeout_seconds": 10}
+  ],
+  "milestones": [
+    {"id": "greeting", "title": "Greet the requested person", "in_scope": true, "depends_on": [], "criteria": [
+      {"id": "acceptance", "description": "The greeting includes the requested name and passes its unittest.", "check_id": "greeting-tests", "required": true}
+    ]}
+  ]
+}

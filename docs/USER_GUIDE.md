@@ -27,6 +27,8 @@ This repository is a custom Git marketplace: add it as a source to install the p
 
 ## Use it on a feature
 
+For a complete small project with a real check, try the [Python greeting example](../examples/first-check/README.md). For runtime restrictions and upcoming log privacy changes, see [commands and logs](COMMANDS_AND_LOGS.md).
+
 Describe the outcome you want. Codex proposes milestones and the checks that would prove each outcome. Review and accept the plan before it saves it. An existing plan is preserved when you track a project.
 
 As work proceeds, Codex records what it has implemented. Ask **“What’s the progress?”** to see which milestones have current passing checks. An implementation claim alone never marks a milestone verified. Editing source can make an earlier passing result out of date.

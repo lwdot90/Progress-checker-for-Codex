@@ -1,0 +1,101 @@
+{
+  "schema_version": 1,
+  "observed_at": "2026-10-13T00:37:46.519440+00:00",
+  "coverage": "synthetic production-fingerprint measurements; not end-to-end status latency",
+  "host": {
+    "kernel": "7.2.5-200.fc44.x86_64",
+    "architecture": "x86_64",
+    "cpu_count": 8
+  },
+  "build": "Cargo debug profile; optimized sha2 compression; full-content hashing",
+  "binary_sha256": "5501ea8baecb1b732e8f79bc27c432d575413dc3d7530dcfe0bbe6a940b8d36b",
+  "sources": {
+    "Cargo.toml": "c367226e5ea8135d01544ac3bee3d41d55eec63de54672d844adf7eef9616bcf",
+    "Cargo.lock": "d164f7c2ca43fd9930e780fea66838743e5924ac9f4954ed19beb83e9c9cc6df",
+    "checker-core/src/fingerprint.rs": "28b7d5aca9eebbfd8dca6f5c62b840451b505b4ac83166d6a74b5cc41bec30a2"
+  },
+  "fixtures": [
+    {
+      "files": 1000,
+      "content_bytes": 4096000,
+      "samples": [
+        {
+          "digest": "sha256:f019a3355fee5c4daaca4f0594024fccc63858beb41ecb9d927e47158e10293e",
+          "elapsed_ms": 346.835149,
+          "input_count": 1000
+        },
+        {
+          "digest": "sha256:f019a3355fee5c4daaca4f0594024fccc63858beb41ecb9d927e47158e10293e",
+          "elapsed_ms": 344.88624400000003,
+          "input_count": 1000
+        },
+        {
+          "digest": "sha256:f019a3355fee5c4daaca4f0594024fccc63858beb41ecb9d927e47158e10293e",
+          "elapsed_ms": 264.247724,
+          "input_count": 1000
+        },
+        {
+          "digest": "sha256:f019a3355fee5c4daaca4f0594024fccc63858beb41ecb9d927e47158e10293e",
+          "elapsed_ms": 260.123121,
+          "input_count": 1000
+        },
+        {
+          "digest": "sha256:f019a3355fee5c4daaca4f0594024fccc63858beb41ecb9d927e47158e10293e",
+          "elapsed_ms": 319.810614,
+          "input_count": 1000
+        }
+      ],
+      "first_read_ms": 346.835149,
+      "median_ms": 319.810614,
+      "p95_ms": 346.835149,
+      "sample_count": 5,
+      "same_size_restored_mtime_edit_detected": true,
+      "after_edit": {
+        "digest": "sha256:00effbec850ebcd9e9b95cbec0d59ba6f11162ab0d22066a44ae333032177c14",
+        "elapsed_ms": 414.92798,
+        "input_count": 1000
+      }
+    },
+    {
+      "files": 10000,
+      "content_bytes": 40960000,
+      "samples": [
+        {
+          "digest": "sha256:496ddddea755d108b784756e861d6b900ecf7982e02ee59c1ba9d182214379ff",
+          "elapsed_ms": 2010.058429,
+          "input_count": 10000
+        },
+        {
+          "digest": "sha256:496ddddea755d108b784756e861d6b900ecf7982e02ee59c1ba9d182214379ff",
+          "elapsed_ms": 2325.581776,
+          "input_count": 10000
+        },
+        {
+          "digest": "sha256:496ddddea755d108b784756e861d6b900ecf7982e02ee59c1ba9d182214379ff",
+          "elapsed_ms": 2736.60619,
+          "input_count": 10000
+        },
+        {
+          "digest": "sha256:496ddddea755d108b784756e861d6b900ecf7982e02ee59c1ba9d182214379ff",
+          "elapsed_ms": 2169.453855,
+          "input_count": 10000
+        },
+        {
+          "digest": "sha256:496ddddea755d108b784756e861d6b900ecf7982e02ee59c1ba9d182214379ff",
+          "elapsed_ms": 2283.503277,
+          "input_count": 10000
+        }
+      ],
+      "first_read_ms": 2010.058429,
+      "median_ms": 2283.503277,
+      "p95_ms": 2736.60619,
+      "sample_count": 5,
+      "same_size_restored_mtime_edit_detected": true,
+      "after_edit": {
+        "digest": "sha256:db8b6b98ec29ed6ebd699b329c34d7d2894e994884041d677ff845a268622776",
+        "elapsed_ms": 2193.543836,
+        "input_count": 10000
+      }
+    }
+  ]
+}

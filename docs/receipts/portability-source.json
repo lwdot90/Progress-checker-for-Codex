@@ -1,14 +1,14 @@
 {
   "schema_version": 1,
   "scope": "source inspection; no Ubuntu execution or support claim",
-  "observed_at": "2026-10-13T00:15:55.384185+00:00",
+  "observed_at": "2026-10-13T00:36:00.112241+00:00",
   "sources": {
     "checker-core/src/environment.rs": "c0d625e241bb44b85f2b30ccefcb60ecf93e995e0429f73b132dd946d0bfa36e",
     "checker-core/src/engine.rs": "90377bdf997ced2694e80adb9243e3d5a1d1ca7e508df289336e7a404a143720",
-    "checker-core/src/security.rs": "d40ae480458375df3efe77eea7db6b9711ca8a38e5eb6e3e6d3a57b496e11c30",
-    "checker-core/src/runner.rs": "9238d0dfc1c48b03661a8e20394a4b40d14d7d10e628a462dffd71c4d8dc91a8",
-    "plugins/progress-checker/bin/checker-global": "8fd371cdb217e40126a091c12f35bc3394394df84060640754afc99057d26666",
+    "checker-core/src/security.rs": "935c1e07fa01f6a83403b390d740bdf266badc64c000e3f9ea722615a646a7ee",
+    "checker-core/src/runner.rs": "2ec8c749df31167765fb718dcf1e93b622e56c6a9bc79ae33f0a5c8e9e93cf81",
+    "plugins/progress-checker/bin/checker-global": "08e052e5a7c6a810c084194f78e5734071df4b599b4e6d3f225690d8ea0fa80d",
     "plugins/progress-checker/bin/checker-plugin": "82fb1e7cef3172e465f33fec54d4d7be4f799c66193b5dd8f9b989689009fcaa",
-    "scripts/package-plugin.py": "9ce4c5fdb77e9561f980e830d6bff47fdd417e64391a84790ad2bab8f09afe6b"
+    "scripts/package-plugin.py": "c1969b3e8ae6b7b71674f6b4368024da6e5101a40f5a5de5b7120ffb34b5c971"
   }
 }

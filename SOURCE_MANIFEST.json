@@ -31,15 +31,15 @@
     },
     {
       "path": "Cargo.lock",
-      "sha256": "50e1b6499024b70915f9d34e39698b0852feda5d72c3cfe1d8011ae99b11c4d1",
-      "bytes": 26588,
+      "sha256": "d164f7c2ca43fd9930e780fea66838743e5924ac9f4954ed19beb83e9c9cc6df",
+      "bytes": 26604,
       "mode": "0o644",
       "origin": "native_plugin_source_or_public_documentation"
     },
     {
       "path": "Cargo.toml",
-      "sha256": "c1f0c98ce05a61e5cdc3431626f4aa4d825756eb4a1127db263dd8ad75c1737d",
-      "bytes": 928,
+      "sha256": "c367226e5ea8135d01544ac3bee3d41d55eec63de54672d844adf7eef9616bcf",
+      "bytes": 932,
       "mode": "0o644",
       "origin": "native_plugin_source_or_public_documentation"
     },
@@ -87,8 +87,8 @@
     },
     {
       "path": "README.md",
-      "sha256": "7a8b1b443cbf1ae139f69837dae2603b680efa8cf563f6518b6c81e0ff4b5215",
-      "bytes": 4272,
+      "sha256": "6a35c6818d8e63edc0abbd3a08b32aa14781b45066a8defbe812c6263e7f75c9",
+      "bytes": 4647,
       "mode": "0o644",
       "origin": "native_plugin_source_or_public_documentation"
     },
@@ -117,6 +117,13 @@
       "path": "checker-core/examples/config.json",
       "sha256": "464dda95f83e481804c57f48eb5f5f341130ea9ababd1d9609089d1681545c5a",
       "bytes": 2497,
+      "mode": "0o644",
+      "origin": "native_plugin_source_or_public_documentation"
+    },
+    {
+      "path": "checker-core/examples/fingerprint-benchmark.rs",
+      "sha256": "2ccf4dc9fb77b33948aecb357e9bc50002845dbd7b8095fadd52c49bc8c84d65",
+      "bytes": 1064,
       "mode": "0o644",
       "origin": "native_plugin_source_or_public_documentation"
     },
@@ -178,15 +185,15 @@
     },
     {
       "path": "checker-core/src/runner.rs",
-      "sha256": "9238d0dfc1c48b03661a8e20394a4b40d14d7d10e628a462dffd71c4d8dc91a8",
-      "bytes": 20324,
+      "sha256": "2ec8c749df31167765fb718dcf1e93b622e56c6a9bc79ae33f0a5c8e9e93cf81",
+      "bytes": 21505,
       "mode": "0o644",
       "origin": "native_plugin_source_or_public_documentation"
     },
     {
       "path": "checker-core/src/security.rs",
-      "sha256": "d40ae480458375df3efe77eea7db6b9711ca8a38e5eb6e3e6d3a57b496e11c30",
-      "bytes": 13435,
+      "sha256": "935c1e07fa01f6a83403b390d740bdf266badc64c000e3f9ea722615a646a7ee",
+      "bytes": 16580,
       "mode": "0o644",
       "origin": "native_plugin_source_or_public_documentation"
     },
@@ -303,9 +310,37 @@
       "origin": "native_plugin_source_or_public_documentation"
     },
     {
+      "path": "docs/COMMANDS_AND_LOGS.md",
+      "sha256": "1d5093d53a526579f69098c0f6ea041cd992fbbf3b6fec8a5d9fa27f1423a8db",
+      "bytes": 4183,
+      "mode": "0o644",
+      "origin": "native_plugin_source_or_public_documentation"
+    },
+    {
+      "path": "docs/FINGERPRINT_PERFORMANCE.md",
+      "sha256": "aa6d4fbb3708f4d80e1393a8083fc4e7498b6c1291a5bc2caeac1218485485e5",
+      "bytes": 1370,
+      "mode": "0o644",
+      "origin": "native_plugin_source_or_public_documentation"
+    },
+    {
       "path": "docs/PORTABILITY.md",
       "sha256": "faaf12621ace95f870e2987eb3099e51624d65d515cd6657d6482367e402eba0",
       "bytes": 5276,
+      "mode": "0o644",
+      "origin": "native_plugin_source_or_public_documentation"
+    },
+    {
+      "path": "docs/SERVICE_ARCHITECTURE.md",
+      "sha256": "14d127ae839557f853614a0f2c5680933f6ace15ab0a5ce83f4963d4c17bbcc8",
+      "bytes": 3526,
+      "mode": "0o644",
+      "origin": "native_plugin_source_or_public_documentation"
+    },
+    {
+      "path": "docs/SOURCE_CANDIDATE.md",
+      "sha256": "54e3fb3ad723d534aefd06892a8c495712d86cb2775990294d4027c8d4e31fa3",
+      "bytes": 1548,
       "mode": "0o644",
       "origin": "native_plugin_source_or_public_documentation"
     },
@@ -318,8 +353,8 @@
     },
     {
       "path": "docs/USER_GUIDE.md",
-      "sha256": "b25b6c3f0653b2595add3378d203c02d3208b329e78900a3a7909c1465f9bf67",
-      "bytes": 4232,
+      "sha256": "f7a4e8c52b9bd8a7510786ff4efd72f5364008f909e1e73bea9a79993285c141",
+      "bytes": 4457,
       "mode": "0o644",
       "origin": "native_plugin_source_or_public_documentation"
     },
@@ -338,8 +373,22 @@
       "origin": "native_plugin_source_or_public_documentation"
     },
     {
+      "path": "docs/receipts/engineering-host-report.json",
+      "sha256": "6400ec2b3b685e55d409aa2c8bc38868726857814a4a430c7998bfefe507573d",
+      "bytes": 898,
+      "mode": "0o644",
+      "origin": "native_plugin_source_or_public_documentation"
+    },
+    {
+      "path": "docs/receipts/fingerprint-benchmark.json",
+      "sha256": "179e0663eb9e5d7a2891b748bc7ac8959b6fd1df5458ce2dfa69b95d19db87cf",
+      "bytes": 3511,
+      "mode": "0o644",
+      "origin": "native_plugin_source_or_public_documentation"
+    },
+    {
       "path": "docs/receipts/portability-source.json",
-      "sha256": "ff9bff7b6f5dc9c00e3a33b21acdc8bdb67da8cc81d5d568b143a13ad84da2ad",
+      "sha256": "ff89bdeaa67dde3b14fd4006c8a639fc0d2a624ce033f91483a0e8493ece6d5f",
       "bytes": 922,
       "mode": "0o644",
       "origin": "native_plugin_source_or_public_documentation"
@@ -359,9 +408,44 @@
       "origin": "native_plugin_source_or_public_documentation"
     },
     {
+      "path": "docs/receipts/service-resources.json",
+      "sha256": "ed69ea13ed8e950c371f599fc104d046e34d9ca24f4102210129cdaf0673fc81",
+      "bytes": 849,
+      "mode": "0o644",
+      "origin": "native_plugin_source_or_public_documentation"
+    },
+    {
       "path": "docs/release-status.md",
       "sha256": "756b71e98bd7a014b7c2f7f08881651cc6247bc350d797442bb3bc5a5bcf290c",
       "bytes": 2074,
+      "mode": "0o644",
+      "origin": "native_plugin_source_or_public_documentation"
+    },
+    {
+      "path": "examples/first-check/.progress-checker/config.json",
+      "sha256": "a21f8955654cee1464c223f94d6553fa4f09f52636f5ba434053f359051a31ef",
+      "bytes": 736,
+      "mode": "0o644",
+      "origin": "native_plugin_source_or_public_documentation"
+    },
+    {
+      "path": "examples/first-check/README.md",
+      "sha256": "3526be872ba83c4ec241e485158cae190155e34e69e692dee204ffdf42d802fa",
+      "bytes": 1602,
+      "mode": "0o644",
+      "origin": "native_plugin_source_or_public_documentation"
+    },
+    {
+      "path": "examples/first-check/greeting.py",
+      "sha256": "a55c14346b5c0e11da873793db175efd28d4840a330a5edba18d03d7d7310626",
+      "bytes": 46,
+      "mode": "0o644",
+      "origin": "native_plugin_source_or_public_documentation"
+    },
+    {
+      "path": "examples/first-check/test_greeting.py",
+      "sha256": "f73cce39b106747294b124a62719d35a429587be97c52c36429970f0300c6482",
+      "bytes": 242,
       "mode": "0o644",
       "origin": "native_plugin_source_or_public_documentation"
     },
@@ -388,8 +472,8 @@
     },
     {
       "path": "plugins/progress-checker/bin/checker-global",
-      "sha256": "8fd371cdb217e40126a091c12f35bc3394394df84060640754afc99057d26666",
-      "bytes": 14271,
+      "sha256": "08e052e5a7c6a810c084194f78e5734071df4b599b4e6d3f225690d8ea0fa80d",
+      "bytes": 14359,
       "mode": "0o755",
       "origin": "native_plugin_source_or_public_documentation"
     },
@@ -409,7 +493,7 @@
     },
     {
       "path": "plugins/progress-checker/plugin.json",
-      "sha256": "188c91ddbc7c5ec1f5187a718667cd003db99a8b2890909fb3ddba434c0b03df",
+      "sha256": "db9d3c1975cf6fd688c51bfee2847d17c15a7d4d3ece33bb950081a10f07d29b",
       "bytes": 486,
       "mode": "0o644",
       "origin": "native_plugin_source_or_public_documentation"
@@ -1970,8 +2054,8 @@
     },
     {
       "path": "plugins/progress-checker/third-party/inventory.json",
-      "sha256": "55294211399571dc16c073d942529f152c6172733fc96952d9082e62ba86d05d",
-      "bytes": 88009,
+      "sha256": "7c1d046acb1986cdc809cdc1bbdb6ad85fa220dd5448fbbd0319a33d556af246",
+      "bytes": 88013,
       "mode": "0o644",
       "origin": "native_plugin_source_or_public_documentation"
     },
@@ -2109,6 +2193,13 @@
       "origin": "native_plugin_source_or_public_documentation"
     },
     {
+      "path": "scripts/benchmark-fingerprint.py",
+      "sha256": "5eedf87a2be2b562f14704e251e55033b7198b3fbb99675dd5e1d627c5fa1625",
+      "bytes": 3280,
+      "mode": "0o644",
+      "origin": "native_plugin_source_or_public_documentation"
+    },
+    {
       "path": "scripts/build-checker.sh",
       "sha256": "e0dec6acbc3e29a8dc648153e5cd2b4e748591a530414f3af122a9535da31ccc",
       "bytes": 255,
@@ -2123,6 +2214,34 @@
       "origin": "native_plugin_source_or_public_documentation"
     },
     {
+      "path": "scripts/check-engineering-docs.py",
+      "sha256": "e94de0e3dddf330ecf88db6645378641c867c2791176d963d1021740e6d92f8f",
+      "bytes": 1237,
+      "mode": "0o644",
+      "origin": "native_plugin_source_or_public_documentation"
+    },
+    {
+      "path": "scripts/check-engineering.sh",
+      "sha256": "0b1c2a271363e2fc8565f4729ea84e04efe5c581d8137fac28df9abe1800e44c",
+      "bytes": 817,
+      "mode": "0o644",
+      "origin": "native_plugin_source_or_public_documentation"
+    },
+    {
+      "path": "scripts/check-first-example.py",
+      "sha256": "a427e1671f7f1a3bf954e86af085bfed56e5f4d8dddbe9fdb4f250b483b5d22d",
+      "bytes": 1362,
+      "mode": "0o644",
+      "origin": "native_plugin_source_or_public_documentation"
+    },
+    {
+      "path": "scripts/check-source-version.py",
+      "sha256": "cf2e29634cbcadec2330f4148398200bd87955e0d862589bf3dafed6e6c11c3b",
+      "bytes": 2561,
+      "mode": "0o644",
+      "origin": "native_plugin_source_or_public_documentation"
+    },
+    {
       "path": "scripts/generate-plugin-notices.py",
       "sha256": "77323b5a613355c6b962190f3047ba6f2306d12e758ff80412908bb33a561f94",
       "bytes": 9998,
@@ -2131,8 +2250,15 @@
     },
     {
       "path": "scripts/package-plugin.py",
-      "sha256": "9ce4c5fdb77e9561f980e830d6bff47fdd417e64391a84790ad2bab8f09afe6b",
-      "bytes": 3369,
+      "sha256": "c1969b3e8ae6b7b71674f6b4368024da6e5101a40f5a5de5b7120ffb34b5c971",
+      "bytes": 3430,
+      "mode": "0o644",
+      "origin": "native_plugin_source_or_public_documentation"
+    },
+    {
+      "path": "scripts/package_version.py",
+      "sha256": "5e913915248bf523db291dc9a6e298a1b8dadf71a01bb043e59f6db9bd32a4e5",
+      "bytes": 995,
       "mode": "0o644",
       "origin": "native_plugin_source_or_public_documentation"
     },
@@ -2220,5 +2346,10 @@
       "mode": "0o644",
       "origin": "native_plugin_source_or_public_documentation"
     }
-  ]
+  ],
+  "source_candidate": {
+    "version": "0.5.0-dev",
+    "status": "unreleased; host regression completion human-reported; checker regression environment unresolved",
+    "published_payload_unchanged": true
+  }
 }

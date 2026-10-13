@@ -14,6 +14,8 @@ What’s the progress?
 
 This demo shows an actual recorded tool result rendered as a conversation, not a screen recording. It demonstrates tracking and progress reporting; the complete human approval and passing-check demo is still pending. [Demo receipt](docs/receipts/progress-demo.json).
 
+Source contributors: main contains an [unreleased 0.5 candidate](docs/SOURCE_CANDIDATE.md). The installation below still uses the frozen 0.4 beta.
+
 ## Install
 
 1. Open `/plugins` in Codex and choose **Add marketplace**.
@@ -26,6 +28,8 @@ The beta currently supports **Fedora 44 x86_64**. Installation was exercised wit
 This repository is a custom Git marketplace: add it as a source to install the plugin.
 
 ## Use it on a feature
+
+For a complete small project with a real check, try the [Python greeting example](examples/first-check/README.md). For runtime restrictions and upcoming log privacy changes, see [commands and logs](docs/COMMANDS_AND_LOGS.md).
 
 Describe the outcome you want. Codex proposes milestones and the checks that would prove each outcome. Review and accept the plan before it saves it. An existing plan is preserved when you track a project.
 

@@ -7,12 +7,14 @@ import re
 from pathlib import Path
 import shutil
 import tarfile
+from package_version import source_version, binary_versions
 
 root = Path(__file__).resolve().parent.parent
 parser = argparse.ArgumentParser(description=__doc__)
 parser.add_argument('--output', type=Path, default=root / '.local/plugin-build')
 args = parser.parse_args()
-version = json.loads((root / 'plugins/progress-checker/plugin.json').read_text())['version']
+version = source_version(root)
+binary_versions(root / '.local/checker-target/debug', version)
 if not re.fullmatch(r'[0-9]+\.[0-9]+\.[0-9]+[-.A-Za-z0-9]*', version):
     raise SystemExit('Manifest version is not a safe release version')
 inventory_path = root / 'plugins/progress-checker/third-party/inventory.json'

@@ -38,6 +38,7 @@ class Gateway:
         self.child = None
         self.buffer = b''
         self.sequence = 0
+        self.version = json.loads((BIN.parent / 'plugin.json').read_text())['version']
         self.initialized = self.ready = False
         self.tools = json.loads(subprocess.check_output([str(BIN / 'progress-checker-mcp'), '--describe-tools'], timeout=10))['tools']
         self.names = {tool['name'] for tool in self.tools}
@@ -167,7 +168,7 @@ class Gateway:
             if not isinstance(params, dict) or not isinstance(params.get('protocolVersion'), str) or not isinstance(params.get('capabilities'), dict) or not isinstance(params.get('clientInfo'), dict):
                 return {'jsonrpc':'2.0','id':id_value,'error':{'code':-32602,'message':'Invalid initialization'}}
             self.initialized = True
-            return reply({'protocolVersion':'2025-06-18','capabilities':{'tools':{'listChanged':False}},'serverInfo':{'name':'progress-checker-global','version':'0.4.0-dev'},'instructions':'Install once globally. When the user requests tracking, call checker_track_project with the current session Git worktree root. Never use cache cwd. The connection cannot switch projects. Claims are not verification; commands require exact human approval.'})
+            return reply({'protocolVersion':'2025-06-18','capabilities':{'tools':{'listChanged':False}},'serverInfo':{'name':'progress-checker-global','version':self.version},'instructions':'Install once globally. When the user requests tracking, call checker_track_project with the current session Git worktree root. Never use cache cwd. The connection cannot switch projects. Claims are not verification; commands require exact human approval.'})
         if not self.ready:return reply(failure('NOT_INITIALIZED','Initialize first.'))
         if not isinstance(params, dict):return reply(failure('INVALID_ARGUMENT','Expected an object.'))
         meta=params.get('_meta')

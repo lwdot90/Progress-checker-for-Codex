@@ -1,0 +1,38 @@
+{
+  "schema_version": 1,
+  "observed_at": "2026-10-13T00:34:23.551122+00:00",
+  "installed_plugin_version": "0.4.0-dev",
+  "host": {
+    "kernel": "7.2.5-200.fc44.x86_64",
+    "architecture": "x86_64"
+  },
+  "coverage": "point-in-time installed stack RSS; shared pages may be counted more than once; not source-candidate or cross-platform performance",
+  "processes": [
+    {
+      "pid": 21547,
+      "role": "checker-global",
+      "rss_kib": 23076
+    },
+    {
+      "pid": 21800,
+      "role": "checker-plugin",
+      "rss_kib": 21484
+    },
+    {
+      "pid": 21802,
+      "role": "progress-checker",
+      "rss_kib": 26180
+    },
+    {
+      "pid": 21811,
+      "role": "checker-plugin",
+      "rss_kib": 21360
+    },
+    {
+      "pid": 21908,
+      "role": "progress-checker-mcp",
+      "rss_kib": 7132
+    }
+  ],
+  "summed_rss_kib": 99232
+}
